@@ -1,0 +1,29 @@
+{
+  "name": "mern-social-app",
+  "version": "0.1.0",
+  "description": "MeRightNow social network app",
+  "scripts": {
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pabramber01/MeRN.git"
+  },
+  "keywords": [
+    "MERN",
+    "social",
+    "network",
+    "frontend",
+    "backend",
+    "fullstack"
+  ],
+  "author": "pabramber01",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/pabramber01/MeRN/issues"
+  },
+  "homepage": "https://github.com/pabramber01/MeRN#readme",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
