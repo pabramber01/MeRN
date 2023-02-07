@@ -17,7 +17,7 @@ function App() {
         >
           <Route index />
         </Route>
-        <Route path="/home" element={<Landing />} />
+        <Route path="/landing" element={<Landing />} />
         <Route path="*" element={<Error />} />
       </Routes>
       <ToastContainer position="bottom-right" />
