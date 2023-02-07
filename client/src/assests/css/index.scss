@@ -1,3 +1,6 @@
+$primary: #bdd2b6;
+$danger: #798777;
+
 @import 'normalize.css';
 @import 'bootstrap';
 @import 'react-toastify/dist/ReactToastify.css';
@@ -16,26 +19,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-$button-primary-color: #bdd2b6;
-
-.btn-primary {
-  @include button-variant(
-    $button-primary-color,
-    darken($button-primary-color, 7.5%),
-    darken($button-primary-color, 50%),
-    lighten($button-primary-color, 5%),
-    lighten($button-primary-color, 50%),
-    darken($button-primary-color, 50%)
-  );
-}
-
-.btn-outline-primary {
-  @include button-outline-variant(
-    $button-primary-color,
-    #222222,
-    lighten($button-primary-color, 5%),
-    $button-primary-color
-  );
 }

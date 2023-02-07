@@ -1,10 +1,27 @@
 import { customAxiosAPI } from '../../utils';
 
-const registerUserThunk = async (url, user, thunkAPI) => {
+const loginUserThunk = async (url, user, thunkAPI) => {
   try {
-    // const res = await customAxiosAPI.post(url, user);
-    // return res.data;
+    return (await customAxiosAPI.post(url, user)).data;
   } catch (err) {
-    // return thunkAPI.rejectwithValue(error.response.data.msg);
+    return thunkAPI.rejectWithValue(err.response.data);
   }
 };
+
+const logoutUserThunk = async (url, thunkAPI) => {
+  try {
+    return (await customAxiosAPI.get(url)).data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data);
+  }
+};
+
+const createUserThunk = async (url, user, thunkAPI) => {
+  try {
+    return (await customAxiosAPI.post(url, user)).data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data);
+  }
+};
+
+export { loginUserThunk, logoutUserThunk, createUserThunk };

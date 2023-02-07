@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
-import { FormInput, FormInputError, LogoText } from '../../layout';
-import { Wrapper, Service } from './index';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginUser, createUser } from '../../context';
+import { Wrapper, Service } from '.';
+import {
+  FormInput,
+  FormInputError,
+  LogoText,
+  SpinnerButton,
+} from '../../layout';
 
 const initialValues = {
   username: '',
@@ -21,6 +29,24 @@ const initialErrors = {
 function Authentication() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialErrors);
+  const { user, isLoading } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const firtRender = useRef(true);
+
+  useEffect(() => {
+    let auxControl = false;
+    if (firtRender.current) {
+      firtRender.current = false;
+      if (user) auxControl = true;
+    }
+    if (user) {
+      setTimeout(() => {
+        if (auxControl) toast.warn('You are already logged in!');
+        navigate('/');
+      }, 1000);
+    }
+  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,17 +55,19 @@ function Authentication() {
     const validation = Service.validate(username, email, password, password2);
 
     if (isMember) {
-      const hasErrors =
-        validation.username.hasError || validation.password.hasError;
-      if (hasErrors) toast.error('Invalid credentials');
+      if (Service.checkLoginErrors(validation)) {
+        toast.error('Invalid credentials');
+        return;
+      }
+
+      dispatch(loginUser({ username, password }));
     } else {
       setErrors(validation);
-      const hasErrors =
-        validation.username.hasError ||
-        validation.email.hasError ||
-        validation.password.hasError ||
-        validation.password2.hasError;
-      if (hasErrors) return;
+      if (Service.checkRegisterErrors(validation)) {
+        return;
+      }
+
+      dispatch(createUser({ username, email, password }));
     }
   };
 
@@ -64,7 +92,6 @@ function Authentication() {
         res = Service.validatePassword(values.password);
         break;
       case 'password2':
-        console.log(e);
         res = Service.validatePassword2(values.password, values.password2);
         break;
       default:
@@ -152,8 +179,12 @@ function Authentication() {
                 </>
               )}
               <div className="d-grid gap-2 my-3">
-                <button type="submit" className="btn btn-primary">
-                  Submit
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isLoading}
+                >
+                  {isLoading ? <SpinnerButton /> : 'Submit'}
                 </button>
               </div>
             </form>

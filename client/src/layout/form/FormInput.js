@@ -19,7 +19,7 @@ function FormInput({
         name={name}
         value={value}
         onChange={onChange}
-        onBlur={onBlur}
+        onBlur={onBlur || undefined}
         placeholder={placeholder}
       />
     </div>

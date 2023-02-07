@@ -35,9 +35,9 @@ const Service = {
     let hasError = false;
     let msg = '';
 
-    if (validator.isEmpty(password)) {
+    if (password.length < 3) {
       hasError = true;
-      msg = 'Provide a password';
+      msg = 'Must be atleast 3 long';
     }
 
     return { hasError, msg };
@@ -52,6 +52,17 @@ const Service = {
     }
 
     return { hasError, msg };
+  },
+  checkLoginErrors: (validation) => {
+    return validation.username.hasError || validation.password.hasError;
+  },
+  checkRegisterErrors: (validation) => {
+    return (
+      validation.username.hasError ||
+      validation.email.hasError ||
+      validation.password.hasError ||
+      validation.password2.hasError
+    );
   },
 };
 

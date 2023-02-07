@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const Wrapper = styled.main`
   .logo-img {
-    max-height: 60px;
-    margin: 10px 5px 10px 0;
+    max-height: 45px;
+    margin-right: 5px;
   }
   .logo-text {
     font-family: 'Yatra One';
