@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { Protected, Landing, Error, SharedLayout } from './pages';
+import { Protected, Landing, Error, SharedLayout, Home } from './pages';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
             </Protected>
           }
         >
-          <Route index />
+          <Route index element={<Home />} />
         </Route>
         <Route path="/landing" element={<Landing />} />
         <Route path="*" element={<Error />} />

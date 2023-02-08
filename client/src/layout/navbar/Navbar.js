@@ -4,7 +4,7 @@ import { Logo } from '..';
 function Navbar() {
   return (
     <Wrapper>
-      <nav className="navbar navbar-expand-lg bg-light">
+      <nav className="navbar navbar-expand-xl bg-light fixed-top">
         <div className="container-md">
           {/* Navbar brand */}
           <span className="navbar-brand">
