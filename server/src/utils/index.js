@@ -5,6 +5,7 @@ import {
   attachLoginCookie,
   attachLogoutCookie,
 } from './token.js';
+import { readJSONFiles } from './reader.js';
 
 export {
   connectDB,
@@ -12,4 +13,5 @@ export {
   isTokenValid,
   attachLoginCookie,
   attachLogoutCookie,
+  readJSONFiles,
 };

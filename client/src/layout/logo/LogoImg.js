@@ -1,4 +1,4 @@
-import logo from '../../assests/images/logo.png';
+import logo from '../../assets/images/logo.png';
 import { Wrapper } from './index';
 
 function Logo() {

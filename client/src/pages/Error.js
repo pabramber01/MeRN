@@ -1,4 +1,4 @@
-import not_found from '../assests/images/not_found.svg';
+import not_found from '../assets/images/not_found.svg';
 
 function Error() {
   return (

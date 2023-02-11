@@ -11,6 +11,7 @@ import {
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
 } from './error/index.js';
+import { publicationRouter } from './publication/index.js';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(morgan('common'));
 
 app.use('/mern/v1/auth', authRouter);
 app.use('/mern/v1/users', userRouter);
+app.use('/mern/v1/publications', publicationRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(routeNotFoundMiddleware);

@@ -29,12 +29,19 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
+  avatar: {
+    type: String,
+  },
 });
 
 UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.pre('remove', async function () {
+  await this.model('Publication').deleteMany({ user: this._id });
 });
 
 UserSchema.methods.checkPassword = async function (pass) {

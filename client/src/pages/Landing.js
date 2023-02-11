@@ -1,4 +1,4 @@
-import landing from '../assests/images/landing.svg';
+import landing from '../assets/images/landing.svg';
 import { Authentication } from '../features';
 
 function Landing() {

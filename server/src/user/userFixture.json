@@ -1,0 +1,37 @@
+{
+  "model": "User",
+  "data": [
+    {
+      "_id": "63e65ed132dde4d4ebe2cd15",
+      "username": "test",
+      "email": "test@mern.es",
+      "password": "$2a$10$tuKaIO7teHjaWq3BYczVoe7hnaOhwJGXVxuhV55WQ0oN/yMc52/E6",
+      "role": "user",
+      "avatar": "https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg"
+    },
+    {
+      "_id": "63e65ee4e59bf65fa96314ca",
+      "username": "example",
+      "email": "example@mern.es",
+      "password": "$2a$10$al5GruEj3CDNGMKSNpiyd.jIUeuYCTn4parmMwKqGEoc.GyrmzOV2",
+      "role": "user",
+      "avatar": "https://www.seekpng.com/png/detail/975-9753787_profile-picture-of-alex-jones-profil-picture-john.pngz"
+    },
+    {
+      "_id": "63e65f7a5370fe2673c74f07",
+      "username": "user1",
+      "email": "user1@mern.es",
+      "password": "$2a$10$CL.bN8DGRMefiEHSgz9EROtRBmyi1vmTZx6i079ByRcmyB1UvbKZq",
+      "role": "user",
+      "avatar": "https://www.jq22.com/demo/Simplify_Admin201702282213/images/profile/profile7.jpg"
+    },
+    {
+      "_id": "63e65f94cccb463f267e38b1",
+      "username": "user2",
+      "email": "user2@mern.es",
+      "password": "$2a$10$c7eIOvprb3Z3rLVbYkLnO.a5BoYMetFL3z8zMYnTSw54ZCL0TQuIW",
+      "role": "user",
+      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8rRhbrKkA_YHYtExTvKb8qGKF1lgP_S7qBaVe09HDZ9E8poPEjfKrEhiu_6A4_WM6DEM&usqp=CAU"
+    }
+  ]
+}

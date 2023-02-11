@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "MeRightNow social network app",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" "
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
+    "populate": "cd server && npm run populate"
   },
   "repository": {
     "type": "git",
