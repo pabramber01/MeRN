@@ -7,11 +7,11 @@ import cors from 'cors';
 import { connectDB } from './utils/index.js';
 import { authRouter } from './auth/index.js';
 import { userRouter } from './user/index.js';
+import { publicationRouter } from './publication/index.js';
 import {
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
 } from './error/index.js';
-import { publicationRouter } from './publication/index.js';
 
 const app = express();
 

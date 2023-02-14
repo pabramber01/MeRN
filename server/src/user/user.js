@@ -2,36 +2,50 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 
-const UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: [true, 'Provide username'],
-    minlength: [3, 'Username must be atleast 3 long'],
-    maxlength: [12, 'Username can not be longer than 12'],
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: [true, 'Provide email'],
-    validate: {
-      validator: validator.isEmail,
-      message: 'Provide valid email',
+const UserSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      unique: true,
+      required: [true, 'Provide username'],
+      minlength: [3, 'Username must be atleast 3 long'],
+      maxlength: [12, 'Username can not be longer than 12'],
+      validate: {
+        validator: (val) => !validator.isMongoId(val),
+        message: 'Invalid username',
+      },
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, 'Provide email'],
+      validate: {
+        validator: validator.isEmail,
+        message: 'Provide valid email',
+      },
+    },
+    password: {
+      type: String,
+      required: [true, 'Provide password'],
+      minlength: [3, 'Password must be atleast 3 long'],
+    },
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
+    },
+    avatar: {
+      type: String,
     },
   },
-  password: {
-    type: String,
-    required: [true, 'Provide password'],
-    minlength: [3, 'Password must be atleast 3 long'],
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
-  },
-  avatar: {
-    type: String,
-  },
+  { toJSON: { virtuals: true }, toObject: { virtual: true } }
+);
+
+UserSchema.virtual('publications', {
+  ref: 'Publication',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
 });
 
 UserSchema.pre('save', async function () {

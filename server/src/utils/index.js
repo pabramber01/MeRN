@@ -6,6 +6,8 @@ import {
   attachLogoutCookie,
 } from './token.js';
 import { readJSONFiles } from './reader.js';
+import sortQuery from './sortQuery.js';
+import pageQuery from './pageQuery.js';
 
 export {
   connectDB,
@@ -14,4 +16,6 @@ export {
   attachLoginCookie,
   attachLogoutCookie,
   readJSONFiles,
+  sortQuery,
+  pageQuery,
 };
