@@ -32,12 +32,12 @@ function Authentication() {
   const { user, isLoading } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const firtRender = useRef(true);
+  const firstRender = useRef(true);
 
   useEffect(() => {
     let auxControl = false;
-    if (firtRender.current) {
-      firtRender.current = false;
+    if (firstRender.current) {
+      firstRender.current = false;
       if (user) auxControl = true;
     }
     if (user) {

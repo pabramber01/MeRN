@@ -29,10 +29,19 @@ const Wrapper = styled.main`
     transform: translateY(100%);
     transition: 0.3s;
   }
-  .photo:hover .photo-info {
+  .photo:hover > .photo-info {
     transform: translateY(0);
+    transition: 0.3s;
   }
-  @media (max-width: 1080px) {
+  .placeholder-img {
+    width: 100%;
+    height: 100%;
+  }
+  .placeholder-h1 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 1199px) {
     .photo-info {
       transform: translateY(0);
     }

@@ -1,61 +1,36 @@
-import { FeedRow } from '.';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { changeView, getAll } from '../../context';
+import { FeedSingle } from '.';
 
-const api = [
-  {
-    id: 1,
-    url: 'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
-    alt: 'example',
-    name: 'Example',
-    avatar: 'https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg',
-    link: 'http://example.com/',
-    likes: 123,
-  },
-  {
-    id: 2,
-    url: 'https://images.pexels.com/photos/3680219/pexels-photo-3680219.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    alt: 'example',
-    name: 'Example',
-    avatar: 'https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg',
-    link: 'http://example.com/',
-    likes: 123,
-  },
-  {
-    id: 3,
-    url: 'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
-    alt: 'example',
-    name: 'Example',
-    avatar: 'https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg',
-    link: 'http://example.com/',
-    likes: 123,
-  },
-  {
-    id: 4,
-    url: 'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
-    alt: 'example',
-    name: 'Example',
-    avatar: 'https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg',
-    link: 'http://example.com/',
-    likes: 123,
-  },
-];
+function Feed({ page }) {
+  const { feed, view } = useSelector((store) => store.publication);
+  const dispatch = useDispatch();
+  const firstRender = useRef(true);
 
-function Feed() {
-  const dataLen = api.length;
-  const colsLen = 3;
-  const rowsLen = Math.ceil(dataLen / colsLen);
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      if (view !== page) dispatch(changeView({ page }));
+      dispatch(getAll(page));
+    }
+
+    const event = () => {
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 1)
+        dispatch(getAll(page));
+    };
+    window.addEventListener('scroll', event);
+    return () => window.removeEventListener('scroll', event); // eslint-disable-next-line
+  }, []);
 
   return (
-    <>
-      {[...Array(rowsLen).keys()].map((rowIndex) => {
-        return (
-          <FeedRow
-            key={rowIndex}
-            data={api.slice(rowIndex * colsLen, (rowIndex + 1) * colsLen)}
-            colsLen={colsLen}
-          />
-        );
-      })}
-    </>
+    <div className="row">
+      {feed.map((publication) => (
+        <div key={publication._id} className="col-md-4">
+          <FeedSingle data={publication} />
+        </div>
+      ))}
+    </div>
   );
 }
 
