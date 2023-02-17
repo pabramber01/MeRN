@@ -8,7 +8,7 @@ function Landing() {
         <div className="col-lg-6 d-none d-lg-block">
           <img src={landing} alt="Gallery" className="img-fluid" />
         </div>
-        <div className="col-lg-4">
+        <div className="col-sm-12 col-md-7 col-lg-5 col-xl-4">
           <Authentication />
         </div>
       </div>

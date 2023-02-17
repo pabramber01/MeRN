@@ -29,7 +29,7 @@ const initialErrors = {
 function Authentication() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialErrors);
-  const { user, isLoading } = useSelector((store) => store.user);
+  const { currentUser, isLoading } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const firstRender = useRef(true);
@@ -38,15 +38,15 @@ function Authentication() {
     let auxControl = false;
     if (firstRender.current) {
       firstRender.current = false;
-      if (user) auxControl = true;
+      if (currentUser) auxControl = true;
     }
-    if (user) {
+    if (currentUser) {
       setTimeout(() => {
         if (auxControl) toast.warn('You are already logged in!');
         navigate('/');
       }, 1000);
-    }
-  }, [user, navigate]);
+    } // eslint-disable-next-line
+  }, [currentUser]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -114,7 +114,7 @@ function Authentication() {
             <LogoText />
           </h5>
           <hr />
-          <div className="col-md-10 offset-md-1">
+          <div className="col-10 offset-1">
             <form onSubmit={handleSubmit}>
               <FormInput
                 label="Username"

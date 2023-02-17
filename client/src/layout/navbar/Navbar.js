@@ -1,7 +1,12 @@
+import { useSelector } from 'react-redux';
 import { NavbarDropdown, NavbarLink, NavbarLogout, Wrapper } from '.';
 import { Logo } from '..';
 
 function Navbar() {
+  const {
+    currentUser: { username },
+  } = useSelector((state) => state.user);
+
   return (
     <Wrapper>
       <div className="fixed-top">
@@ -43,12 +48,10 @@ function Navbar() {
                 <ul className="navbar-nav nav-pills">
                   <hr className="initial-separator" />
                   <NavbarLink path="/" label="Home" />
-                  <NavbarLink path="/link" label="Link" />
-                  <NavbarDropdown label="Account">
-                    <NavbarLink path="/yolo1" label="Home" dropdown={true} />
+                  <NavbarDropdown label={`${username}`}>
                     <NavbarLink
-                      path="/yolo2"
-                      label="Action 2"
+                      path={`/users/${username}`}
+                      label="My Profile"
                       dropdown={true}
                     />
                     <hr className="dropdown-divider" />

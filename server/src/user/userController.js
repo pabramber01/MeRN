@@ -7,6 +7,7 @@ import {
   pageQuery,
 } from '../utils/index.js';
 import validator from 'validator';
+import { BadRequestError } from '../error/error.js';
 
 async function createUser(req, res) {
   const { username, email, password } = req.body;
@@ -29,6 +30,8 @@ async function getUserProfile(req, res) {
     { _id: 0, username: 1, avatar: 1 }
   );
 
+  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+
   res.status(StatusCodes.OK).json({ success: true, data });
 }
 
@@ -46,16 +49,16 @@ async function getAllPublicationsByUser(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const data = await User.find(
-    { [searchField]: id },
-    { username: 1, avatar: 1 }
-  ).populate({
+  const data = await User.findOne({ [searchField]: id }, { _id: 1 }).populate({
     path: 'publications',
     select: { title: 1, images: { $slice: 1 } },
     options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
+    populate: { path: 'user', select: { username: 1, avatar: 1 } },
   });
 
-  res.status(StatusCodes.OK).json({ success: true, data });
+  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+
+  res.status(StatusCodes.OK).json({ success: true, data: data.publications });
 }
 
 export default { createUser, getUserProfile, getAllPublicationsByUser };

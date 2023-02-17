@@ -48,8 +48,17 @@ const Wrapper = styled.main`
     .nav-pills {
       --bs-nav-pills-border-radius: 0;
     }
+    .dropdown-menu {
+      margin: 0;
+      border-radius: 0;
+    }
   }
   @media (min-width: 1200px) {
+    .dropdown-menu {
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      min-width: 8rem;
+    }
     .dropdown-menu-center {
       left: 50%;
       transform: translateX(-50%);

@@ -10,7 +10,7 @@ function NavbarLink({ path, label, dropdown }) {
 
   return (
     <>
-      <li className={liClass}>
+      <li className={liClass} data-bs-dismiss="offcanvas">
         <NavLink to={path} className={({ isActive }) => checkActive(isActive)}>
           {label}
         </NavLink>

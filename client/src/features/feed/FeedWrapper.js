@@ -8,12 +8,14 @@ const Wrapper = styled.main`
     position: relative;
     overflow: hidden;
   }
-  .photo > img {
+  .photo > img,
+  .placeholder-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .user-img {
+  .user-img,
+  .placeholder-avatar {
     width: 40px;
     height: 40px;
     object-fit: cover;
@@ -32,14 +34,6 @@ const Wrapper = styled.main`
   .photo:hover > .photo-info {
     transform: translateY(0);
     transition: 0.3s;
-  }
-  .placeholder-img {
-    width: 100%;
-    height: 100%;
-  }
-  .placeholder-h1 {
-    margin-top: 8px;
-    margin-bottom: 8px;
   }
   @media (max-width: 1199px) {
     .photo-info {

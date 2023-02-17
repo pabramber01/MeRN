@@ -1,13 +1,20 @@
 import store from './store';
-import { loginUser, logoutUser, createUser } from './user';
-import { getAll, changeView, getAllPublications } from './publication';
+import { getAll, changeView } from './slicePublication';
+import {
+  loginUser,
+  logoutUser,
+  createUser,
+  getUserProfile,
+  changeProfile,
+} from './sliceUser';
 
 export default store;
 export {
   loginUser,
   logoutUser,
   createUser,
+  getUserProfile,
+  changeProfile,
   getAll,
   changeView,
-  getAllPublications,
 };

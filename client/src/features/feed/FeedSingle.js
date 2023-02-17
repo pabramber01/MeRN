@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Wrapper } from '.';
 
 function FeedSingle({ data: { title, images, user } }) {
@@ -16,11 +17,11 @@ function FeedSingle({ data: { title, images, user } }) {
   };
 
   const handleAvatarLoad = (e) => {
-    const anchor = e.target.parentNode;
-    const anchorPlaceholder = anchor.nextSibling;
+    const avatar = e.target;
+    const avatarPlaceholder = avatar.nextSibling;
 
-    anchor.classList.remove('d-none');
-    anchorPlaceholder.remove();
+    avatar.classList.remove('d-none');
+    avatarPlaceholder.remove();
   };
 
   return (
@@ -35,16 +36,16 @@ function FeedSingle({ data: { title, images, user } }) {
         <span className="placeholder placeholder-img" />
         <div className="photo-info d-flex justify-content-between align-items-center placeholder placeholder-wave">
           <h4 className="m-0 d-none">{title}</h4>
-          <span className="placeholder placeholder-wave placeholder-h1 col-6"></span>
-          <a href="http://example.com" className="d-none">
+          <span className="placeholder placeholder-wave col-6"></span>
+          <Link to={`/users/${user.username}`}>
             <img
               src={user.avatar}
               alt={user.username}
               onLoad={handleAvatarLoad}
-              className="user-img"
+              className="user-img d-none"
             />
-          </a>
-          <span className="placeholder placeholder-wave placeholder-h1 col-1"></span>
+            <span className="placeholder placeholder-avatar"></span>
+          </Link>
         </div>
       </div>
     </Wrapper>

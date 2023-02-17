@@ -1,32 +1,57 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { changeView, getAll } from '../../context';
 import { FeedSingle } from '.';
 
 function Feed({ page }) {
-  const { feed, view } = useSelector((store) => store.publication);
+  const { feed, view, reachEnd, isLoading } = useSelector(
+    (store) => store.publication
+  );
+  const [initGetAll, setInitGetAll] = useState(true);
   const dispatch = useDispatch();
-  const firstRender = useRef(true);
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      if (view !== page) dispatch(changeView({ page }));
-      dispatch(getAll(page));
-    }
-
-    const event = () => {
-      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 1)
-        dispatch(getAll(page));
-    };
-    window.addEventListener('scroll', event);
-    return () => window.removeEventListener('scroll', event); // eslint-disable-next-line
+    if (view !== page) {
+      dispatch(changeView({ page }));
+    } // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      const hasVScroll = document.body.clientHeight > window.innerHeight;
+      if (!hasVScroll) {
+        dispatch(getAll(page));
+      } else {
+        setInitGetAll(false);
+      }
+    } // eslint-disable-next-line
+  }, [initGetAll, isLoading]);
+
+  useEffect(() => {
+    if (!reachEnd) {
+      let scrollDebounce = true;
+      const event = () => {
+        if (
+          scrollDebounce &&
+          window.innerHeight + window.scrollY >= document.body.scrollHeight - 1
+        ) {
+          scrollDebounce = false;
+          dispatch(getAll(page));
+          setTimeout(() => (scrollDebounce = true), 100);
+        }
+      };
+      window.addEventListener('scroll', event);
+      return () => window.removeEventListener('scroll', event);
+    } // eslint-disable-next-line
+  }, [reachEnd]);
 
   return (
     <div className="row">
       {feed.map((publication) => (
-        <div key={publication._id} className="col-md-4">
+        <div
+          key={publication._id}
+          className="col-md-10 offset-md-1 col-lg-4 offset-lg-0"
+        >
           <FeedSingle data={publication} />
         </div>
       ))}

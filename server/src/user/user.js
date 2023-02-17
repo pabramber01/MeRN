@@ -38,7 +38,15 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { toJSON: { virtuals: true }, toObject: { virtual: true } }
+  {
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+      },
+    },
+    toObject: { virtual: true },
+  }
 );
 
 UserSchema.virtual('publications', {

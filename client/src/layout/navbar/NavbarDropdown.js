@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Wrapper } from '.';
 
 function NavbarDropdown({ label, children }) {
   return (
@@ -12,7 +11,7 @@ function NavbarDropdown({ label, children }) {
         >
           {label}
         </Link>
-        <ul className="dropdown-menu dropdown-menu-center dropdown-menu-fade dropdown-menu-hover m-0 rounded-0">
+        <ul className="dropdown-menu dropdown-menu-center dropdown-menu-fade dropdown-menu-hover">
           {children}
         </ul>
       </li>
