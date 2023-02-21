@@ -1,31 +1,19 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { changeView, getAll } from '../../context';
 import { FeedSingle } from '.';
 
 function Feed({ page }) {
-  const { feed, view, reachEnd, isLoading } = useSelector(
-    (store) => store.publication
-  );
-  const [initGetAll, setInitGetAll] = useState(true);
+  const { feed, view, reachEnd } = useSelector((store) => store.publication);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (view !== page) {
       dispatch(changeView({ page }));
+    } else if (document.body.clientHeight <= window.innerHeight) {
+      dispatch(getAll(page));
     } // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    if (!isLoading) {
-      const hasVScroll = document.body.clientHeight > window.innerHeight;
-      if (!hasVScroll) {
-        dispatch(getAll(page));
-      } else {
-        setInitGetAll(false);
-      }
-    } // eslint-disable-next-line
-  }, [initGetAll, isLoading]);
+  }, [page, view, feed]);
 
   useEffect(() => {
     if (!reachEnd) {
@@ -33,6 +21,7 @@ function Feed({ page }) {
       const event = () => {
         if (
           scrollDebounce &&
+          window.scrollY !== 0 &&
           window.innerHeight + window.scrollY >= document.body.scrollHeight - 1
         ) {
           scrollDebounce = false;
@@ -43,7 +32,7 @@ function Feed({ page }) {
       window.addEventListener('scroll', event);
       return () => window.removeEventListener('scroll', event);
     } // eslint-disable-next-line
-  }, [reachEnd]);
+  }, [page, reachEnd]);
 
   return (
     <div className="row">

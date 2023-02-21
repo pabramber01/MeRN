@@ -1,35 +1,59 @@
-import { useSelector } from 'react-redux';
-import { Wrapper } from '.';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getUserProfile } from '../../context';
+import { Wrapper, UserPlaceholderAvatar } from '.';
 
-function User() {
+function User({ username }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userProfile } = useSelector((store) => store.user);
+  const initialState = {
+    pending: true,
+    load: false,
+    error: false,
+  };
+  const [avatarState, setAvatarState] = useState(initialState);
 
-  const handleImageLoad = (e) => {
-    const avatar = e.target;
-    const avatarPlaceholder = avatar.nextSibling;
-    const name = avatar.nextSibling.nextSibling.firstChild;
-    const namePlaceholder = name.nextSibling;
+  useEffect(() => {
+    if (username !== userProfile.username) {
+      setAvatarState(initialState);
+      dispatch(getUserProfile(username))
+        .unwrap()
+        .catch(() => navigate('/'));
+    } // eslint-disable-next-line
+  }, [username]);
 
-    avatar.classList.remove('d-none');
-    name.classList.remove('d-none');
-    avatarPlaceholder.remove();
-    namePlaceholder.remove();
+  const handleImageLoad = () => {
+    setAvatarState({ pending: false, load: true, error: false });
+  };
+
+  const handleImageError = () => {
+    setAvatarState({ pending: false, load: false, error: true });
   };
 
   return (
     <Wrapper>
       <div className="profile">
-        <img
-          src={userProfile.avatar}
-          alt={userProfile.username}
-          className="user-img d-none"
-          onLoad={handleImageLoad}
-        />
-        <span className="placeholder placeholder-img" />
-        <div className="profile-info">
-          <h4 className="d-none">{userProfile.username}</h4>
-          <span className="placeholder placeholder-wave">loading...</span>
-        </div>
+        {avatarState.pending && <UserPlaceholderAvatar />}
+        {username === userProfile.username && (
+          <>
+            {avatarState.error ? (
+              <UserPlaceholderAvatar />
+            ) : (
+              <img
+                src={userProfile.avatar}
+                className={`user-img ${avatarState.pending && 'd-none'}`}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                alt=""
+              />
+            )}
+            <div className="profile-info">
+              <h4>{userProfile.username}</h4>
+            </div>
+          </>
+        )}
       </div>
     </Wrapper>
   );

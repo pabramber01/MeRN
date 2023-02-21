@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.main`
-  .profile {
+  .profile,
+  .placeholder-profile {
     display: flex;
-    justify-content: center;
     margin: 1rem auto 1rem auto;
   }
   .user-img,
@@ -20,11 +20,6 @@ const Wrapper = styled.main`
     margin: auto 1rem auto 1rem;
     word-wrap: break-word;
     word-break: break-word;
-  }
-  @media (max-width: 767px) {
-    .profile {
-      justify-content: left;
-    }
   }
   @media (max-width: 1199px) {
     .user-img,

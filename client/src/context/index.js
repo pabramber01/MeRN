@@ -1,12 +1,6 @@
 import store from './store';
 import { getAll, changeView } from './slicePublication';
-import {
-  loginUser,
-  logoutUser,
-  createUser,
-  getUserProfile,
-  changeProfile,
-} from './sliceUser';
+import { loginUser, logoutUser, createUser, getUserProfile } from './sliceUser';
 
 export default store;
 export {
@@ -14,7 +8,6 @@ export {
   logoutUser,
   createUser,
   getUserProfile,
-  changeProfile,
   getAll,
   changeView,
 };

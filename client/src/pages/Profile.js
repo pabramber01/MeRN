@@ -1,40 +1,28 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
-import { changeProfile, getUserProfile } from '../context';
-import { Feed, User } from '../features';
+import { useParams } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { UserPlaceholder, FeedPlaceholder } from '../features';
 
 function Profile() {
+  const User = lazy(() => import('../features/user'));
+  const Feed = lazy(() => import('../features/feed'));
   const { username } = useParams();
-  const { userProfile } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (username !== userProfile.username) {
-      dispatch(changeProfile());
-      dispatch(getUserProfile(username))
-        .unwrap()
-        .catch(() => {
-          navigate('/');
-        });
-    } // eslint-disable-next-line
-  }, [username]);
 
   return (
-    userProfile.username && (
-      <>
-        <div className="row">
-          <div className="col">
-            <User />
-          </div>
+    <>
+      <div className="row justify-content-center">
+        <div className="col-md-12 col-xl-4">
+          <Suspense fallback={<UserPlaceholder />}>
+            <User username={username} />
+          </Suspense>
         </div>
-        <div className="row">
-          <hr className="border border-danger border-1 m-0 mb-2" />
-        </div>
+      </div>
+      <div className="row">
+        <hr className="border border-danger border-1 m-0 mb-2" />
+      </div>
+      <Suspense fallback={<FeedPlaceholder />}>
         <Feed page={`profile/${username}`} />
-      </>
-    )
+      </Suspense>
+    </>
   );
 }
 

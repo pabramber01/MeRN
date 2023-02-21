@@ -15,8 +15,8 @@ import {
 
 const initialState = {
   currentUser: getUserFromLocalStorage(),
-  isLoading: false,
   userProfile: {},
+  isLoading: false,
 };
 
 const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAPI) =>
@@ -39,19 +39,12 @@ const getUserProfile = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    changeProfile: (state) => {
-      state.userProfile = {};
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addMatcher(
-        isPending(loginUser, logoutUser, createUser, getUserProfile),
-        (state) => {
-          state.isLoading = true;
-        }
-      )
+      .addMatcher(isPending(loginUser, createUser), (state) => {
+        state.isLoading = true;
+      })
       .addMatcher(isFulfilled(loginUser, createUser), (state, { payload }) => {
         const { data } = payload;
         state.isLoading = false;
@@ -59,23 +52,24 @@ const userSlice = createSlice({
         addUserToLocalStorage(data.user);
         toast.success(`Welcome, ${data.user.username}`);
       })
+
       .addMatcher(isFulfilled(logoutUser), (state, { payload }) => {
         const { data } = payload;
-        state.isLoading = false;
         state.currentUser = null;
         removeUserFromLocalStorage();
         toast.success(data.msg);
       })
       .addMatcher(isFulfilled(getUserProfile), (state, { payload }) => {
         const { data } = payload;
-        state.isLoading = false;
         state.userProfile = data;
       })
+      .addMatcher(isRejectedWithValue(loginUser, createUser), (state) => {
+        state.isLoading = false;
+      })
       .addMatcher(
-        isRejectedWithValue(loginUser, logoutUser, createUser, getUserProfile),
-        (state, { payload }) => {
+        isRejectedWithValue(loginUser, createUser, logoutUser, getUserProfile),
+        (_, { payload }) => {
           const { msg } = payload;
-          state.isLoading = false;
           toast.error(msg);
         }
       );
@@ -83,5 +77,5 @@ const userSlice = createSlice({
 });
 
 export { loginUser, logoutUser, createUser, getUserProfile };
-export const { changeProfile } = userSlice.actions;
+// export const {} = userSlice.actions;
 export default userSlice.reducer;

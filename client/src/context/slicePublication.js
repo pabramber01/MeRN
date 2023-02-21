@@ -13,7 +13,6 @@ const initialState = {
   page: 0,
   view: '',
   reachEnd: false,
-  isLoading: false,
 };
 
 const getAll = createAsyncThunk(
@@ -67,7 +66,6 @@ const publicationSlice = createSlice({
         isPending(getAllPublications, getAllPublicationsByUser),
         (state) => {
           state.page += 1;
-          state.isLoading = true;
         }
       )
       .addMatcher(
@@ -80,17 +78,12 @@ const publicationSlice = createSlice({
           } else {
             state.feed.push(...data);
           }
-          state.isLoading = false;
         }
       )
-      .addMatcher(
-        isRejectedWithValue(getAllPublications, getAllPublicationsByUser),
-        (state, { payload }) => {
-          const { msg } = payload;
-          state.isLoading = false;
-          toast.error(msg);
-        }
-      );
+      .addMatcher(isRejectedWithValue(getAllPublications), (_, { payload }) => {
+        const { msg } = payload;
+        toast.error(msg);
+      });
   },
 });
 
