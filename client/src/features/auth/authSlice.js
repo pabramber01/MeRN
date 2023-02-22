@@ -11,33 +11,27 @@ import {
   addUserToLocalStorage,
   removeUserFromLocalStorage,
   thunks,
-} from '../utils';
+} from '../../utils';
 
 const initialState = {
   currentUser: getUserFromLocalStorage(),
-  userProfile: {},
   isLoading: false,
 };
 
-const loginUser = createAsyncThunk('user/loginUser', async (user, thunkAPI) =>
+const loginUser = createAsyncThunk('auth/loginUser', async (user, thunkAPI) =>
   thunks.post('/auth/login', user, thunkAPI)
 );
 
-const logoutUser = createAsyncThunk('user/logoutUser', async (_, thunkAPI) =>
+const logoutUser = createAsyncThunk('auth/logoutUser', async (_, thunkAPI) =>
   thunks.get('/auth/logout', thunkAPI)
 );
 
-const createUser = createAsyncThunk('user/createUser', async (user, thunkAPI) =>
+const createUser = createAsyncThunk('auth/createUser', async (user, thunkAPI) =>
   thunks.post('/users', user, thunkAPI)
 );
 
-const getUserProfile = createAsyncThunk(
-  'user/getUserProfile',
-  async (username, thunkAPI) => thunks.get(`/users/${username}`, thunkAPI)
-);
-
-const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -52,22 +46,17 @@ const userSlice = createSlice({
         addUserToLocalStorage(data.user);
         toast.success(`Welcome, ${data.user.username}`);
       })
-
       .addMatcher(isFulfilled(logoutUser), (state, { payload }) => {
         const { data } = payload;
         state.currentUser = null;
         removeUserFromLocalStorage();
         toast.success(data.msg);
       })
-      .addMatcher(isFulfilled(getUserProfile), (state, { payload }) => {
-        const { data } = payload;
-        state.userProfile = data;
-      })
       .addMatcher(isRejectedWithValue(loginUser, createUser), (state) => {
         state.isLoading = false;
       })
       .addMatcher(
-        isRejectedWithValue(loginUser, createUser, logoutUser, getUserProfile),
+        isRejectedWithValue(loginUser, createUser, logoutUser),
         (_, { payload }) => {
           const { msg } = payload;
           toast.error(msg);
@@ -76,6 +65,6 @@ const userSlice = createSlice({
   },
 });
 
-export { loginUser, logoutUser, createUser, getUserProfile };
-// export const {} = userSlice.actions;
-export default userSlice.reducer;
+export { loginUser, logoutUser, createUser };
+// export const {} = authSlice.actions;
+export default authSlice.reducer;

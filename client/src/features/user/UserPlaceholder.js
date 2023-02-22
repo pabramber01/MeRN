@@ -1,15 +1,15 @@
-import { Wrapper } from '.';
+import { UserPlaceholderAvatar, UserWrapper } from '.';
 
 function UserPlaceholder() {
   return (
-    <Wrapper>
+    <UserWrapper>
       <div className="profile">
-        <span className="placeholder placeholder-img" />
+        <UserPlaceholderAvatar />
         <div className="profile-info">
           <span className="placeholder placeholder-wave">loading...</span>
         </div>
       </div>
-    </Wrapper>
+    </UserWrapper>
   );
 }
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main``;
+const SpinnerWrapper = styled.main``;
 
-export default Wrapper;
+export default SpinnerWrapper;

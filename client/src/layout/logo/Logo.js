@@ -1,13 +1,13 @@
-import { LogoImg, LogoText, Wrapper } from './index';
+import { LogoImg, LogoText, LogoWrapper } from './index';
 
 function Logo() {
   return (
-    <Wrapper>
+    <LogoWrapper>
       <div className="logo-container">
         <LogoImg />
         <LogoText />
       </div>
-    </Wrapper>
+    </LogoWrapper>
   );
 }
 

@@ -1,10 +1,10 @@
-import { Wrapper } from '.';
+import { FeedWrapper } from '.';
 
 function FeedSinglePlaceholderAvatar() {
   return (
-    <Wrapper>
+    <FeedWrapper>
       <span className="placeholder placeholder-avatar"></span>
-    </Wrapper>
+    </FeedWrapper>
   );
 }
 

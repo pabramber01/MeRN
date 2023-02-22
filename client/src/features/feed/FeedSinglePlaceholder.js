@@ -1,12 +1,12 @@
 import {
-  Wrapper,
+  FeedWrapper,
   FeedSinglePlaceholderAvatar,
   FeedSinglePlaceholderImage,
 } from '.';
 
 function FeedSinglePlaceholder() {
   return (
-    <Wrapper>
+    <FeedWrapper>
       <div className="photo">
         <FeedSinglePlaceholderImage />
         <div className="photo-info d-flex justify-content-between align-items-center placeholder placeholder-wave">
@@ -14,7 +14,7 @@ function FeedSinglePlaceholder() {
           <FeedSinglePlaceholderAvatar />
         </div>
       </div>
-    </Wrapper>
+    </FeedWrapper>
   );
 }
 

@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import publicationSlice from './slicePublication';
-import userSlice from './sliceUser';
+import { authSlice, userSlice, feedSlice } from './features';
 
 const store = configureStore({
   reducer: {
+    auth: authSlice,
     user: userSlice,
-    publication: publicationSlice,
+    feed: feedSlice,
   },
 });
 

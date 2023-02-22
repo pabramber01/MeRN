@@ -1,11 +1,11 @@
 import validator from 'validator';
 
-const Service = {
+const authService = {
   validate: (user, eml, pass, pass2) => {
-    const username = Service.validateUsername(user);
-    const email = Service.validateEmail(eml);
-    const password = Service.validatePassword(pass);
-    const password2 = Service.validatePassword2(pass, pass2);
+    const username = authService.validateUsername(user);
+    const email = authService.validateEmail(eml);
+    const password = authService.validatePassword(pass);
+    const password2 = authService.validatePassword2(pass, pass2);
     return { username, email, password, password2 };
   },
   validateUsername: (username) => {
@@ -66,4 +66,4 @@ const Service = {
   },
 };
 
-export default Service;
+export default authService;

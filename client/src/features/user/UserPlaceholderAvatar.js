@@ -1,10 +1,10 @@
-import { Wrapper } from '.';
+import { UserWrapper } from '.';
 
 function UserPlaceholderAvatar() {
   return (
-    <Wrapper>
+    <UserWrapper>
       <span className="placeholder placeholder-img" />
-    </Wrapper>
+    </UserWrapper>
   );
 }
 

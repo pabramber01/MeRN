@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
-import { NavbarDropdown, NavbarLink, NavbarLogout, Wrapper } from '.';
+import { NavbarDropdown, NavbarLink, NavbarLogout, NavbarWrapper } from '.';
 import { Logo } from '..';
 
 function Navbar() {
   const {
     currentUser: { username },
-  } = useSelector((state) => state.user);
+  } = useSelector((state) => state.auth);
 
   return (
-    <Wrapper>
+    <NavbarWrapper>
       <div className="fixed-top">
         <nav className="navbar navbar-expand-xl bg-light">
           <div className="container-md">
@@ -64,7 +64,7 @@ function Navbar() {
         </nav>
         <hr className="border border-primary border-1 m-0" />
       </div>
-    </Wrapper>
+    </NavbarWrapper>
   );
 }
 

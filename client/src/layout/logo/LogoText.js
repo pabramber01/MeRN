@@ -1,10 +1,10 @@
-import { Wrapper } from './index';
+import { LogoWrapper } from './index';
 
 function LogoText() {
   return (
-    <Wrapper>
+    <LogoWrapper>
       <span className="logo-text">Me Right Now</span>
-    </Wrapper>
+    </LogoWrapper>
   );
 }
 

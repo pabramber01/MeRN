@@ -1,75 +1,38 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { ConditionalLink, SuspenseImg } from '../../layout';
 import {
   FeedSinglePlaceholderAvatar,
   FeedSinglePlaceholderImage,
-  Wrapper,
+  FeedWrapper,
 } from '.';
 
-function FeedSingle({ data: { title, images, user } }) {
-  const initialState = {
-    pending: true,
-    load: false,
-    error: false,
-  };
-  const [imageState, setImageState] = useState(initialState);
-  const [avatarState, setAvatarState] = useState(initialState);
-
-  const handleImageLoad = () =>
-    setImageState({ pending: false, load: true, error: false });
-
-  const handleImageError = () =>
-    setImageState({ pending: false, load: false, error: true });
-
-  const handleAvatarLoad = () =>
-    setAvatarState({ pending: false, load: true, error: false });
-
-  const handleAvatarError = () =>
-    setAvatarState({ pending: false, load: false, error: true });
-
+function FeedSingle({ data: { title, images, user }, page }) {
   return (
-    <Wrapper>
+    <FeedWrapper>
       <div className="photo">
-        {imageState.error ? (
-          <FeedSinglePlaceholderImage />
-        ) : (
-          <>
-            {imageState.pending && <FeedSinglePlaceholderImage />}
-            <img
-              src={images[0]}
-              className={`${imageState.pending ? 'd-none' : undefined}`}
-              alt={title}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-            />
-          </>
-        )}
+        <SuspenseImg
+          fallback={<FeedSinglePlaceholderImage />}
+          attr={{ src: images[0], alt: title }}
+        />
         <div
-          className={`photo-info d-flex justify-content-between align-items-center ${
-            (imageState.pending || imageState.error) &&
-            'placeholder placeholder-wave'
-          }`}
+          className={`photo-info d-flex justify-content-between align-items-center`}
         >
           <h4 className="m-0">{title}</h4>
-          <Link to={`/users/${user.username}`}>
-            {avatarState.error ? (
-              <FeedSinglePlaceholderAvatar />
-            ) : (
-              <>
-                {avatarState.pending && <FeedSinglePlaceholderAvatar />}
-                <img
-                  src={user.avatar}
-                  className={`user-img ${avatarState.pending && 'd-none'}`}
-                  alt={user.username}
-                  onLoad={handleAvatarLoad}
-                  onError={handleAvatarError}
-                />
-              </>
-            )}
-          </Link>
+          <ConditionalLink
+            to={`/users/${user.username}`}
+            condition={!page.startsWith('profile')}
+          >
+            <SuspenseImg
+              fallback={<FeedSinglePlaceholderAvatar />}
+              attr={{
+                src: user.avatar,
+                className: 'user-img',
+                alt: user.username,
+              }}
+            />
+          </ConditionalLink>
         </div>
       </div>
-    </Wrapper>
+    </FeedWrapper>
   );
 }
 

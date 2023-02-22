@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main`
+const AuthWrapper = styled.main`
   .span-member {
     display: inline-block;
     height: 26px;
@@ -8,4 +8,4 @@ const Wrapper = styled.main`
   }
 `;
 
-export default Wrapper;
+export default AuthWrapper;

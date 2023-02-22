@@ -2,8 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, createUser } from '../../context';
-import { Wrapper, Service } from '.';
+import { AuthWrapper, authService, loginUser, createUser } from '.';
 import {
   FormInput,
   FormInputError,
@@ -26,10 +25,10 @@ const initialErrors = {
   password2: { hasError: false, msg: '' },
 };
 
-function Authentication() {
+function Auth() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState(initialErrors);
-  const { currentUser, isLoading } = useSelector((store) => store.user);
+  const { currentUser, isLoading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const firstRender = useRef(true);
@@ -52,10 +51,15 @@ function Authentication() {
     e.preventDefault();
     const { username, email, password, password2, isMember } = values;
 
-    const validation = Service.validate(username, email, password, password2);
+    const validation = authService.validate(
+      username,
+      email,
+      password,
+      password2
+    );
 
     if (isMember) {
-      if (Service.checkLoginErrors(validation)) {
+      if (authService.checkLoginErrors(validation)) {
         toast.error('Invalid credentials');
         return;
       }
@@ -63,7 +67,7 @@ function Authentication() {
       dispatch(loginUser({ username, password }));
     } else {
       setErrors(validation);
-      if (Service.checkRegisterErrors(validation)) {
+      if (authService.checkRegisterErrors(validation)) {
         return;
       }
 
@@ -83,16 +87,16 @@ function Authentication() {
 
     switch (e.target.name) {
       case 'username':
-        res = Service.validateUsername(values.username);
+        res = authService.validateUsername(values.username);
         break;
       case 'email':
-        res = Service.validateEmail(values.email);
+        res = authService.validateEmail(values.email);
         break;
       case 'password':
-        res = Service.validatePassword(values.password);
+        res = authService.validatePassword(values.password);
         break;
       case 'password2':
-        res = Service.validatePassword2(values.password, values.password2);
+        res = authService.validatePassword2(values.password, values.password2);
         break;
       default:
         res = {};
@@ -107,7 +111,7 @@ function Authentication() {
   };
 
   return (
-    <Wrapper>
+    <AuthWrapper>
       <div className="card">
         <div className="card-body">
           <h5 className="card-title text-center">
@@ -204,8 +208,8 @@ function Authentication() {
           </div>
         </div>
       </div>
-    </Wrapper>
+    </AuthWrapper>
   );
 }
 
-export default Authentication;
+export default Auth;

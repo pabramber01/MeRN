@@ -1,4 +1,5 @@
-import Wrapper from './FeedWrapper';
+import feedSlice, { getAll, changeView } from './feedSlice';
+import FeedWrapper from './FeedWrapper';
 import Feed from './Feed';
 import FeedPlaceholder from './FeedPlaceholder';
 import FeedSingle from './FeedSingle';
@@ -8,7 +9,10 @@ import FeedSinglePlaceholderAvatar from './FeedSinglePlaceholderAvatar';
 
 export default Feed;
 export {
-  Wrapper,
+  feedSlice,
+  getAll,
+  changeView,
+  FeedWrapper,
   FeedPlaceholder,
   FeedSingle,
   FeedSinglePlaceholder,

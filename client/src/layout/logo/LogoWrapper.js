@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main`
+const LogoWrapper = styled.main`
   .logo-img {
     max-height: 45px;
     margin-right: 5px;
@@ -16,4 +16,4 @@ const Wrapper = styled.main`
   }
 `;
 
-export default Wrapper;
+export default LogoWrapper;

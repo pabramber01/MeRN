@@ -1,11 +1,11 @@
 import logo from '../../assets/images/logo.png';
-import { Wrapper } from './index';
+import { LogoWrapper } from './index';
 
 function Logo() {
   return (
-    <Wrapper>
+    <LogoWrapper>
       <img src={logo} alt="Logo" className="logo-img" />
-    </Wrapper>
+    </LogoWrapper>
   );
 }
 

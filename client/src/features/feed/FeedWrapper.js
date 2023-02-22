@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main`
+const FeedWrapper = styled.main`
   .photo {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -42,4 +42,4 @@ const Wrapper = styled.main`
   }
 `;
 
-export default Wrapper;
+export default FeedWrapper;

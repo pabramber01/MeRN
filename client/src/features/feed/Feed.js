@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { changeView, getAll } from '../../context';
-import { FeedSingle } from '.';
+import { FeedSingle, changeView, getAll } from '.';
 
 function Feed({ page }) {
-  const { feed, view, reachEnd } = useSelector((store) => store.publication);
+  const { feed, view, reachEnd } = useSelector((store) => store.feed);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function Feed({ page }) {
           key={publication._id}
           className="col-md-10 offset-md-1 col-lg-4 offset-lg-0"
         >
-          <FeedSingle data={publication} />
+          <FeedSingle data={publication} page={page} />
         </div>
       ))}
     </div>

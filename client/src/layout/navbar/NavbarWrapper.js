@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main`
+const NavbarWrapper = styled.main`
   .navbar-brand {
     width: 40%;
   }
@@ -75,4 +75,4 @@ const Wrapper = styled.main`
   }
 `;
 
-export default Wrapper;
+export default NavbarWrapper;

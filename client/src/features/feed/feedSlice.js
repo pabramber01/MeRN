@@ -1,4 +1,4 @@
-import { thunks } from '../utils';
+import { thunks } from '../../utils';
 import { toast } from 'react-toastify';
 import {
   createAsyncThunk,
@@ -15,44 +15,36 @@ const initialState = {
   reachEnd: false,
 };
 
-const getAll = createAsyncThunk(
-  'publication/getAll',
-  async (view, thunkAPI) => {
-    switch (true) {
-      case view.startsWith('home'):
-        thunkAPI.dispatch(getAllPublications());
-        break;
-      case view.startsWith('profile'):
-        thunkAPI.dispatch(getAllPublicationsByUser(view.split('/')[1]));
-        break;
-      default:
-        console.log('Wrong view');
-    }
+const getAll = createAsyncThunk('feed/getAll', async (view, thunkAPI) => {
+  switch (true) {
+    case view.startsWith('home'):
+      thunkAPI.dispatch(getAllPublications());
+      break;
+    case view.startsWith('profile'):
+      thunkAPI.dispatch(getAllPublicationsByUser(view.split('/')[1]));
+      break;
+    default:
+      console.log('Wrong view');
   }
-);
+});
 
 const getAllPublications = createAsyncThunk(
-  'publication/getAllPublications',
+  'feed/getAllPublications',
   async (_, thunkAPI) =>
-    thunks.get(
-      `/publications?page=${thunkAPI.getState().publication.page}`,
-      thunkAPI
-    )
+    thunks.get(`/publications?page=${thunkAPI.getState().feed.page}`, thunkAPI)
 );
 
 const getAllPublicationsByUser = createAsyncThunk(
-  'publication/getAllPublicationsByUser',
+  'feed/getAllPublicationsByUser',
   async (username, thunkAPI) =>
     thunks.get(
-      `/users/${username}/publications?page=${
-        thunkAPI.getState().publication.page
-      }`,
+      `/users/${username}/publications?page=${thunkAPI.getState().feed.page}`,
       thunkAPI
     )
 );
 
-const publicationSlice = createSlice({
-  name: 'publication',
+const feedSlice = createSlice({
+  name: 'feed',
   initialState,
   reducers: {
     changeView: (_, { payload }) => {
@@ -88,5 +80,5 @@ const publicationSlice = createSlice({
 });
 
 export { getAll };
-export const { changeView } = publicationSlice.actions;
-export default publicationSlice.reducer;
+export const { changeView } = feedSlice.actions;
+export default feedSlice.reducer;

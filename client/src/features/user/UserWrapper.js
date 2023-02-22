@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Wrapper = styled.main`
+const UserWrapper = styled.main`
   .profile,
   .placeholder-profile {
     display: flex;
@@ -29,4 +29,4 @@ const Wrapper = styled.main`
   }
 `;
 
-export default Wrapper;
+export default UserWrapper;
