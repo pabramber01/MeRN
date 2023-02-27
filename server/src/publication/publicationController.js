@@ -1,6 +1,8 @@
 import { Publication } from './index.js';
 import { StatusCodes } from 'http-status-codes';
 import { pageQuery, sortQuery } from '../utils/index.js';
+import { BadRequestError } from '../error/error.js';
+import validator from 'validator';
 
 const getAllPublications = async (req, res) => {
   const { sort, page } = req.query;
@@ -23,4 +25,20 @@ const getAllPublications = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, data });
 };
 
-export default { getAllPublications };
+const getPublication = async (req, res) => {
+  const { id } = req.params;
+
+  if (!validator.isMongoId(id))
+    throw new BadRequestError(`No publication found with id: '${id}'`);
+
+  const data = await Publication.findOne({ _id: id }, { __v: 0 }).populate(
+    'user',
+    'username avatar'
+  );
+
+  if (!data) throw new BadRequestError(`No publication found with id: '${id}'`);
+
+  res.status(StatusCodes.OK).json({ success: true, data });
+};
+
+export default { getAllPublications, getPublication };

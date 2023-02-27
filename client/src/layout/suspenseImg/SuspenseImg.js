@@ -19,6 +19,7 @@ function SuspenseImg({ fallback, attr }) {
     <>
       {imageState.pending && fallback}
       <img
+        alt=""
         {...attr}
         className={`${attr.className} ${imageState.pending && 'd-none'}`}
         onLoad={handleImageLoad}

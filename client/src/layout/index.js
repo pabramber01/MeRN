@@ -1,13 +1,14 @@
-import { FormInput, FormInputError } from './form';
+import { FormInput } from './form';
 import { Logo, LogoImg, LogoText } from './logo';
 import { Navbar } from './navbar';
 import { Spinner, SpinnerButton } from './spinner';
 import { ConditionalLink } from './conditionalLink';
 import { SuspenseImg } from './suspenseImg';
+import { Slider, sliderVH, SliderPlaceholder } from './slider';
+import { Separator } from './separator';
 
 export {
   FormInput,
-  FormInputError,
   Logo,
   LogoText,
   LogoImg,
@@ -16,4 +17,8 @@ export {
   SpinnerButton,
   ConditionalLink,
   SuspenseImg,
+  Slider,
+  SliderPlaceholder,
+  sliderVH,
+  Separator,
 };

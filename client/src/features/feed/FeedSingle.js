@@ -4,15 +4,18 @@ import {
   FeedSinglePlaceholderImage,
   FeedWrapper,
 } from '.';
+import { Link } from 'react-router-dom';
 
-function FeedSingle({ data: { title, images, user }, page }) {
+function FeedSingle({ data: { _id, title, images, user }, page }) {
   return (
     <FeedWrapper>
       <div className="photo">
-        <SuspenseImg
-          fallback={<FeedSinglePlaceholderImage />}
-          attr={{ src: images[0], alt: title }}
-        />
+        <Link to={`/publications/${_id}`}>
+          <SuspenseImg
+            fallback={<FeedSinglePlaceholderImage />}
+            attr={{ src: images[0], className: 'main-img', alt: title }}
+          />
+        </Link>
         <div
           className={`photo-info d-flex justify-content-between align-items-center`}
         >

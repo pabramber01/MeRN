@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { UserPlaceholder, FeedPlaceholder } from '../features';
+import { Separator } from '../layout';
 
 function Profile() {
   const User = lazy(() => import('../features/user'));
@@ -17,7 +18,7 @@ function Profile() {
         </div>
       </div>
       <div className="row">
-        <hr className="border border-danger border-1 m-0 mb-2" />
+        <Separator color={'secondary'} cls={'mb-2'} />
       </div>
       <Suspense fallback={<FeedPlaceholder />}>
         <Feed page={`profile/${username}`} />

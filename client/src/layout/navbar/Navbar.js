@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { NavbarDropdown, NavbarLink, NavbarLogout, NavbarWrapper } from '.';
-import { Logo } from '..';
+import { Logo, Separator } from '..';
 
 function Navbar() {
   const {
@@ -62,7 +62,7 @@ function Navbar() {
             </div>
           </div>
         </nav>
-        <hr className="border border-primary border-1 m-0" />
+        <Separator color={'primary'} />
       </div>
     </NavbarWrapper>
   );

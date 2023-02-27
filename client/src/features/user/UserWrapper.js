@@ -13,7 +13,7 @@ const UserWrapper = styled.main`
     object-fit: cover;
     border: thick solid rgba(var(--bs-primary-rgb));
     border-radius: 50%;
-    box-shadow: 10px 5px 5px rgba(var(--bs-danger-rgb));
+    box-shadow: 10px 5px 5px rgba(var(--bs-secondary-rgb));
   }
   .profile-info {
     display: block;

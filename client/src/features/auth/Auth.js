@@ -3,12 +3,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AuthWrapper, authService, loginUser, createUser } from '.';
-import {
-  FormInput,
-  FormInputError,
-  LogoText,
-  SpinnerButton,
-} from '../../layout';
+import { FormInput, LogoText, SpinnerButton } from '../../layout';
 
 const initialValues = {
   username: '',
@@ -19,10 +14,10 @@ const initialValues = {
 };
 
 const initialErrors = {
-  username: { hasError: false, msg: '' },
-  email: { hasError: false, msg: '' },
-  password: { hasError: false, msg: '' },
-  password2: { hasError: false, msg: '' },
+  username: { hasError: null, msg: '' },
+  email: { hasError: null, msg: '' },
+  password: { hasError: null, msg: '' },
+  password2: { hasError: null, msg: '' },
 };
 
 function Auth() {
@@ -52,6 +47,7 @@ function Auth() {
     const { username, email, password, password2, isMember } = values;
 
     const validation = authService.validate(
+      isMember,
       username,
       email,
       password,
@@ -93,7 +89,7 @@ function Auth() {
         res = authService.validateEmail(values.email);
         break;
       case 'password':
-        res = authService.validatePassword(values.password);
+        res = authService.validatePassword(values.isMember, values.password);
         break;
       case 'password2':
         res = authService.validatePassword2(values.password, values.password2);
@@ -128,27 +124,21 @@ function Auth() {
                 onChange={handleChange}
                 onBlur={!values.isMember && handleBlur}
                 placeholder="username"
-              />
-              <FormInputError
                 hasError={errors.username.hasError}
-                msg={errors.username.msg}
+                errorMsg={errors.username.msg}
               />
               {!values.isMember && (
-                <>
-                  <FormInput
-                    label="Email"
-                    type="input"
-                    name="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={!values.isMember && handleBlur}
-                    placeholder="example@mern.es"
-                  />
-                  <FormInputError
-                    hasError={errors.email.hasError}
-                    msg={errors.email.msg}
-                  />
-                </>
+                <FormInput
+                  label="Email"
+                  type="input"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={!values.isMember && handleBlur}
+                  placeholder="example@mern.es"
+                  hasError={errors.email.hasError}
+                  errorMsg={errors.email.msg}
+                />
               )}
               <FormInput
                 label="Password"
@@ -158,29 +148,21 @@ function Auth() {
                 onChange={handleChange}
                 onBlur={!values.isMember && handleBlur}
                 placeholder="password"
+                hasError={errors.password.hasError}
+                errorMsg={errors.password.msg}
               />
               {!values.isMember && (
-                <FormInputError
-                  hasError={errors.password.hasError}
-                  msg={errors.password.msg}
+                <FormInput
+                  label="Confirm password"
+                  type="password"
+                  name="password2"
+                  value={values.password2}
+                  onChange={handleChange}
+                  onBlur={!values.isMember && handleBlur}
+                  placeholder="password"
+                  hasError={errors.password2.hasError}
+                  errorMsg={errors.password2.msg}
                 />
-              )}
-              {!values.isMember && (
-                <>
-                  <FormInput
-                    label="Confirm password"
-                    type="password"
-                    name="password2"
-                    value={values.password2}
-                    onChange={handleChange}
-                    onBlur={!values.isMember && handleBlur}
-                    placeholder="password"
-                  />
-                  <FormInputError
-                    hasError={errors.password2.hasError}
-                    msg={errors.password2.msg}
-                  />
-                </>
               )}
               <div className="d-grid gap-2 my-3">
                 <button

@@ -11,4 +11,8 @@ router
     publicationController.getAllPublications
   );
 
+router
+  .route('/:id')
+  .get(authMiddleware.isAuthenticated, publicationController.getPublication);
+
 export default router;

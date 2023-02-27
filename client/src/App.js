@@ -10,12 +10,17 @@ import {
   SharedLayout,
   Home,
   Profile,
+  ScrollToTop,
+  Interceptors,
 } from './pages';
+import PublicationDetails from './pages/PublicationDetails';
 
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <Interceptors />
+        <ScrollToTop />
         <Routes>
           <Route
             path="/"
@@ -27,6 +32,7 @@ function App() {
           >
             <Route index element={<Home />} />
             <Route path="users/:username" element={<Profile />} />
+            <Route path="publications/:id" element={<PublicationDetails />} />
           </Route>
           <Route path="/landing" element={<Landing />} />
           <Route path="*" element={<Error />} />

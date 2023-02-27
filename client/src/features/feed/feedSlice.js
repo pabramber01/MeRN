@@ -66,7 +66,9 @@ const feedSlice = createSlice({
           const { data } = payload;
           if (data.length === 0 && !state.reachEnd) {
             state.reachEnd = true;
-            toast.warn('You have reached the end!');
+            if (state.page > 1) {
+              toast.warn('You have reached the end!');
+            }
           } else {
             state.feed.push(...data);
           }

@@ -11,7 +11,7 @@ const PublicationSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      default: 'No provided',
+      default: 'Description not provided',
       maxLength: [512, 'Description is too long'],
     },
     images: {

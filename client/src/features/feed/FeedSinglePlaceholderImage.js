@@ -1,11 +1,5 @@
-import { FeedWrapper } from '.';
-
 function FeedSinglePlaceholderImage() {
-  return (
-    <FeedWrapper className="h-100">
-      <span className="placeholder placeholder-img" />
-    </FeedWrapper>
-  );
+  return <span className="placeholder placeholder-img bg-dark" />;
 }
 
 export default FeedSinglePlaceholderImage;

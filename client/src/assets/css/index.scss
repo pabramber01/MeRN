@@ -1,5 +1,5 @@
 $primary: #bdd2b6;
-$danger: #798777;
+$secondary: #798777;
 
 @import 'normalize.css';
 @import 'bootstrap';
@@ -23,4 +23,8 @@ code {
 
 .pt-6 {
   padding-top: 5rem;
+}
+
+.vh-70 {
+  height: 70vh;
 }

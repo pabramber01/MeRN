@@ -1,4 +1,4 @@
-import customAxiosAPI from './axios';
+import customAxiosAPI, { setupInterceptors } from './axios';
 import {
   addUserToLocalStorage,
   removeUserFromLocalStorage,
@@ -8,6 +8,7 @@ import thunks from './thunks';
 
 export {
   customAxiosAPI,
+  setupInterceptors,
   addUserToLocalStorage,
   removeUserFromLocalStorage,
   getUserFromLocalStorage,

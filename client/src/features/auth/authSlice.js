@@ -33,7 +33,13 @@ const createUser = createAsyncThunk('auth/createUser', async (user, thunkAPI) =>
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUserLocal: (state) => {
+      state.currentUser = null;
+      removeUserFromLocalStorage();
+      toast.warn('Session expired, logging out...');
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isPending(loginUser, createUser), (state) => {
@@ -66,5 +72,5 @@ const authSlice = createSlice({
 });
 
 export { loginUser, logoutUser, createUser };
-// export const {} = authSlice.actions;
+export const { logoutUserLocal } = authSlice.actions;
 export default authSlice.reducer;

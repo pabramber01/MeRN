@@ -1,11 +1,5 @@
-import { FeedWrapper } from '.';
-
 function FeedSinglePlaceholderAvatar() {
-  return (
-    <FeedWrapper>
-      <span className="placeholder placeholder-avatar"></span>
-    </FeedWrapper>
-  );
+  return <span className="placeholder placeholder-avatar bg-light"></span>;
 }
 
 export default FeedSinglePlaceholderAvatar;

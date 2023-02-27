@@ -115,6 +115,16 @@ dist
 # TernJS port file
 .tern-port
 
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
 # misc
 .DS_Store
 

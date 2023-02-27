@@ -8,7 +8,7 @@ const FeedWrapper = styled.main`
     position: relative;
     overflow: hidden;
   }
-  .photo > img,
+  .main-img,
   .placeholder-img {
     width: 100%;
     height: 100%;

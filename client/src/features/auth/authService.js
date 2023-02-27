@@ -1,10 +1,10 @@
 import validator from 'validator';
 
 const authService = {
-  validate: (user, eml, pass, pass2) => {
+  validate: (isMember, user, eml, pass, pass2) => {
     const username = authService.validateUsername(user);
     const email = authService.validateEmail(eml);
-    const password = authService.validatePassword(pass);
+    const password = authService.validatePassword(isMember, pass);
     const password2 = authService.validatePassword2(pass, pass2);
     return { username, email, password, password2 };
   },
@@ -31,11 +31,11 @@ const authService = {
 
     return { hasError, msg };
   },
-  validatePassword: (password) => {
+  validatePassword: (isMember, password) => {
     let hasError = false;
     let msg = '';
 
-    if (password.length < 3) {
+    if (!isMember && password.length < 3) {
       hasError = true;
       msg = 'Must be atleast 3 long';
     }
@@ -45,6 +45,11 @@ const authService = {
   validatePassword2: (password, password2) => {
     let hasError = false;
     let msg = '';
+
+    if (password2.length < 3) {
+      hasError = true;
+      msg = 'Must be atleast 3 long';
+    }
 
     if (password !== password2) {
       hasError = true;

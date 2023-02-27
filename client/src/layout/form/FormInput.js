@@ -1,3 +1,5 @@
+import FormWrapper from './FormWrapper';
+
 function FormInput({
   label,
   type,
@@ -6,6 +8,8 @@ function FormInput({
   onChange,
   onBlur,
   placeholder,
+  hasError,
+  errorMsg,
 }) {
   return (
     <div className="form-group">
@@ -13,7 +17,9 @@ function FormInput({
         {label || name}
       </label>
       <input
-        className="form-control"
+        className={`form-control ${
+          hasError === null ? undefined : hasError ? 'is-invalid' : 'is-valid'
+        }`}
         type={type}
         id={name}
         name={name}
@@ -22,6 +28,7 @@ function FormInput({
         onBlur={onBlur || undefined}
         placeholder={placeholder}
       />
+      <div className="invalid-feedback">{errorMsg}</div>
     </div>
   );
 }
