@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { logoutUserLocal } from '../features';
+import { logoutUserLocal } from '../auth';
 
 const customAxiosAPI = axios.create({
   baseURL: process.env.REACT_APP_API_URL,

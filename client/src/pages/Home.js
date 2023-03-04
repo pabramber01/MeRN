@@ -1,9 +1,9 @@
 import { Suspense, lazy } from 'react';
-import { FeedPlaceholder } from '../features';
+import { PublicationListPlaceholder } from '../publication';
 import { Separator } from '../layout';
 
 function Home() {
-  const Feed = lazy(() => import('../features/feed'));
+  const PublicationList = lazy(() => import('../publication/publicationList'));
 
   return (
     <>
@@ -11,8 +11,8 @@ function Home() {
         <h1 className="text-center fw-bold fst-italic">Recent Publications</h1>
         <Separator color={'secondary'} cls={'mb-2'} />
       </div>
-      <Suspense fallback={<FeedPlaceholder />}>
-        <Feed page="home" />
+      <Suspense fallback={<PublicationListPlaceholder />}>
+        <PublicationList page="home" />
       </Suspense>
     </>
   );

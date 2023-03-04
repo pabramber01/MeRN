@@ -1,5 +1,5 @@
 import landing from '../assets/images/landing.svg';
-import { Auth } from '../features';
+import { AuthForm } from '../auth';
 
 function Landing() {
   return (
@@ -9,7 +9,7 @@ function Landing() {
           <img src={landing} alt="Gallery" className="img-fluid" />
         </div>
         <div className="col-sm-12 col-md-7 col-lg-5 col-xl-4">
-          <Auth />
+          <AuthForm />
         </div>
       </div>
     </div>

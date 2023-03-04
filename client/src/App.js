@@ -12,9 +12,9 @@ import {
   Profile,
   ScrollToTop,
   Interceptors,
-  PublicationCreation,
+  PublicationEdit,
+  Publication,
 } from './pages';
-import PublicationDetails from './pages/PublicationDetails';
 
 function App() {
   return (
@@ -33,8 +33,8 @@ function App() {
           >
             <Route index element={<Home />} />
             <Route path="users/:username" element={<Profile />} />
-            <Route path="publications/new" element={<PublicationCreation />} />
-            <Route path="publications/:id" element={<PublicationDetails />} />
+            <Route path="publications/new" element={<PublicationEdit />} />
+            <Route path="publications/:id" element={<Publication />} />
           </Route>
           <Route path="/landing" element={<Landing />} />
           <Route path="*" element={<Error />} />

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../features';
+import { logoutUser } from '../../auth';
 
 function NavbarLogout() {
   const dispatch = useDispatch();

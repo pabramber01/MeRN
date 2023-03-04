@@ -5,7 +5,7 @@ import { Logo, Separator } from '..';
 function Navbar() {
   const {
     currentUser: { username },
-  } = useSelector((state) => state.auth);
+  } = useSelector((state) => state.authForm);
 
   return (
     <NavbarWrapper>
