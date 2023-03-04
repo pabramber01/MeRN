@@ -1,7 +1,8 @@
 import { SuspenseImg } from '../suspenseImg';
-import SliderImgPlaceholder from './SliderImgPlaceholder';
+import { TiDelete } from 'react-icons/ti';
+import { SliderImgPlaceholder } from '.';
 
-function SliderImg({ id, source, alternative, vh, len }) {
+function SliderImg({ id, index, len, source, alternative, vh, edit }) {
   return (
     <div className="container container-img">
       <SuspenseImg
@@ -25,6 +26,19 @@ function SliderImg({ id, source, alternative, vh, len }) {
             data-bs-slide="next"
           />
         </>
+      )}
+      {edit && (
+        <div className="delete-container">
+          <TiDelete className="delete-icon" />
+          <button
+            id={index}
+            type="button"
+            className={`delete-button${
+              len === 1 && source === '' ? ' delete-disabled' : ''
+            }`}
+            onClick={len === 1 && source === '' ? undefined : edit}
+          />
+        </div>
       )}
     </div>
   );

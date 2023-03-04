@@ -12,6 +12,7 @@ import {
   Profile,
   ScrollToTop,
   Interceptors,
+  PublicationCreation,
 } from './pages';
 import PublicationDetails from './pages/PublicationDetails';
 
@@ -32,6 +33,7 @@ function App() {
           >
             <Route index element={<Home />} />
             <Route path="users/:username" element={<Profile />} />
+            <Route path="publications/new" element={<PublicationCreation />} />
             <Route path="publications/:id" element={<PublicationDetails />} />
           </Route>
           <Route path="/landing" element={<Landing />} />

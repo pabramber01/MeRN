@@ -1,4 +1,4 @@
-import { FormInput } from './form';
+import { FormInput, FormTextArea } from './form';
 import { Logo, LogoImg, LogoText } from './logo';
 import { Navbar } from './navbar';
 import { Spinner, SpinnerButton } from './spinner';
@@ -9,6 +9,7 @@ import { Separator } from './separator';
 
 export {
   FormInput,
+  FormTextArea,
   Logo,
   LogoText,
   LogoImg,

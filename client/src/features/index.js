@@ -12,6 +12,7 @@ import Publication, {
   getPublication,
   PublicationPlaceholder,
 } from './publication';
+import PublicationForm from './publicationForm';
 
 export {
   Auth,
@@ -33,4 +34,5 @@ export {
   publicationSlice,
   getPublication,
   PublicationPlaceholder,
+  PublicationForm,
 };

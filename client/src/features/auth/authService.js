@@ -1,62 +1,69 @@
 import validator from 'validator';
 
 const authService = {
-  validate: (isMember, user, eml, pass, pass2) => {
-    const username = authService.validateUsername(user);
-    const email = authService.validateEmail(eml);
-    const password = authService.validatePassword(isMember, pass);
-    const password2 = authService.validatePassword2(pass, pass2);
-    return { username, email, password, password2 };
+  validate: (username, email, password, password2, isMember) => {
+    const usernameErrors = authService.validateUsername(username);
+    const emailErrors = authService.validateEmail(email);
+    const passwordErrors = authService.validatePassword(password, isMember);
+    const password2Errors = authService.validatePassword2(password, password2);
+
+    return {
+      username: { username, ...usernameErrors },
+      email: { email, ...emailErrors },
+      password: { password, ...passwordErrors },
+      password2: { password2, ...password2Errors },
+      isMember,
+    };
   },
   validateUsername: (username) => {
     let hasError = false;
-    let msg = '';
+    let errorMsg = '';
 
     const len = username.length;
     if (len < 3 || len > 12) {
       hasError = true;
-      msg = 'Must be between 3 and 12 long';
+      errorMsg = 'Must be between 3 and 12 long';
     }
 
-    return { hasError, msg };
+    return { hasError, errorMsg };
   },
   validateEmail: (email) => {
     let hasError = false;
-    let msg = '';
+    let errorMsg = '';
 
     if (!validator.isEmail(email)) {
       hasError = true;
-      msg = 'Provide a valid email';
+      errorMsg = 'Provide a valid email';
     }
 
-    return { hasError, msg };
+    return { hasError, errorMsg };
   },
-  validatePassword: (isMember, password) => {
+  validatePassword: (password, isMember) => {
     let hasError = false;
-    let msg = '';
+    let errorMsg = '';
 
     if (!isMember && password.length < 3) {
       hasError = true;
-      msg = 'Must be atleast 3 long';
+      errorMsg = 'Must be atleast 3 long';
     }
 
-    return { hasError, msg };
+    return { hasError, errorMsg };
   },
   validatePassword2: (password, password2) => {
     let hasError = false;
-    let msg = '';
+    let errorMsg = '';
 
     if (password2.length < 3) {
       hasError = true;
-      msg = 'Must be atleast 3 long';
+      errorMsg = 'Must be atleast 3 long';
     }
 
     if (password !== password2) {
       hasError = true;
-      msg = 'Passwords do not match';
+      errorMsg = 'Passwords do not match';
     }
 
-    return { hasError, msg };
+    return { hasError, errorMsg };
   },
   checkLoginErrors: (validation) => {
     return validation.username.hasError || validation.password.hasError;

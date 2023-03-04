@@ -6,23 +6,15 @@ import { AuthWrapper, authService, loginUser, createUser } from '.';
 import { FormInput, LogoText, SpinnerButton } from '../../layout';
 
 const initialValues = {
-  username: '',
-  email: '',
-  password: '',
-  password2: '',
+  username: { value: '', hasError: null, errorMsg: '' },
+  email: { value: '', hasError: null, errorMsg: '' },
+  password: { value: '', hasError: null, errorMsg: '' },
+  password2: { value: '', hasError: null, errorMsg: '' },
   isMember: true,
-};
-
-const initialErrors = {
-  username: { hasError: null, msg: '' },
-  email: { hasError: null, msg: '' },
-  password: { hasError: null, msg: '' },
-  password2: { hasError: null, msg: '' },
 };
 
 function Auth() {
   const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState(initialErrors);
   const { currentUser, isLoading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,11 +39,11 @@ function Auth() {
     const { username, email, password, password2, isMember } = values;
 
     const validation = authService.validate(
-      isMember,
-      username,
-      email,
-      password,
-      password2
+      username.value,
+      email.value,
+      password.value,
+      password2.value,
+      isMember
     );
 
     if (isMember) {
@@ -60,14 +52,25 @@ function Auth() {
         return;
       }
 
-      dispatch(loginUser({ username, password }));
+      dispatch(
+        loginUser({
+          username: username.value,
+          password: password.value,
+        })
+      );
     } else {
-      setErrors(validation);
+      setValues(validation);
       if (authService.checkRegisterErrors(validation)) {
         return;
       }
 
-      dispatch(createUser({ username, email, password }));
+      dispatch(
+        createUser({
+          username: username.value,
+          email: email.value,
+          password: password.value,
+        })
+      );
     }
   };
 
@@ -75,35 +78,36 @@ function Auth() {
     const name = e.target.name;
     const value = e.target.value;
 
-    setValues({ ...values, [name]: value });
+    setValues({ ...values, [name]: { ...values[name], value } });
   };
 
   const handleBlur = (e) => {
+    const { username, email, password, password2, isMember } = values;
+    const name = e.target.name;
     let res;
 
-    switch (e.target.name) {
+    switch (name) {
       case 'username':
-        res = authService.validateUsername(values.username);
+        res = authService.validateUsername(username.value);
         break;
       case 'email':
-        res = authService.validateEmail(values.email);
+        res = authService.validateEmail(email.value);
         break;
       case 'password':
-        res = authService.validatePassword(values.isMember, values.password);
+        res = authService.validatePassword(password.value, isMember);
         break;
       case 'password2':
-        res = authService.validatePassword2(values.password, values.password2);
+        res = authService.validatePassword2(password.value, password2.value);
         break;
       default:
         res = {};
     }
 
-    setErrors({ ...errors, [e.target.name]: res });
+    setValues({ ...values, [name]: { ...values[name], ...res } });
   };
 
   const handleMember = () => {
-    setValues({ ...values, isMember: !values.isMember });
-    setErrors(initialErrors);
+    setValues({ ...initialValues, isMember: !values.isMember });
   };
 
   return (
@@ -120,48 +124,48 @@ function Auth() {
                 label="Username"
                 type="input"
                 name="username"
-                value={values.username}
+                value={values.username.value}
                 onChange={handleChange}
                 onBlur={!values.isMember && handleBlur}
                 placeholder="username"
-                hasError={errors.username.hasError}
-                errorMsg={errors.username.msg}
+                hasError={values.username.hasError}
+                errorMsg={values.username.errorMsg}
               />
               {!values.isMember && (
                 <FormInput
                   label="Email"
                   type="input"
                   name="email"
-                  value={values.email}
+                  value={values.email.value}
                   onChange={handleChange}
                   onBlur={!values.isMember && handleBlur}
                   placeholder="example@mern.es"
-                  hasError={errors.email.hasError}
-                  errorMsg={errors.email.msg}
+                  hasError={values.email.hasError}
+                  errorMsg={values.email.errorMsg}
                 />
               )}
               <FormInput
                 label="Password"
                 type="password"
                 name="password"
-                value={values.password}
+                value={values.password.value}
                 onChange={handleChange}
                 onBlur={!values.isMember && handleBlur}
                 placeholder="password"
-                hasError={errors.password.hasError}
-                errorMsg={errors.password.msg}
+                hasError={values.password.hasError}
+                errorMsg={values.password.errorMsg}
               />
               {!values.isMember && (
                 <FormInput
                   label="Confirm password"
                   type="password"
                   name="password2"
-                  value={values.password2}
+                  value={values.password2.value}
                   onChange={handleChange}
                   onBlur={!values.isMember && handleBlur}
                   placeholder="password"
-                  hasError={errors.password2.hasError}
-                  errorMsg={errors.password2.msg}
+                  hasError={values.password2.hasError}
+                  errorMsg={values.password2.errorMsg}
                 />
               )}
               <div className="d-grid gap-2 my-3">

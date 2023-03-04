@@ -1,21 +1,25 @@
-import { useEffect } from 'react';
-import { SliderWrapper, SliderItem } from '.';
-import { Separator } from '../separator';
+import { useEffect, useState } from 'react';
+import { SliderWrapper, SliderItem, SliderPlaceholder } from '.';
 import Carousel from 'bootstrap/js/dist/carousel';
 
 const sliderVH = 70;
 
-function Slider({ id, images, alt }) {
-  const len = images.length;
+function Slider({ id, images, alt, edit }) {
+  const [imgs, setImgs] = useState([]);
 
   useEffect(() => {
-    new Carousel(document.getElementById(id));
-  }, [id]);
+    if (imgs !== images) {
+      setImgs(images);
+    } else {
+      new Carousel(document.getElementById(id));
+    } // eslint-disable-next-line
+  }, [images]);
 
-  return (
+  return imgs !== images ? (
+    <SliderPlaceholder />
+  ) : (
     <SliderWrapper>
       <div className="full-slider">
-        <Separator color={'primary'} />
         <div id={id} className="carousel slide">
           <div className="carousel-inner">
             {images.map((img, i) => (
@@ -23,15 +27,15 @@ function Slider({ id, images, alt }) {
                 key={i}
                 id={id}
                 index={i}
-                len={len}
+                len={imgs.length}
                 source={img}
                 alternative={alt}
                 vh={sliderVH}
+                edit={edit}
               />
             ))}
           </div>
         </div>
-        <Separator color={'primary'} />
       </div>
     </SliderWrapper>
   );

@@ -6,6 +6,7 @@ import Home from './Home';
 import Profile from './Profile';
 import ScrollToTop from './ScrollToTop';
 import Interceptors from './Interceptors';
+import PublicationCreation from './PublicationCreation';
 
 export {
   Landing,
@@ -16,4 +17,5 @@ export {
   Profile,
   ScrollToTop,
   Interceptors,
+  PublicationCreation,
 };

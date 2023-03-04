@@ -55,6 +55,12 @@ function Navbar() {
                       dropdown={true}
                     />
                     <hr className="dropdown-divider" />
+                    <NavbarLink
+                      path={`/publications/new`}
+                      label="New post"
+                      dropdown={true}
+                    />
+                    <hr className="dropdown-divider" />
                     <NavbarLogout />
                   </NavbarDropdown>
                 </ul>
