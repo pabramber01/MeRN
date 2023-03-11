@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 const NavbarWrapper = styled.main`
   .navbar-brand {
-    width: 40%;
+    width: 50%;
+    margin-right: 0;
   }
   .active {
     color: #ffffff !important;
@@ -54,6 +55,9 @@ const NavbarWrapper = styled.main`
     }
   }
   @media (min-width: 1200px) {
+    .search-input {
+      transform: translateX(-50%);
+    }
     .dropdown-menu {
       margin-top: 0.5rem;
       border-radius: 5px;

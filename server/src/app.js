@@ -2,10 +2,11 @@ import 'dotenv/config';
 import 'express-async-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import morgan from 'morgan';
+import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import morgan from 'morgan';
 import { connectDB } from './utils/index.js';
-import { authRouter } from './auth/index.js';
+import { authMiddleware, authRouter } from './auth/index.js';
 import { userRouter } from './user/index.js';
 import { publicationRouter } from './publication/index.js';
 import {
@@ -18,7 +19,15 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
-app.use(express.static('./public'));
+app.use(
+  fileUpload({
+    createParentPath: true,
+    defCharset: 'utf8',
+    defParamCharset: 'utf8',
+  })
+);
+app.use('/mern/static', authMiddleware.isAuthenticated);
+app.use('/mern/static', express.static('./public/mern'));
 
 app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
 

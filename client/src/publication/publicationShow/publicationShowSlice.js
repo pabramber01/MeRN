@@ -20,7 +20,11 @@ const getPublication = createAsyncThunk(
 const publicationShowSlice = createSlice({
   name: 'publicationShow',
   initialState,
-  reducers: {},
+  reducers: {
+    clearPublication: () => {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isFulfilled(getPublication), (state, { payload }) => {
@@ -35,5 +39,5 @@ const publicationShowSlice = createSlice({
 });
 
 export { getPublication };
-// export const {} = publicationShowSlice.actions;
+export const { clearPublication } = publicationShowSlice.actions;
 export default publicationShowSlice.reducer;

@@ -5,7 +5,7 @@ import {
   attachLoginCookie,
   attachLogoutCookie,
 } from './token.js';
-import { readJSONFiles } from './reader.js';
+import { readFixtures, moveAssets } from './reader.js';
 import sortQuery from './sortQuery.js';
 import pageQuery from './pageQuery.js';
 
@@ -15,7 +15,8 @@ export {
   isTokenValid,
   attachLoginCookie,
   attachLogoutCookie,
-  readJSONFiles,
+  readFixtures,
+  moveAssets,
   sortQuery,
   pageQuery,
 };

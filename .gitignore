@@ -125,6 +125,9 @@ dist
 .history/
 *.vsix
 
+# Temp public files
+server/public/mern/*
+
 # misc
 .DS_Store
 

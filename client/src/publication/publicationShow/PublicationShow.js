@@ -1,16 +1,21 @@
 import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { RiEditBoxLine, RiDeleteBin2Line } from 'react-icons/ri';
+import { Slider, sliderVH, Spinner, SuspenseImg } from '../../layout';
+import { loadPublication, deletePublication, clearFeed } from '..';
 import {
+  clearPublication,
   getPublication,
   PublicationShowPlaceholder,
   PublicationShowPlaceholderAvatar,
   PublicationShowWrapper,
 } from '.';
-import { Slider, sliderVH, SuspenseImg } from '../../layout';
 
 function PublicationShow({ publicationId }) {
+  const { currentUser } = useSelector((store) => store.authForm);
   const { publication } = useSelector((store) => store.publicationShow);
+  const { isLoading } = useSelector((store) => store.publicationForm);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,9 +23,26 @@ function PublicationShow({ publicationId }) {
     if (publication._id !== publicationId) {
       dispatch(getPublication(publicationId))
         .unwrap()
+        .then((pub) => dispatch(loadPublication(pub.data)))
         .catch(() => navigate('/'));
     } // eslint-disable-next-line
   }, [publicationId]);
+
+  const handleEdit = () => {
+    navigate('/publications/edit');
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Do you really want to delete this publication?')) {
+      dispatch(deletePublication())
+        .unwrap()
+        .then(() => {
+          dispatch(clearFeed());
+          navigate('/');
+          dispatch(clearPublication());
+        });
+    }
+  };
 
   return publication._id !== publicationId ? (
     <PublicationShowPlaceholder />
@@ -37,6 +59,27 @@ function PublicationShow({ publicationId }) {
         <div className="publication-info">
           <div className="header">
             <h1 className="publication-title">{publication.title}</h1>
+            <div className="publication-actions">
+              {isLoading ? (
+                <Spinner color="secondary" />
+              ) : (
+                publication.user.username === currentUser.username && (
+                  <>
+                    <RiEditBoxLine
+                      size={25}
+                      onClick={handleEdit}
+                      type="button"
+                      className="mx-2"
+                    />
+                    <RiDeleteBin2Line
+                      size={25}
+                      onClick={handleDelete}
+                      type="button"
+                    />
+                  </>
+                )
+              )}
+            </div>
           </div>
           <div className="body">
             <p className="publication-description">{publication.description}</p>

@@ -59,6 +59,9 @@ const publicationListSlice = createSlice({
       const { page } = payload;
       return { ...initialState, view: page };
     },
+    clearFeed: () => {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -90,5 +93,5 @@ const publicationListSlice = createSlice({
 });
 
 export { getAll };
-export const { changeView } = publicationListSlice.actions;
+export const { changeView, clearFeed } = publicationListSlice.actions;
 export default publicationListSlice.reducer;

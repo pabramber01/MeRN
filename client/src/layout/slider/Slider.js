@@ -1,28 +1,33 @@
 import { useEffect, useState } from 'react';
 import { SliderWrapper, SliderItem, SliderPlaceholder } from '.';
+import { arraysEqual } from '../../utils';
 import Carousel from 'bootstrap/js/dist/carousel';
 
 const sliderVH = 70;
 
 function Slider({ id, images, alt, edit }) {
-  const [imgs, setImgs] = useState([]);
+  const [imgs, setImgs] = useState(images);
+
+  const areImgsEqual = arraysEqual(imgs, images);
 
   useEffect(() => {
-    if (imgs !== images) {
+    if (!areImgsEqual) {
       setImgs(images);
-    } else {
-      new Carousel(document.getElementById(id));
     } // eslint-disable-next-line
   }, [images]);
 
-  return imgs !== images ? (
-    <SliderPlaceholder />
+  useEffect(() => {
+    new Carousel(`#${id}`); // eslint-disable-next-line
+  }, [imgs]);
+
+  return !areImgsEqual ? (
+    <SliderPlaceholder edit="true" />
   ) : (
     <SliderWrapper>
       <div className="full-slider">
         <div id={id} className="carousel slide">
           <div className="carousel-inner">
-            {images.map((img, i) => (
+            {imgs.map((img, i) => (
               <SliderItem
                 key={i}
                 id={id}

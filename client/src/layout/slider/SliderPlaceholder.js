@@ -1,7 +1,8 @@
 import { SliderWrapper, SliderImgPlaceholder, sliderVH } from '.';
+import { TiDelete } from 'react-icons/ti';
 import { Separator } from '../separator';
 
-function SliderPlaceholder() {
+function SliderPlaceholder({ edit }) {
   return (
     <SliderWrapper>
       <div className="full-slider">
@@ -11,6 +12,15 @@ function SliderPlaceholder() {
             <div className="carousel-item active">
               <div className="container container-img">
                 <SliderImgPlaceholder vh={sliderVH} />
+                {edit && (
+                  <div className="delete-container">
+                    <TiDelete className="delete-icon" />
+                    <button
+                      type="button"
+                      className="delete-button delete-disabled"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

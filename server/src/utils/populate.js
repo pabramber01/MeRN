@@ -1,19 +1,24 @@
 import mongoose from 'mongoose';
-import { readJSONFiles } from './index.js';
+import { moveAssets, readFixtures } from './index.js';
 import '../app.js';
 
 const populate = async () => {
   console.log('Dumping data...');
 
-  const data = await readJSONFiles({
+  const { assets, data } = await readFixtures({
     mainPath: './src',
-    regex: '^.*Fixture.json$',
+    regex: '^.*Fixture$',
   });
 
   for (const json of data) {
     await mongoose.model(json.model).deleteMany({});
     await mongoose.model(json.model).insertMany(json.data);
   }
+
+  await moveAssets({
+    mainPath: './public/mern',
+    assets,
+  });
 
   console.log('Dumping was successful!');
   await mongoose.connection.close();

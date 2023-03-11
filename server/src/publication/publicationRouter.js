@@ -6,13 +6,22 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(
+  .get(authMiddleware.isAuthenticated, publicationController.getAllPublications)
+  .post(
     authMiddleware.isAuthenticated,
-    publicationController.getAllPublications
+    publicationController.createPublication
   );
 
 router
   .route('/:id')
-  .get(authMiddleware.isAuthenticated, publicationController.getPublication);
+  .get(authMiddleware.isAuthenticated, publicationController.getPublication)
+  .patch(
+    authMiddleware.isAuthenticated,
+    publicationController.updatePublication
+  )
+  .delete(
+    authMiddleware.isAuthenticated,
+    publicationController.deletePublication
+  );
 
 export default router;

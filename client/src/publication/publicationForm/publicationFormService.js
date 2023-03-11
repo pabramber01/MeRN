@@ -1,12 +1,12 @@
 const publicationFormService = {
-  validate: (title, description, images, previews) => {
+  validate: (title, desc, images, previews) => {
     const titleErrors = publicationFormService.validateTitle(title);
-    const descErrors = publicationFormService.validateDescription(description);
+    const descErrors = publicationFormService.validateDescription(desc);
     const imagesErrors = publicationFormService.validateImages(images);
 
     return {
       title: { value: title, ...titleErrors },
-      description: { value: description, ...descErrors },
+      desc: { value: desc, ...descErrors },
       images: { value: images, ...imagesErrors },
       previews,
     };
@@ -50,7 +50,7 @@ const publicationFormService = {
   checkErrors: (validation) => {
     return (
       validation.title.hasError ||
-      validation.description.hasError ||
+      validation.desc.hasError ||
       validation.images.hasError
     );
   },

@@ -6,6 +6,11 @@ const PublicationShowWrapper = styled.main`
     margin-top: 7px;
   }
   .publication-title {
+    margin-bottom: 0;
+    color: var(--bs-secondary);
+  }
+  .publication-actions {
+    align-self: center;
     color: var(--bs-secondary);
   }
   .publication-description {
@@ -15,6 +20,11 @@ const PublicationShowWrapper = styled.main`
     word-spacing: 5px;
     overflow-wrap: break-word;
     word-break: break-word;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
   }
   .footer {
     display: block;

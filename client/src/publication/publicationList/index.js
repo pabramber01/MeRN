@@ -1,6 +1,7 @@
 import publicationListSlice, {
   getAll,
   changeView,
+  clearFeed,
 } from './publicationListSlice';
 import PublicationListWrapper from './PublicationListWrapper';
 import PublicationList from './PublicationList';
@@ -15,6 +16,7 @@ export {
   publicationListSlice,
   getAll,
   changeView,
+  clearFeed,
   PublicationListWrapper,
   PublicationListPlaceholder,
   PublicationListSingle,

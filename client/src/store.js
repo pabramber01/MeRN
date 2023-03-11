@@ -1,7 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authFormSlice } from './auth';
 import { userShowSlice } from './user';
-import { publicationListSlice, publicationShowSlice } from './publication';
+import {
+  publicationListSlice,
+  publicationShowSlice,
+  publicationFormSlice,
+} from './publication';
 
 const store = configureStore({
   reducer: {
@@ -9,6 +13,7 @@ const store = configureStore({
     userShow: userShowSlice,
     publicationList: publicationListSlice,
     publicationShow: publicationShowSlice,
+    publicationForm: publicationFormSlice,
   },
 });
 
