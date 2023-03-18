@@ -26,7 +26,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     error.statusCode = 400;
   }
 
-  return res.status(error.statusCode).json({ success: false, msg: error.msg });
+  res.status(error.statusCode).json({ success: false, msg: error.msg });
 };
 
 const routeNotFoundMiddleware = (req, res) =>

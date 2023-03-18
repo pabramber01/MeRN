@@ -1,4 +1,5 @@
 import authFormSlice, {
+  loadCurrentUser,
   logoutUserLocal,
   loginUser,
   logoutUser,
@@ -11,6 +12,7 @@ import AuthFormWrapper from './AuthFormWrapper';
 export default AuthForm;
 export {
   authFormSlice,
+  loadCurrentUser,
   logoutUserLocal,
   loginUser,
   logoutUser,

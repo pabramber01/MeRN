@@ -10,18 +10,18 @@ import {
 async function loginUser(req, res) {
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username });
+  const data = await User.findOne({ username });
 
-  if (!user) {
+  if (!data) {
     throw new BadRequestError('Invalid credentials');
   }
 
-  const passwordMatch = await user.checkPassword(password);
+  const passwordMatch = await data.checkPassword(password);
   if (!passwordMatch) {
     throw new BadRequestError('Invalid credentials');
   }
 
-  const userToken = createToken(user);
+  const userToken = createToken(data);
   attachLoginCookie({ res, userToken });
   res.status(StatusCodes.OK).json({ success: true, data: { user: userToken } });
 }

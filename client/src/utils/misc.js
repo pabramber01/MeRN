@@ -9,4 +9,8 @@ const arraysEqual = (a, b) => {
   return true;
 };
 
-export { arraysEqual };
+const objectsEqual = (a, b) => {
+  return arraysEqual(Object.values(a), Object.values(b));
+};
+
+export { arraysEqual, objectsEqual };

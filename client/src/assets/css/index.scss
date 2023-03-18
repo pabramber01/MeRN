@@ -1,6 +1,14 @@
 $primary: #bdd2b6;
 $secondary: #798777;
 
+$nav-tabs-link-active-bg: var(--bs-light);
+$nav-tabs-border-width: 2px;
+$nav-tabs-border-color: rgba(var(--bs-secondary-rgb), 0.25);
+$nav-tabs-link-active-border-color: rgba(var(--bs-secondary-rgb), 0.25)
+  rgba(var(--bs-secondary-rgb), 0.25) $nav-tabs-link-active-bg;
+$nav-tabs-link-hover-border-color: rgba(var(--bs-primary-rgb), 0.25)
+  rgba(var(--bs-primary-rgb), 0.25) $nav-tabs-border-color;
+
 @import 'normalize.css';
 @import 'bootstrap';
 @import 'react-toastify/dist/ReactToastify.css';

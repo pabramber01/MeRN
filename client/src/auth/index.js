@@ -1,4 +1,5 @@
 import AuthForm, {
+  loadCurrentUser,
   authFormSlice,
   logoutUserLocal,
   loginUser,
@@ -9,6 +10,7 @@ import AuthForm, {
 export {
   AuthForm,
   authFormSlice,
+  loadCurrentUser,
   logoutUserLocal,
   loginUser,
   logoutUser,

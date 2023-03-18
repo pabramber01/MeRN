@@ -14,7 +14,7 @@ import {
   FormTextArea,
   Slider,
   sliderVH,
-  SpinnerButton,
+  FormSubmit,
 } from '../../layout';
 
 const initialValues = {
@@ -189,15 +189,11 @@ function PublicationForm({ type }) {
             hasError={values.desc.hasError}
             errorMsg={values.desc.errorMsg}
           />
-          <div className="d-grid gap-2 my-3">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isLoading}
-            >
-              {isLoading ? <SpinnerButton /> : 'Submit'}
-            </button>
-          </div>
+          <FormSubmit
+            className="d-grid gap-2 my-3"
+            btn="primary"
+            disabled={isLoading}
+          />
         </div>
       </form>
     </PublicationFormWrapper>

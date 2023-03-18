@@ -1,4 +1,4 @@
-import { FormInput, FormTextArea } from './form';
+import { FormInput, FormTextArea, FormSubmit } from './form';
 import { Logo, LogoImg, LogoText } from './logo';
 import { Navbar } from './navbar';
 import { Spinner, SpinnerButton } from './spinner';
@@ -6,10 +6,12 @@ import { ConditionalLink } from './conditionalLink';
 import { SuspenseImg } from './suspenseImg';
 import { Slider, sliderVH, SliderPlaceholder } from './slider';
 import { Separator } from './separator';
+import { Tabs } from './tabs';
 
 export {
   FormInput,
   FormTextArea,
+  FormSubmit,
   Logo,
   LogoText,
   LogoImg,
@@ -22,4 +24,5 @@ export {
   SliderPlaceholder,
   sliderVH,
   Separator,
+  Tabs,
 };

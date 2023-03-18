@@ -65,10 +65,9 @@ const publicationFormSlice = createSlice({
           toast.success(`Your publication was uploaded!`);
         }
       )
-      .addMatcher(isFulfilled(deletePublication), (state, { payload }) => {
-        const { data } = payload;
+      .addMatcher(isFulfilled(deletePublication), (state) => {
         state = initialState;
-        toast.success(data.msg);
+        toast.success('Publication was successfully deleted!');
       })
       .addMatcher(
         isRejectedWithValue(

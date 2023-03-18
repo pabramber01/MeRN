@@ -11,10 +11,10 @@ const authFormService = {
     );
 
     return {
-      username: { username, ...usernameErrors },
-      email: { email, ...emailErrors },
-      password: { password, ...passwordErrors },
-      password2: { password2, ...password2Errors },
+      username: { value: username, ...usernameErrors },
+      email: { value: email, ...emailErrors },
+      password: { value: password, ...passwordErrors },
+      password2: { value: password2, ...password2Errors },
       isMember,
     };
   },

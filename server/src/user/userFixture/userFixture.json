@@ -7,7 +7,7 @@
       "email": "test@mern.es",
       "password": "$2a$10$tuKaIO7teHjaWq3BYczVoe7hnaOhwJGXVxuhV55WQ0oN/yMc52/E6",
       "role": "user",
-      "avatar": "https://gpmbroker.com/wp-content/uploads/2021/02/team-1.jpg"
+      "avatar": "avatar0.jpg"
     },
     {
       "_id": "63e65ee4e59bf65fa96314ca",
@@ -15,7 +15,7 @@
       "email": "example@mern.es",
       "password": "$2a$10$al5GruEj3CDNGMKSNpiyd.jIUeuYCTn4parmMwKqGEoc.GyrmzOV2",
       "role": "user",
-      "avatar": "https://image.shutterstock.com/mosaic_250/2780032/1733598437/stock-photo-close-up-headshot-portrait-picture-of-smiling-african-american-businesswoman-happy-attractive-1733598437.jpg"
+      "avatar": "avatar0.jpg"
     },
     {
       "_id": "63e65f7a5370fe2673c74f07",
@@ -23,7 +23,7 @@
       "email": "user1@mern.es",
       "password": "$2a$10$CL.bN8DGRMefiEHSgz9EROtRBmyi1vmTZx6i079ByRcmyB1UvbKZq",
       "role": "user",
-      "avatar": "https://media.istockphoto.com/id/1368424494/photo/studio-portrait-of-a-cheerful-woman.jpg?b=1&s=170667a&w=0&k=20&c=VEE1756TeCzYH2uPsFZ_P8H3Di2j_jw8aOT6zd7V8JY="
+      "avatar": "avatar0.jpg"
     },
     {
       "_id": "63e65f94cccb463f267e38b1",
@@ -31,7 +31,7 @@
       "email": "user2@mern.es",
       "password": "$2a$10$c7eIOvprb3Z3rLVbYkLnO.a5BoYMetFL3z8zMYnTSw54ZCL0TQuIW",
       "role": "user",
-      "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8rRhbrKkA_YHYtExTvKb8qGKF1lgP_S7qBaVe09HDZ9E8poPEjfKrEhiu_6A4_WM6DEM&usqp=CAU"
+      "avatar": "avatar0.png"
     }
   ]
 }

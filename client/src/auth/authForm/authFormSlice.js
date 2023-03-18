@@ -37,10 +37,14 @@ const authFormSlice = createSlice({
   name: 'authForm',
   initialState,
   reducers: {
-    logoutUserLocal: (state) => {
+    loadCurrentUser: (state) => {
+      state.currentUser = getUserFromLocalStorage();
+    },
+    logoutUserLocal: (state, { payload }) => {
       state.currentUser = null;
       removeUserFromLocalStorage();
-      toast.warn('Session expired, logging out...');
+      if (payload) toast.success(payload);
+      else toast.warn('Session expired, logging out...');
     },
   },
   extraReducers: (builder) => {
@@ -75,5 +79,5 @@ const authFormSlice = createSlice({
 });
 
 export { loginUser, logoutUser, createUser };
-export const { logoutUserLocal } = authFormSlice.actions;
+export const { loadCurrentUser, logoutUserLocal } = authFormSlice.actions;
 export default authFormSlice.reducer;

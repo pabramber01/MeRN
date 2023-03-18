@@ -1,27 +1,36 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { objectsEqual } from '../../utils';
+
+const initialState = {
+  pending: true,
+  load: false,
+  error: false,
+};
 
 function SuspenseImg({ fallback, attr }) {
-  const [imageState, setImageState] = useState({
-    pending: true,
-    load: false,
-    error: false,
-  });
+  const [image, setImage] = useState({ attr, state: initialState });
+
+  useEffect(() => {
+    if (!objectsEqual(image.attr, attr)) {
+      setImage({ attr, state: initialState });
+    } // eslint-disable-next-line
+  }, [attr]);
 
   const handleImageLoad = () =>
-    setImageState({ pending: false, load: true, error: false });
+    setImage({ attr, state: { pending: false, load: true, error: false } });
 
   const handleImageError = () =>
-    setImageState({ pending: false, load: false, error: true });
+    setImage({ attr, state: { pending: false, load: false, error: true } });
 
-  return imageState.error ? (
+  return !objectsEqual(image.attr, attr) || image.state.error ? (
     <> {fallback} </>
   ) : (
     <>
-      {imageState.pending && fallback}
+      {image.state.pending && fallback}
       <img
         alt=""
-        {...attr}
-        className={`${attr.className} ${imageState.pending && 'd-none'}`}
+        {...image.attr}
+        className={`${image.attr.className} ${image.state.pending && 'd-none'}`}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />

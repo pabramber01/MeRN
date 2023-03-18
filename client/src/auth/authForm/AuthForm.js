@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AuthFormWrapper, authFormService, loginUser, createUser } from '.';
-import { FormInput, LogoText, SpinnerButton } from '../../layout';
+import { FormInput, FormSubmit, LogoText } from '../../layout';
 
 const initialValues = {
   username: { value: '', hasError: null, errorMsg: '' },
@@ -142,7 +142,7 @@ function AuthForm() {
                   value={values.email.value}
                   onChange={handleChange}
                   onBlur={!values.isMember && handleBlur}
-                  placeholder="example@mern.es"
+                  placeholder="example@mern.com"
                   hasError={values.email.hasError}
                   errorMsg={values.email.errorMsg}
                 />
@@ -171,15 +171,11 @@ function AuthForm() {
                   errorMsg={values.password2.errorMsg}
                 />
               )}
-              <div className="d-grid gap-2 my-3">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading}
-                >
-                  {isLoading ? <SpinnerButton /> : 'Submit'}
-                </button>
-              </div>
+              <FormSubmit
+                className="d-grid gap-2 my-3"
+                btn="primary"
+                disabled={isLoading}
+              />
             </form>
           </div>
           <hr />

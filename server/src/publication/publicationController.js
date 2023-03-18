@@ -60,7 +60,9 @@ const createPublication = async (req, res) => {
     throw new BadRequestError('You must only upload images');
   }
 
-  const paths = images.map((img, i) => `${i + 1}-${img.name}`);
+  const paths = images.map(
+    (img, i) => `${i + 1}-image0${img.name.substr(img.name.lastIndexOf('.'))}`
+  );
 
   const data = await Publication.create({
     title,
@@ -69,14 +71,13 @@ const createPublication = async (req, res) => {
     user: userId,
   });
 
-  images.forEach(async (img, i) => {
+  for (const [i, img] of images.entries())
     await img.mv(
       path.join(__dirname, `${staticFolder}/${data._id}/${paths[i]}`)
     );
-  });
 
-  return res
-    .status(StatusCodes.OK)
+  res
+    .status(StatusCodes.CREATED)
     .json({ sucess: true, data: { _id: data._id } });
 };
 
@@ -118,46 +119,43 @@ const updatePublication = async (req, res) => {
     images.forEach((img) => paths.push(img.name));
   }
 
+  const v = data.__v;
   const getBaseImg = (img) => img.split('/').splice(-1)[0].slice(2);
+  const getExtension = (img) => img.substr(img.lastIndexOf('.'));
   oldImg.forEach((img) => paths.unshift(getBaseImg(img)));
-  paths = paths.map((img, i) => `${i + 1}-${img}`);
+  paths = paths.map((img, i) => `${i + 1}-image${v + 1}${getExtension(img)}`);
 
   const imagesToDelete = [];
   const imagesToRename = [];
   data.images.forEach((img, i) => {
     oldImg.includes(img)
-      ? imagesToRename.push(`${i + 1}-${getBaseImg(img)}`)
-      : imagesToDelete.push(`${i + 1}-${getBaseImg(img)}`);
+      ? imagesToRename.push(`${i + 1}-image${v}${getExtension(img)}`)
+      : imagesToDelete.push(`${i + 1}-image${v}${getExtension(img)}`);
   });
 
   data.set({ title, description, images: paths });
   await data.save();
 
-  imagesToDelete.forEach(async (img) => {
+  for (const img of imagesToDelete)
     await fs.rm(path.join(__dirname, `${staticFolder}/${data._id}/${img}`));
-  });
 
-  imagesToRename.forEach(async (img, i) => {
+  for (const [i, img] of imagesToRename.entries())
     await fs.rename(
       path.join(__dirname, `${staticFolder}/${data._id}/${img}`),
       path.join(__dirname, `${staticFolder}/${data._id}/${paths[i]}`)
     );
-  });
 
   if (images) {
-    images.forEach(async (img, i) => {
+    for (const [i, img] of images.entries())
       await img.mv(
         path.join(
           __dirname,
           `${staticFolder}/${data._id}/${paths[i + imagesToRename.length]}`
         )
       );
-    });
   }
 
-  return res
-    .status(StatusCodes.OK)
-    .json({ sucess: true, data: { _id: data._id } });
+  res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
 };
 
 const deletePublication = async (req, res) => {
@@ -175,10 +173,7 @@ const deletePublication = async (req, res) => {
     recursive: true,
   });
 
-  return res.status(StatusCodes.OK).json({
-    success: true,
-    data: { msg: 'Publication was successfully deleted' },
-  });
+  res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
 };
 
 export default {

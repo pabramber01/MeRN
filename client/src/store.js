@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { authFormSlice } from './auth';
-import { userShowSlice } from './user';
+import { userShowSlice, userFormSlice } from './user';
 import {
   publicationListSlice,
   publicationShowSlice,
@@ -10,6 +10,7 @@ import {
 const combinedReducer = combineReducers({
   authForm: authFormSlice,
   userShow: userShowSlice,
+  userForm: userFormSlice,
   publicationList: publicationListSlice,
   publicationShow: publicationShowSlice,
   publicationForm: publicationFormSlice,
@@ -19,10 +20,11 @@ const rootReducer = (state, action) => {
   const resetActions = [
     'authForm/logoutUser/fulfilled',
     'authForm/logoutUserLocal',
+    'userForm/updateUser/fulfilled',
   ];
 
   if (resetActions.includes(action.type)) {
-    state = undefined;
+    state = { authForm: state.authForm };
   }
 
   return combinedReducer(state, action);

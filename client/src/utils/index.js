@@ -5,7 +5,7 @@ import {
   getUserFromLocalStorage,
 } from './localStorage';
 import thunks from './thunks';
-import { arraysEqual } from './misc';
+import { arraysEqual, objectsEqual } from './misc';
 
 export {
   customAxiosAPI,
@@ -15,4 +15,5 @@ export {
   getUserFromLocalStorage,
   thunks,
   arraysEqual,
+  objectsEqual,
 };

@@ -46,6 +46,7 @@ const UserSchema = new mongoose.Schema(
       },
     },
     toObject: { virtual: true },
+    optimisticConcurrency: true,
   }
 );
 
@@ -56,10 +57,37 @@ UserSchema.virtual('publications', {
   justOne: false,
 });
 
+UserSchema.post(/(find|findOne)/, async function (obj) {
+  const noUser = !obj;
+  if (noUser) return;
+  const withoutAvatar = Array.isArray(obj) ? !obj[0].avatar : !obj.avatar;
+  if (withoutAvatar) return;
+
+  const concatBaseUrl = (img, id) => {
+    const route = img.includes('default')
+      ? 'common/static/avatars'
+      : `mern/static/users/${id}`;
+    return `${process.env.BASE_URL}/${route}/${img}`;
+  };
+
+  if (Array.isArray(obj)) {
+    obj.forEach((user) => {
+      user.avatar = concatBaseUrl(user.avatar, user._id);
+    });
+  } else {
+    obj.avatar = concatBaseUrl(obj.avatar, obj._id);
+  }
+});
+
 UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.pre('save', async function () {
+  if (!this.avatar)
+    this.avatar = `${Math.ceil(Math.random() * 4)}-defaultAvatar.png`;
 });
 
 UserSchema.pre('remove', async function () {
@@ -67,7 +95,14 @@ UserSchema.pre('remove', async function () {
 });
 
 UserSchema.methods.checkPassword = async function (pass) {
-  const isEqual = await bcrypt.compare(pass, this.password);
+  let isEqual;
+
+  if (typeof pass !== 'string') {
+    isEqual = false;
+  } else {
+    isEqual = await bcrypt.compare(pass, this.password);
+  }
+
   return isEqual;
 };
 

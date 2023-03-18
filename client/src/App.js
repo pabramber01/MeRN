@@ -15,6 +15,7 @@ import {
   PublicationEdit,
   Publication,
 } from './pages';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -33,9 +34,10 @@ function App() {
           >
             <Route index element={<Home />} />
             <Route path="users/:username" element={<Profile />} />
+            <Route path="users/mysettings" element={<Settings />} />
+            <Route path="publications/:id" element={<Publication />} />
             <Route path="publications/new" element={<PublicationEdit />} />
             <Route path="publications/edit" element={<PublicationEdit />} />
-            <Route path="publications/:id" element={<Publication />} />
           </Route>
           <Route path="/landing" element={<Landing />} />
           <Route path="*" element={<Error />} />

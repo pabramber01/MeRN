@@ -59,6 +59,11 @@ function Navbar() {
                     label="My Profile"
                     dropdown={true}
                   />
+                  <NavbarLink
+                    path={`/users/mysettings`}
+                    label="My settings"
+                    dropdown={true}
+                  />
                   <hr className="dropdown-divider" />
                   <NavbarLogout />
                 </NavbarDropdown>
