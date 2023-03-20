@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react';
-import { objectsEqual } from '../../utils';
+import { objectsEqual, imgIsCached } from '../../utils';
 
-const initialState = {
-  pending: true,
-  load: false,
-  error: false,
+const initialImage = (attr) => {
+  const isCached = imgIsCached(attr.src);
+  const state = { pending: !isCached, load: isCached, error: false };
+  return { attr, state };
 };
 
 function SuspenseImg({ fallback, attr }) {
-  const [image, setImage] = useState({ attr, state: initialState });
+  const [image, setImage] = useState(initialImage(attr));
 
   useEffect(() => {
     if (!objectsEqual(image.attr, attr)) {
-      setImage({ attr, state: initialState });
+      setImage(initialImage(attr));
     } // eslint-disable-next-line
   }, [attr]);
 
   const handleImageLoad = () =>
-    setImage({ attr, state: { pending: false, load: true, error: false } });
+    setImage({ ...image, state: { pending: false, load: true, error: false } });
 
   const handleImageError = () =>
-    setImage({ attr, state: { pending: false, load: false, error: true } });
+    setImage({ ...image, state: { pending: false, load: false, error: true } });
 
-  return !objectsEqual(image.attr, attr) || image.state.error ? (
+  return image.state.error ? (
     <> {fallback} </>
   ) : (
     <>

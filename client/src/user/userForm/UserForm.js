@@ -1,20 +1,11 @@
-import { Suspense, lazy } from 'react';
 import { Tabs } from '../../layout';
-import {
-  UserFormGeneralPlaceholder,
-  UserFormSecurity,
-  UserFormWrapper,
-} from '.';
+import { UserFormGeneral, UserFormSecurity, UserFormWrapper } from '.';
 
 function UserForm() {
-  const UserFormGeneral = lazy(() => import('./UserFormGeneral'));
-
   return (
     <UserFormWrapper>
       <Tabs>
-        <Suspense label="General" fallback={<UserFormGeneralPlaceholder />}>
-          <UserFormGeneral />
-        </Suspense>
+        <UserFormGeneral label="General" />
         <UserFormSecurity label="Security" />
       </Tabs>
     </UserFormWrapper>

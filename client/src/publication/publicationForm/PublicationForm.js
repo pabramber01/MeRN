@@ -17,36 +17,33 @@ import {
   FormSubmit,
 } from '../../layout';
 
-const initialValues = {
-  title: { value: '', hasError: null, errorMsg: '' },
-  desc: { value: '', hasError: null, errorMsg: '' },
-  images: { value: [], hasError: null, errorMsg: '' },
-  previews: [],
-};
+const initialValues = (p) => ({
+  title: { value: p.title || '', hasError: null, errorMsg: '' },
+  desc: { value: p.description || '', hasError: null, errorMsg: '' },
+  images: { value: p.images || [], hasError: null, errorMsg: '' },
+  previews: p.images || [],
+});
 
 function PublicationForm({ type }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [values, setValues] = useState(initialValues);
   const { publication, isLoading } = useSelector(
     (state) => state.publicationForm
   );
+  const [values, setValues] = useState(
+    initialValues(type === 'new' ? {} : publication)
+  );
 
   useEffect(() => {
-    if (type === 'edit' && publication.id) {
-      setValues({
-        title: { value: publication.title, hasError: null, errorMsg: '' },
-        desc: { value: publication.description, hasError: null, errorMsg: '' },
-        images: { value: publication.images, hasError: null, errorMsg: '' },
-        previews: publication.images,
-      });
-    } else {
-      setValues(initialValues);
+    if (type === 'new') {
+      setValues(initialValues({}));
+    } else if (type === 'edit') {
+      setValues(initialValues(publication));
     } // eslint-disable-next-line
   }, [type]);
 
   useEffect(() => {
-    if (values.images.value.length > 0) {
+    if (Object.keys(publication).length === 1) {
       dispatch(clearPublication());
       dispatch(clearFeed());
       navigate(`/publications/${publication.id}`);
