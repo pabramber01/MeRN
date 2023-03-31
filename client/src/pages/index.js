@@ -8,6 +8,8 @@ import ScrollToTop from './ScrollToTop';
 import Interceptors from './Interceptors';
 import PublicationEdit from './PublicationEdit';
 import Publication from './Publication';
+import ProtectedAdmin from './ProtectedAdmin';
+import UsersDashboard from './UsersDashboard';
 
 export {
   Landing,
@@ -20,4 +22,6 @@ export {
   Interceptors,
   PublicationEdit,
   Publication,
+  ProtectedAdmin,
+  UsersDashboard,
 };

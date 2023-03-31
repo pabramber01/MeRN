@@ -4,7 +4,7 @@ import { Logo, Separator } from '..';
 
 function Navbar() {
   const {
-    currentUser: { username },
+    currentUser: { username, role },
   } = useSelector((state) => state.authForm);
 
   return (
@@ -47,6 +47,15 @@ function Navbar() {
               <ul className="navbar-nav nav-pills">
                 <hr className="initial-separator" />
                 <NavbarLink path="/" label="Home" />
+                {role === 'admin' && (
+                  <NavbarDropdown label="Admin">
+                    <NavbarLink
+                      path={`/admin/users`}
+                      label="Users dashboard"
+                      dropdown={true}
+                    />
+                  </NavbarDropdown>
+                )}
                 <NavbarDropdown label={`${username}`}>
                   <NavbarLink
                     path={`/publications/new`}

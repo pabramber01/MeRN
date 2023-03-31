@@ -1,16 +1,22 @@
-import connectDB from './db.js';
+import connectDB, {
+  concatPubImg,
+  concatUserAvat,
+  lookupPipeline,
+} from './db.js';
+import { sortQuery, pageQuery, searchQuery } from './queries.js';
+import { readFixtures, moveAssets } from './reader.js';
 import {
   createToken,
   isTokenValid,
   attachLoginCookie,
   attachLogoutCookie,
 } from './token.js';
-import { readFixtures, moveAssets } from './reader.js';
-import sortQuery from './sortQuery.js';
-import pageQuery from './pageQuery.js';
 
 export {
   connectDB,
+  concatPubImg,
+  concatUserAvat,
+  lookupPipeline,
   createToken,
   isTokenValid,
   attachLoginCookie,
@@ -19,4 +25,5 @@ export {
   moveAssets,
   sortQuery,
   pageQuery,
+  searchQuery,
 };

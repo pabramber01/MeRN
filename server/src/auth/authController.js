@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError } from '../error/index.js';
+import { BadRequestError, UnauthorizedError } from '../error/index.js';
 import { User } from '../user/index.js';
 import {
   createToken,
@@ -14,6 +14,10 @@ async function loginUser(req, res) {
 
   if (!data) {
     throw new BadRequestError('Invalid credentials');
+  }
+
+  if (!data.enabled) {
+    throw new UnauthorizedError('You are banned from this site');
   }
 
   const passwordMatch = await data.checkPassword(password);

@@ -7,6 +7,7 @@ import { SuspenseImg } from './suspenseImg';
 import { Slider, sliderVH, SliderPlaceholder } from './slider';
 import { Separator } from './separator';
 import { Tabs } from './tabs';
+import { EmptyData } from './empty';
 
 export {
   FormInput,
@@ -25,4 +26,5 @@ export {
   sliderVH,
   Separator,
   Tabs,
+  EmptyData,
 };

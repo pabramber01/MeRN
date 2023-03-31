@@ -17,10 +17,11 @@ const initialValues = (user) => ({
   email: { value: user.email || '', hasError: null, errorMsg: '' },
   avatar: user.avatar || '',
   preview: user.avatar || '',
+  isLoading: false,
 });
 
 function UserFormGeneral() {
-  const { user, isLoading } = useSelector((state) => state.userForm);
+  const { user } = useSelector((state) => state.userForm);
   const [values, setValues] = useState(initialValues(user));
   const dispatch = useDispatch();
 
@@ -61,9 +62,14 @@ function UserFormGeneral() {
     user.append('username', username.value);
     user.append('email', email.value);
     user.append('avatar', avatar);
+    setValues({ ...validation, isLoading: true });
     dispatch(updateUser(user))
       .unwrap()
-      .then(() => dispatch(loadCurrentUser()));
+      .then(() => {
+        setValues({ ...validation, isLoading: false });
+        dispatch(loadCurrentUser());
+      })
+      .catch(() => setValues({ ...validation, isLoading: false }));
   };
 
   const handleChange = (e) => {
@@ -175,7 +181,7 @@ function UserFormGeneral() {
             <FormSubmit
               className="d-grid gap-2 my-3"
               btn="primary"
-              disabled={isLoading}
+              disabled={values.isLoading}
             />
           </div>
         </div>

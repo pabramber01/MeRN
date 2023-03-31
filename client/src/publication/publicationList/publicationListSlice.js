@@ -20,11 +20,9 @@ const getAll = createAsyncThunk(
   async (view, thunkAPI) => {
     switch (true) {
       case view.startsWith('home'):
-        thunkAPI.dispatch(getAllPublications());
-        break;
+        return thunkAPI.dispatch(getAllPublications());
       case view.startsWith('profile'):
-        thunkAPI.dispatch(getAllPublicationsByUser(view.split('/')[1]));
-        break;
+        return thunkAPI.dispatch(getAllPublicationsByUser(view.split('/')[1]));
       default:
         console.log('Wrong view');
     }

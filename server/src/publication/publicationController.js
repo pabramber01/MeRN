@@ -12,6 +12,7 @@ const staticFolder = '../../public/mern/publications';
 
 const getAllPublications = async (req, res) => {
   const { sort, page } = req.query;
+  const { username } = req.user;
   const pageSize = 9;
 
   const orderQuery = sortQuery({
@@ -22,29 +23,50 @@ const getAllPublications = async (req, res) => {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const data = await Publication.find(
-    {},
-    { title: 1, images: { $slice: 1 }, user: 1 },
-    { sort: orderQuery, limit: pageSize, skip: skipQuery }
-  ).populate('user', 'username avatar');
+  const data = await Publication.lookup({
+    filter: {},
+    project: { title: 1, images: { $slice: ['$images', 1] }, user: 1 },
+    options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
+    populate: {
+      path: 'user',
+      select: { username: 1, avatar: 1 },
+      match: {
+        $or: [{ enabled: true }, { enabled: false, username: username }],
+      },
+    },
+  });
 
   res.status(StatusCodes.OK).json({ success: true, data });
 };
 
 const getPublication = async (req, res) => {
   const { id } = req.params;
+  const { username, role } = req.user;
+  const isAdmin = role === 'admin';
 
   if (!validator.isMongoId(id))
     throw new BadRequestError(`No publication found with id: '${id}'`);
 
-  const data = await Publication.findOne({ _id: id }, { __v: 0 }).populate(
-    'user',
-    'username avatar'
-  );
+  const data = await Publication.lookup({
+    filter: { _id: id },
+    project: { __v: 0 },
+    populate: {
+      path: 'user',
+      select: { username: 1, avatar: 1 },
+      match: {
+        $or: [
+          { enabled: true },
+          { enabled: isAdmin && false },
+          { enabled: false, username: username },
+        ],
+      },
+    },
+  });
 
-  if (!data) throw new BadRequestError(`No publication found with id: '${id}'`);
+  if (data.length === 0)
+    throw new BadRequestError(`No publication found with id: '${id}'`);
 
-  res.status(StatusCodes.OK).json({ success: true, data });
+  res.status(StatusCodes.OK).json({ success: true, data: data[0] });
 };
 
 const createPublication = async (req, res) => {
@@ -93,7 +115,7 @@ const updatePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (userId !== data.user.toString())
+  if (!data || userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
 
   if (!oldImg.every((img) => data.images.includes(img)))
@@ -164,7 +186,7 @@ const deletePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (userId !== data.user.toString())
+  if (!data || userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
 
   await data.delete();

@@ -11,6 +11,7 @@ import {
   attachLogoutCookie,
   sortQuery,
   pageQuery,
+  searchQuery,
 } from '../utils/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -93,6 +94,9 @@ async function updatePassword(req, res) {
 async function deleteUser(req, res) {
   const data = await User.findOne({ username: req.user.username });
 
+  if (data.role === 'admin')
+    throw new BadRequestError('You can not delete an admin account');
+
   await data.delete();
 
   await fs.rm(p.join(__dirname, `${staticFolder}/${data._id}`), {
@@ -104,12 +108,75 @@ async function deleteUser(req, res) {
   res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
 }
 
-async function getUserProfile(req, res) {
+async function banUser(req, res) {
   const { id } = req.params;
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
 
+  const data = await User.findOne({ [searchField]: id });
+
+  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+
+  if (data.role === 'admin')
+    throw new BadRequestError('You can not ban an admin user');
+
+  data.set({ enabled: false });
+  await data.save();
+
+  res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
+}
+
+async function unbanUser(req, res) {
+  const { id } = req.params;
+  const searchField = validator.isMongoId(id) ? '_id' : 'username';
+
+  const data = await User.findOne({ [searchField]: id });
+
+  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+
+  data.set({ enabled: true });
+  await data.save();
+
+  res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
+}
+
+async function getAllUsers(req, res) {
+  const { sort, page, q } = req.query;
+  const pageSize = 9;
+
+  const orderQuery = sortQuery({
+    sort,
+    fields: ['username'],
+    defaultSort: { username: 1 },
+  });
+
+  const skipQuery = pageQuery({ page, pageSize });
+
+  const findQuery = searchQuery({ q, fields: ['username'] });
+
+  const data = await User.find(
+    findQuery,
+    { password: 0 },
+    { sort: orderQuery, limit: pageSize, skip: skipQuery }
+  );
+
+  res.status(StatusCodes.OK).json({ success: true, data });
+}
+
+async function getUserProfile(req, res) {
+  const { id } = req.params;
+  const { username, role } = req.user;
+  const isAdmin = role === 'admin';
+  const searchField = validator.isMongoId(id) ? '_id' : 'username';
+
   const data = await User.findOne(
-    { [searchField]: id },
+    {
+      [searchField]: id,
+      $or: [
+        { enabled: true },
+        { enabled: isAdmin && false },
+        { enabled: false, username: username },
+      ],
+    },
     { username: 1, avatar: 1 }
   );
 
@@ -121,6 +188,8 @@ async function getUserProfile(req, res) {
 async function getAllPublicationsByUser(req, res) {
   const { id } = req.params;
   const { sort, page } = req.query;
+  const { username, role } = req.user;
+  const isAdmin = role === 'admin';
   const pageSize = 9;
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
 
@@ -132,7 +201,17 @@ async function getAllPublicationsByUser(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const data = await User.findOne({ [searchField]: id }, { _id: 1 }).populate({
+  const data = await User.findOne(
+    {
+      [searchField]: id,
+      $or: [
+        { enabled: true },
+        { enabled: isAdmin && false },
+        { enabled: false, username: username },
+      ],
+    },
+    { _id: 1 }
+  ).populate({
     path: 'publications',
     select: { title: 1, images: { $slice: 1 } },
     options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
@@ -152,4 +231,7 @@ export default {
   deleteUser,
   getUserData,
   updateUser,
+  getAllUsers,
+  banUser,
+  unbanUser,
 };

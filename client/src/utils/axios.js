@@ -15,7 +15,10 @@ const setupInterceptors = (dispatch, navigate) => {
       if (err.response.status === 401) {
         dispatch(logoutUserLocal());
         return;
-      } else if (err.response.status === 403) {
+      } else if (
+        err.response.status === 403 &&
+        !err.response.data.msg.includes('ban')
+      ) {
         navigate('/');
       }
       return Promise.reject(err);

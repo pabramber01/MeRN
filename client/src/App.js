@@ -14,6 +14,8 @@ import {
   Interceptors,
   PublicationEdit,
   Publication,
+  ProtectedAdmin,
+  UsersDashboard,
 } from './pages';
 import Settings from './pages/Settings';
 
@@ -38,6 +40,9 @@ function App() {
             <Route path="publications/:id" element={<Publication />} />
             <Route path="publications/new" element={<PublicationEdit />} />
             <Route path="publications/edit" element={<PublicationEdit />} />
+            <Route path="admin/" element={<ProtectedAdmin />}>
+              <Route path="users" element={<UsersDashboard />} />
+            </Route>
           </Route>
           <Route path="/landing" element={<Landing />} />
           <Route path="*" element={<Error />} />

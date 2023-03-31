@@ -4,7 +4,14 @@ import { userController } from './index.js';
 
 const router = express.Router();
 
-router.route('/').post(userController.createUser);
+router
+  .route('/')
+  .post(userController.createUser)
+  .get(
+    authMiddleware.isAuthenticated,
+    authMiddleware.hasPermission('admin'),
+    userController.getAllUsers
+  );
 
 router
   .route('/own')
@@ -15,6 +22,22 @@ router
 router
   .route('/own/change-password')
   .patch(authMiddleware.isAuthenticated, userController.updatePassword);
+
+router
+  .route('/:id/ban')
+  .patch(
+    authMiddleware.isAuthenticated,
+    authMiddleware.hasPermission('admin'),
+    userController.banUser
+  );
+
+router
+  .route('/:id/unban')
+  .patch(
+    authMiddleware.isAuthenticated,
+    authMiddleware.hasPermission('admin'),
+    userController.unbanUser
+  );
 
 router
   .route('/:id')

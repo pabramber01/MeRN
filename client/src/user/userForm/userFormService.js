@@ -10,6 +10,7 @@ const userFormService = {
       email: { value: email, ...emailErrors },
       avatar,
       preview,
+      isLoading: false,
     };
   },
   validatePassForm: (newPass, newPass2, oldPass) => {
@@ -21,6 +22,8 @@ const userFormService = {
       newPass: { value: newPass, ...newPassErrors },
       newPass2: { value: newPass2, ...newPass2Errors },
       oldPass: { value: oldPass, ...oldPassErrors },
+      isLoadingPassword: false,
+      isLoadingDelete: false,
     };
   },
   validateUsername: (username) => {

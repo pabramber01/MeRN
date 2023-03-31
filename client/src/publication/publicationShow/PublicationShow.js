@@ -99,6 +99,8 @@ function PublicationShow({ publicationId }) {
             <div className="publication-user">
               <Link to={`/users/${publication.user.username}`}>
                 <span className="user-name">{publication.user.username}</span>
+              </Link>
+              <Link to={`/users/${publication.user.username}`}>
                 <SuspenseImg
                   fallback={<PublicationShowPlaceholderAvatar />}
                   attr={{

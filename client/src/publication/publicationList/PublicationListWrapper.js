@@ -28,16 +28,15 @@ const PublicationListWrapper = styled.main`
     color: white;
     position: absolute;
     bottom: 0;
-    transform: translateY(100%);
-    transition: 0.3s;
   }
-  .photo:hover > .photo-info {
-    transform: translateY(0);
-    transition: 0.3s;
-  }
-  @media (max-width: 1199px) {
+  @media not all and (any-pointer: coarse) {
     .photo-info {
+      transform: translateY(100%);
+      transition: 0.3s;
+    }
+    .photo:hover > .photo-info {
       transform: translateY(0);
+      transition: 0.3s;
     }
   }
 `;

@@ -8,11 +8,13 @@ const initialValues = {
   newPass: { value: '', hasError: null, errorMsg: '' },
   newPass2: { value: '', hasError: null, errorMsg: '' },
   oldPass: { value: '', hasError: null, errorMsg: '' },
+  isLoadingPassword: false,
+  isLoadingDelete: false,
 };
 
 function UserFormSecurity() {
   const [values, setValues] = useState(initialValues);
-  const { isLoading } = useSelector((store) => store.userForm);
+  const { currentUser } = useSelector((store) => store.authForm);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
@@ -30,13 +32,15 @@ function UserFormSecurity() {
       return;
     }
 
+    setValues({ ...validation, isLoadingPassword: true });
     dispatch(updatePassword({ oldPass: oldPass.value, newPass: newPass.value }))
       .unwrap()
       .then(() => setValues(initialValues))
       .catch(() =>
         setValues({
-          ...values,
+          ...validation,
           oldPass: { value: '', hasError: null, errorMsg: '' },
+          isLoadingPassword: false,
         })
       );
   };
@@ -72,11 +76,11 @@ function UserFormSecurity() {
 
   const handleDelete = () => {
     if (window.confirm('Do you really want to delete your account?')) {
+      setValues({ ...values, isLoadingDelete: true });
       dispatch(deleteUser())
         .unwrap()
-        .then(() => {
-          dispatch(logoutUserLocal('We hope to see you again!'));
-        });
+        .then(() => dispatch(logoutUserLocal('We hope to see you again!')))
+        .catch(() => setValues({ ...values, isLoadingDelete: false }));
     }
   };
 
@@ -132,7 +136,7 @@ function UserFormSecurity() {
             <FormSubmit
               className="col-md-6 d-grid my-3"
               btn="primary"
-              disabled={isLoading}
+              disabled={values.isLoadingPassword}
               text="Update password"
             />
           </div>
@@ -152,8 +156,12 @@ function UserFormSecurity() {
             className="col-md-6 d-grid"
             btn="secondary"
             onClick={handleDelete}
-            disabled={isLoading}
+            disabled={values.isLoadingDelete}
             text="Delete account"
+            alwaysDisabled={{
+              disabled: currentUser.role === 'admin',
+              text: 'You can not delete an admin account',
+            }}
           />
         </div>
       </div>

@@ -1,15 +1,30 @@
 import { SpinnerButton } from '..';
 
-function FormSubmit({ className, btn, disabled, onClick, text }) {
+function FormSubmit({
+  className,
+  btn,
+  onClick,
+  disabled,
+  text,
+  alwaysDisabled,
+}) {
+  if (!alwaysDisabled) alwaysDisabled = {};
+
   return (
     <div className={className}>
       <button
         type="submit"
         className={`btn btn-${btn}`}
-        disabled={disabled}
+        disabled={alwaysDisabled.disabled || disabled}
         onClick={onClick ? onClick : undefined}
       >
-        {disabled ? <SpinnerButton /> : text || 'Submit'}
+        {alwaysDisabled.disabled ? (
+          alwaysDisabled.text
+        ) : disabled ? (
+          <SpinnerButton />
+        ) : (
+          text || 'Submit'
+        )}
       </button>
     </div>
   );

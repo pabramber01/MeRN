@@ -1,12 +1,12 @@
-function Spinner({ color, small, centered }) {
+function Spinner({ color, small, centered, extraClass }) {
   const cl = color || 'dark';
   const size = small ? 'spinner-border-sm' : '';
-  const className = `spinner-border ${size} text-${cl}`;
-  const center = centered ? 'text-center' : undefined;
+  const classNameInner = `spinner-border ${size} text-${cl}`;
+  const classNameOuter = `${centered ? 'text-center' : ''} ${extraClass || ''}`;
 
   return (
-    <div className={center}>
-      <div className={className} role="status">
+    <div className={classNameOuter.trim() ? classNameOuter : undefined}>
+      <div className={classNameInner} role="status">
         <span className="visually-hidden">Loading...</span>
       </div>
     </div>

@@ -39,7 +39,7 @@ const PublicationShowWrapper = styled.main`
   }
   a {
     color: var(--bs-body-color);
-    text-decoration: none !important;
+    text-decoration: none;
     display: flex;
   }
   .placeholder-user-name,

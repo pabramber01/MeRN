@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import { publicationService } from './index.js';
+import {
+  concatPubImg,
+  concatUserAvat,
+  lookupPipeline,
+} from '../utils/index.js';
 
 const PublicationSchema = new mongoose.Schema(
   {
@@ -32,22 +37,26 @@ const PublicationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-PublicationSchema.post(/(find|findOne)/, async function (obj) {
-  if (!obj) return;
+PublicationSchema.post('aggregate', async function (obj) {
+  obj.forEach((p) => {
+    const images = p.images;
+    const avatar = p.user && p.user.avatar;
 
-  let id;
-  const concatBaseUrl = (img) =>
-    `${process.env.BASE_URL}/mern/static/publications/${id}/${img}`;
+    if (images) p.images = p.images.map((img) => concatPubImg(img, p._id));
+    if (avatar) p.user.avatar = concatUserAvat(p.user.avatar, p.user._id);
+  });
+});
 
-  if (Array.isArray(obj)) {
-    obj.forEach((pub) => {
-      id = pub._id;
-      pub.images = pub.images.map(concatBaseUrl);
-    });
-  } else {
-    id = obj._id;
-    obj.images = obj.images.map(concatBaseUrl);
-  }
+PublicationSchema.post('findOne', async function (obj) {
+  const images = obj && obj.images;
+  if (images) obj.images = obj.images.map((img) => concatPubImg(img, obj._id));
+});
+
+PublicationSchema.post('find', async function (obj) {
+  obj.forEach((p) => {
+    const images = p.images;
+    if (images) p.images = p.images.map((img) => concatPubImg(img, p._id));
+  });
 });
 
 PublicationSchema.pre('save', async function () {
@@ -55,5 +64,12 @@ PublicationSchema.pre('save', async function () {
     this.description = undefined;
   }
 });
+
+PublicationSchema.statics.lookup = async function (params) {
+  const attrPath = params.populate.path;
+  const model = mongoose.model(this.schema.path(attrPath).options.ref);
+  const modelName = model.collection.name;
+  return this.aggregate(lookupPipeline(modelName, params));
+};
 
 export default mongoose.model('Publication', PublicationSchema);

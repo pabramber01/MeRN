@@ -9,7 +9,15 @@ import UserForm, {
   deleteUser,
   getUserData,
   updateUser,
+  banUser,
+  unbanUser,
 } from './userForm';
+import UserList, {
+  userListSlice,
+  getAll,
+  changeView,
+  changeEnabled,
+} from './userList';
 
 export {
   UserShow,
@@ -22,4 +30,11 @@ export {
   deleteUser,
   getUserData,
   updateUser,
+  banUser,
+  unbanUser,
+  UserList,
+  userListSlice,
+  getAll,
+  changeView,
+  changeEnabled,
 };

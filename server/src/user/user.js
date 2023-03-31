@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
+import { concatUserAvat } from '../utils/index.js';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -37,6 +38,10 @@ const UserSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    enabled: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     toJSON: {
@@ -57,26 +62,16 @@ UserSchema.virtual('publications', {
   justOne: false,
 });
 
-UserSchema.post(/(find|findOne)/, async function (obj) {
-  const noUser = !obj;
-  if (noUser) return;
-  const withoutAvatar = Array.isArray(obj) ? !obj[0].avatar : !obj.avatar;
-  if (withoutAvatar) return;
+UserSchema.post('findOne', async function (obj) {
+  const avatar = obj && obj.avatar;
+  if (avatar) obj.avatar = concatUserAvat(obj.avatar, obj._id);
+});
 
-  const concatBaseUrl = (img, id) => {
-    const route = img.includes('default')
-      ? 'common/static/avatars'
-      : `mern/static/users/${id}`;
-    return `${process.env.BASE_URL}/${route}/${img}`;
-  };
-
-  if (Array.isArray(obj)) {
-    obj.forEach((user) => {
-      user.avatar = concatBaseUrl(user.avatar, user._id);
-    });
-  } else {
-    obj.avatar = concatBaseUrl(obj.avatar, obj._id);
-  }
+UserSchema.post('find', async function (obj) {
+  obj.forEach((u) => {
+    const avatar = u.avatar;
+    if (avatar) u.avatar = concatUserAvat(u.avatar, u._id);
+  });
 });
 
 UserSchema.pre('save', async function () {
@@ -88,6 +83,8 @@ UserSchema.pre('save', async function () {
 UserSchema.pre('save', async function () {
   if (!this.avatar)
     this.avatar = `${Math.ceil(Math.random() * 4)}-defaultAvatar.png`;
+  else if (this.avatar.startsWith('http'))
+    this.avatar = this.avatar.split('/').splice(-1)[0];
 });
 
 UserSchema.pre('remove', async function () {

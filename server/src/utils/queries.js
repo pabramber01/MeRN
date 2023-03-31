@@ -19,4 +19,21 @@ const sortQuery = ({ sort, fields, defaultSort }) => {
   return sortQuery;
 };
 
-export default sortQuery;
+const pageQuery = ({ page, pageSize }) => {
+  const numPage = page && page >= 1 ? page - 1 : 0;
+  const skip = pageSize * numPage;
+  return skip;
+};
+
+const searchQuery = ({ q, fields }) => {
+  let searchQuery = {};
+
+  if (q)
+    fields.forEach(
+      (field) => (searchQuery[field] = { $regex: q, $options: 'i' })
+    );
+
+  return searchQuery;
+};
+
+export { sortQuery, pageQuery, searchQuery };

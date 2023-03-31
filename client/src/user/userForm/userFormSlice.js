@@ -1,7 +1,6 @@
 import {
   createSlice,
   createAsyncThunk,
-  isPending,
   isRejectedWithValue,
   isFulfilled,
 } from '@reduxjs/toolkit';
@@ -11,7 +10,6 @@ import { addUserToLocalStorage } from '../../utils';
 
 const initialState = {
   user: {},
-  isLoading: false,
 };
 
 const getUserData = createAsyncThunk(
@@ -35,18 +33,20 @@ const deleteUser = createAsyncThunk(
   async (_, thunkAPI) => thunks.delete(`/users/own`, thunkAPI)
 );
 
+const banUser = createAsyncThunk('userForm/banUser', async (id, thunkAPI) =>
+  thunks.patch(`/users/${id}/ban`, null, thunkAPI)
+);
+
+const unbanUser = createAsyncThunk('userForm/unbanUser', async (id, thunkAPI) =>
+  thunks.patch(`/users/${id}/unban`, null, thunkAPI)
+);
+
 const userFormSlice = createSlice({
   name: 'userForm',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addMatcher(
-        isPending(deleteUser, updatePassword, updateUser),
-        (state) => {
-          state.isLoading = true;
-        }
-      )
       .addMatcher(isFulfilled(getUserData), (state, { payload }) => {
         const { data } = payload;
         state.user.username = data.username;
@@ -55,33 +55,46 @@ const userFormSlice = createSlice({
       })
       .addMatcher(isFulfilled(updateUser), (state, { payload }) => {
         const { data } = payload;
-        state = initialState;
+        state.user = {};
         addUserToLocalStorage(data.user);
         toast.success('Your account has been updated successfully!');
       })
       .addMatcher(isFulfilled(updatePassword), (state) => {
-        state.isLoading = false;
         toast.success('Your password has been updated successfully!');
       })
       .addMatcher(isFulfilled(deleteUser), (state) => {
         state = initialState;
+      })
+      .addMatcher(isFulfilled(banUser), () => {
+        toast.success('User banned succesfully!');
+      })
+      .addMatcher(isFulfilled(unbanUser), () => {
+        toast.success('User unbanned successfully!');
       })
       .addMatcher(
         isRejectedWithValue(
           getUserData,
           updateUser,
           updatePassword,
-          deleteUser
+          deleteUser,
+          banUser,
+          unbanUser
         ),
-        (state, { payload }) => {
+        (_, { payload }) => {
           const { msg } = payload;
-          state.isLoading = false;
           toast.error(msg);
         }
       );
   },
 });
 
-export { getUserData, updateUser, updatePassword, deleteUser };
+export {
+  getUserData,
+  updateUser,
+  updatePassword,
+  deleteUser,
+  banUser,
+  unbanUser,
+};
 // export const {} = userFormSlice.actions;
 export default userFormSlice.reducer;
