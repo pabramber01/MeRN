@@ -17,10 +17,10 @@ const initialValues = {
 
 function UserList({ page }) {
   const [values, setValues] = useState(initialValues);
-  const { users, view, reachEnd } = useSelector((store) => store.userList);
+  const { data, view, reachEnd } = useSelector((store) => store.userList);
   const navigate = useNavigate();
 
-  useFetchInfiniteScroll(getAll, changeView, users, reachEnd, view, page);
+  useFetchInfiniteScroll(getAll, changeView, data, reachEnd, view, page);
   useControlInfiniteScroll(getAll, page, reachEnd);
 
   const handleSubmit = (e) => {
@@ -55,15 +55,15 @@ function UserList({ page }) {
           </UserListWrapper>
         </div>
       </div>
-      {view !== page || (users.length === 0 && !reachEnd) ? (
+      {view !== page || (data.length === 0 && !reachEnd) ? (
         page.startsWith('admin-search') ? (
           <Spinner color="secondary" centered={true} />
         ) : (
           <UserListPlaceholder />
         )
-      ) : users.length > 0 ? (
+      ) : data.length > 0 ? (
         <div className="row">
-          {users.map((user) => (
+          {data.map((user) => (
             <div
               key={user._id}
               className="col-md-10 offset-md-1 col-lg-6 offset-lg-0 col-xl-4 offset-xl-0"

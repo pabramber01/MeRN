@@ -12,6 +12,7 @@ import {
   sortQuery,
   pageQuery,
   searchQuery,
+  rangeDatesQuery,
 } from '../utils/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -140,7 +141,7 @@ async function unbanUser(req, res) {
 }
 
 async function getAllUsers(req, res) {
-  const { sort, page, q } = req.query;
+  const { after, before, sort, page, q } = req.query;
   const pageSize = 9;
 
   const orderQuery = sortQuery({
@@ -151,11 +152,17 @@ async function getAllUsers(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const findQuery = searchQuery({ q, fields: ['username'] });
+  let filterQuery = searchQuery({ filter: {}, fields: ['username'], q });
+  filterQuery = rangeDatesQuery({
+    filter: filterQuery,
+    field: 'createdAt',
+    start: after,
+    end: before,
+  });
 
   const data = await User.find(
-    findQuery,
-    { password: 0 },
+    filterQuery,
+    { username: 1, email: 1, role: 1, avatar: 1, enabled: 1 },
     { sort: orderQuery, limit: pageSize, skip: skipQuery }
   );
 
@@ -187,7 +194,7 @@ async function getUserProfile(req, res) {
 
 async function getAllPublicationsByUser(req, res) {
   const { id } = req.params;
-  const { sort, page } = req.query;
+  const { after, before, sort, page } = req.query;
   const { username, role } = req.user;
   const isAdmin = role === 'admin';
   const pageSize = 9;
@@ -201,6 +208,13 @@ async function getAllPublicationsByUser(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
+  const matchFilter = rangeDatesQuery({
+    filter: {},
+    field: 'updatedAt',
+    start: after,
+    end: before,
+  });
+
   const data = await User.findOne(
     {
       [searchField]: id,
@@ -213,6 +227,7 @@ async function getAllPublicationsByUser(req, res) {
     { _id: 1 }
   ).populate({
     path: 'publications',
+    match: matchFilter,
     select: { title: 1, images: { $slice: 1 } },
     options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
     populate: { path: 'user', select: { username: 1, avatar: 1 } },

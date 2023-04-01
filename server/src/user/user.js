@@ -52,6 +52,7 @@ const UserSchema = new mongoose.Schema(
     },
     toObject: { virtual: true },
     optimisticConcurrency: true,
+    timestamps: true,
   }
 );
 

@@ -1,6 +1,6 @@
 import { Publication } from './index.js';
 import { StatusCodes } from 'http-status-codes';
-import { pageQuery, sortQuery } from '../utils/index.js';
+import { pageQuery, sortQuery, rangeDatesQuery } from '../utils/index.js';
 import { BadRequestError, UnauthorizedError } from '../error/error.js';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -11,7 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const staticFolder = '../../public/mern/publications';
 
 const getAllPublications = async (req, res) => {
-  const { sort, page } = req.query;
+  const { after, before, sort, page } = req.query;
   const { username } = req.user;
   const pageSize = 9;
 
@@ -23,8 +23,15 @@ const getAllPublications = async (req, res) => {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const data = await Publication.lookup({
+  const filterQuery = rangeDatesQuery({
     filter: {},
+    field: 'updatedAt',
+    start: after,
+    end: before,
+  });
+
+  const data = await Publication.lookup({
+    filter: filterQuery,
     project: { title: 1, images: { $slice: ['$images', 1] }, user: 1 },
     options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
     populate: {

@@ -1,5 +1,4 @@
-import { thunks } from '../../utils';
-import { toast } from 'react-toastify';
+import { reducers, thunks } from '../../utils';
 import {
   createAsyncThunk,
   createSlice,
@@ -9,7 +8,8 @@ import {
 } from '@reduxjs/toolkit';
 
 const initialState = {
-  feed: [],
+  data: [],
+  datetime: '',
   page: 0,
   view: '',
   reachEnd: false,
@@ -31,62 +31,48 @@ const getAll = createAsyncThunk(
 
 const getAllPublications = createAsyncThunk(
   'publicationList/getAllPublications',
-  async (_, thunkAPI) =>
-    thunks.get(
-      `/publications?page=${thunkAPI.getState().publicationList.page}`,
+  async (_, thunkAPI) => {
+    const { page, datetime } = thunkAPI.getState().publicationList;
+    return thunks.get(
+      `/publications?before=${datetime}&page=${page}`,
       thunkAPI
-    )
+    );
+  }
 );
 
 const getAllPublicationsByUser = createAsyncThunk(
   'publicationList/getAllPublicationsByUser',
-  async (username, thunkAPI) =>
-    thunks.get(
-      `/users/${username}/publications?page=${
-        thunkAPI.getState().publicationList.page
-      }`,
+  async (username, thunkAPI) => {
+    const { page, datetime } = thunkAPI.getState().publicationList;
+    return thunks.get(
+      `/users/${username}/publications?before=${datetime}&page=${page}`,
       thunkAPI
-    )
+    );
+  }
 );
 
 const publicationListSlice = createSlice({
   name: 'publicationList',
   initialState,
   reducers: {
-    changeView: (_, { payload }) => {
-      const { page } = payload;
-      return { ...initialState, view: page };
-    },
-    clearFeed: () => {
-      return initialState;
-    },
+    changeView: (_, { payload }) =>
+      reducers.changeViewList(initialState, payload),
+    clearFeed: () => reducers.clear(initialState),
   },
   extraReducers: (builder) => {
     builder
       .addMatcher(
         isPending(getAllPublications, getAllPublicationsByUser),
-        (state) => {
-          state.page += 1;
-        }
+        reducers.pendingList
       )
       .addMatcher(
         isFulfilled(getAllPublications, getAllPublicationsByUser),
-        (state, { payload }) => {
-          const { data } = payload;
-          if (data.length === 0 && !state.reachEnd) {
-            state.reachEnd = true;
-            if (state.page > 1) {
-              toast.warn('You have reached the end!');
-            }
-          } else {
-            state.feed.push(...data);
-          }
-        }
+        reducers.fullfilledList
       )
-      .addMatcher(isRejectedWithValue(getAllPublications), (_, { payload }) => {
-        const { msg } = payload;
-        toast.error(msg);
-      });
+      .addMatcher(
+        isRejectedWithValue(getAllPublications),
+        reducers.rejectNoLoading
+      );
   },
 });
 

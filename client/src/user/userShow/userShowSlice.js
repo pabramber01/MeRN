@@ -4,8 +4,7 @@ import {
   isRejectedWithValue,
   isFulfilled,
 } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
-import { thunks } from '../../utils';
+import { reducers, thunks } from '../../utils';
 
 const initialState = {
   userProfile: {},
@@ -26,10 +25,10 @@ const userShowSlice = createSlice({
         const { data } = payload;
         state.userProfile = data;
       })
-      .addMatcher(isRejectedWithValue(getUserProfile), (_, { payload }) => {
-        const { msg } = payload;
-        toast.error(msg);
-      });
+      .addMatcher(
+        isRejectedWithValue(getUserProfile),
+        reducers.rejectNoLoading
+      );
   },
 });
 

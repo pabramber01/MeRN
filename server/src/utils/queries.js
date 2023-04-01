@@ -25,7 +25,7 @@ const pageQuery = ({ page, pageSize }) => {
   return skip;
 };
 
-const searchQuery = ({ q, fields }) => {
+const searchQuery = ({ filter, fields, q }) => {
   let searchQuery = {};
 
   if (q)
@@ -33,7 +33,17 @@ const searchQuery = ({ q, fields }) => {
       (field) => (searchQuery[field] = { $regex: q, $options: 'i' })
     );
 
-  return searchQuery;
+  return { ...filter, ...searchQuery };
 };
 
-export { sortQuery, pageQuery, searchQuery };
+const rangeDatesQuery = ({ filter, field, start, end }) => {
+  const res = { [field]: {} };
+
+  if (start && !isNaN(new Date(start))) res[field]['$gte'] = new Date(start);
+  if (end && !isNaN(new Date(end))) res[field]['$lte'] = new Date(end);
+
+  const len = Object.keys(res[field]).length;
+  return len === 0 ? filter : { ...filter, ...res };
+};
+
+export { sortQuery, pageQuery, searchQuery, rangeDatesQuery };

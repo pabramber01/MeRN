@@ -9,18 +9,18 @@ import {
 } from '.';
 
 function PublicationList({ page }) {
-  const { feed, view, reachEnd } = useSelector(
+  const { data, view, reachEnd } = useSelector(
     (store) => store.publicationList
   );
 
-  useFetchInfiniteScroll(getAll, changeView, feed, reachEnd, view, page);
+  useFetchInfiniteScroll(getAll, changeView, data, reachEnd, view, page);
   useControlInfiniteScroll(getAll, page, reachEnd);
 
-  return view !== page || (feed.length === 0 && !reachEnd) ? (
+  return view !== page || (data.length === 0 && !reachEnd) ? (
     <PublicationListPlaceholder />
-  ) : feed.length > 0 ? (
+  ) : data.length > 0 ? (
     <div className="row">
-      {feed.map((publication) => (
+      {data.map((publication) => (
         <div
           key={publication._id}
           className="col-md-10 offset-md-1 col-lg-4 offset-lg-0"

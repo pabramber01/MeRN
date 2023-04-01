@@ -6,7 +6,7 @@ import {
   isFulfilled,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { thunks } from '../../utils';
+import { reducers, thunks } from '../../utils';
 
 const initialState = {
   publication: {},
@@ -52,9 +52,7 @@ const publicationFormSlice = createSlice({
     builder
       .addMatcher(
         isPending(createPublication, updatePublication, deletePublication),
-        (state) => {
-          state.isLoading = true;
-        }
+        reducers.pending
       )
       .addMatcher(
         isFulfilled(createPublication, updatePublication),
@@ -75,11 +73,7 @@ const publicationFormSlice = createSlice({
           updatePublication,
           deletePublication
         ),
-        (state, { payload }) => {
-          const { msg } = payload;
-          state.isLoading = false;
-          toast.error(msg);
-        }
+        reducers.reject
       );
   },
 });

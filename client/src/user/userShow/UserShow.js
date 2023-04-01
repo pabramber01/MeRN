@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { isMongoId } from 'validator';
 import { SuspenseImg } from '../../layout';
 import {
   UserShowWrapper,
@@ -14,15 +15,19 @@ function UserShow({ username }) {
   const navigate = useNavigate();
   const { userProfile } = useSelector((store) => store.userShow);
 
+  const fieldCondition = isMongoId(username)
+    ? userProfile._id
+    : userProfile.username;
+
   useEffect(() => {
-    if (username !== userProfile.username) {
+    if (username !== fieldCondition) {
       dispatch(getUserProfile(username))
         .unwrap()
         .catch(() => navigate('/'));
     } // eslint-disable-next-line
   }, [username]);
 
-  return username !== userProfile.username ? (
+  return username !== fieldCondition ? (
     <UserShowPlaceholder />
   ) : (
     <UserShowWrapper>

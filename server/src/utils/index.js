@@ -3,7 +3,12 @@ import connectDB, {
   concatUserAvat,
   lookupPipeline,
 } from './db.js';
-import { sortQuery, pageQuery, searchQuery } from './queries.js';
+import {
+  sortQuery,
+  pageQuery,
+  searchQuery,
+  rangeDatesQuery,
+} from './queries.js';
 import { readFixtures, moveAssets } from './reader.js';
 import {
   createToken,
@@ -26,4 +31,5 @@ export {
   sortQuery,
   pageQuery,
   searchQuery,
+  rangeDatesQuery,
 };

@@ -7,6 +7,7 @@ import {
   removeUserFromLocalStorage,
   getUserFromLocalStorage,
 } from './localStorage';
+import reducers from './reducers';
 
 export {
   customAxiosAPI,
@@ -18,4 +19,5 @@ export {
   arraysEqual,
   objectsEqual,
   imgIsCached,
+  reducers,
 };

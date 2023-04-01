@@ -5,7 +5,7 @@ import {
   isFulfilled,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { thunks } from '../../utils';
+import { reducers, thunks } from '../../utils';
 import { addUserToLocalStorage } from '../../utils';
 
 const initialState = {
@@ -80,10 +80,7 @@ const userFormSlice = createSlice({
           banUser,
           unbanUser
         ),
-        (_, { payload }) => {
-          const { msg } = payload;
-          toast.error(msg);
-        }
+        reducers.rejectNoLoading
       );
   },
 });

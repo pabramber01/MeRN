@@ -11,6 +11,7 @@ import {
   addUserToLocalStorage,
   removeUserFromLocalStorage,
   thunks,
+  reducers,
 } from '../../utils';
 
 const initialState = {
@@ -49,9 +50,7 @@ const authFormSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(isPending(loginUser, createUser), (state) => {
-        state.isLoading = true;
-      })
+      .addMatcher(isPending(loginUser, createUser), reducers.pending)
       .addMatcher(isFulfilled(loginUser, createUser), (state, { payload }) => {
         const { data } = payload;
         state.isLoading = false;
@@ -65,15 +64,13 @@ const authFormSlice = createSlice({
         removeUserFromLocalStorage();
         toast.success(data.msg);
       })
-      .addMatcher(isRejectedWithValue(loginUser, createUser), (state) => {
-        state.isLoading = false;
-      })
+      .addMatcher(
+        isRejectedWithValue(loginUser, createUser),
+        reducers.rejectOnlyLoading
+      )
       .addMatcher(
         isRejectedWithValue(loginUser, createUser, logoutUser),
-        (_, { payload }) => {
-          const { msg } = payload;
-          toast.error(msg);
-        }
+        reducers.rejectNoLoading
       );
   },
 });

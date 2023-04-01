@@ -1,5 +1,4 @@
-import { thunks } from '../../utils';
-import { toast } from 'react-toastify';
+import { reducers, thunks } from '../../utils';
 import {
   createAsyncThunk,
   createSlice,
@@ -9,7 +8,8 @@ import {
 } from '@reduxjs/toolkit';
 
 const initialState = {
-  users: [],
+  data: [],
+  datetime: '',
   page: 0,
   view: '',
   reachEnd: false,
@@ -29,9 +29,10 @@ const getAll = createAsyncThunk('userList/getAll', async (view, thunkAPI) => {
 const getAllUsers = createAsyncThunk(
   'userList/getAllUsers',
   async (query, thunkAPI) => {
-    query = !query ? '' : `&q=${query}`;
+    const { page, datetime } = thunkAPI.getState().userList;
+    query = !query ? '' : `q=${query}&`;
     return thunks.get(
-      `/users?page=${thunkAPI.getState().userList.page}${query}`,
+      `/users?${query}before=${datetime}&page=${page}`,
       thunkAPI
     );
   }
@@ -41,36 +42,19 @@ const userListSlice = createSlice({
   name: 'userList',
   initialState,
   reducers: {
-    changeView: (_, { payload }) => {
-      const { page } = payload;
-      return { ...initialState, view: page };
-    },
+    changeView: (_, { payload }) =>
+      reducers.changeViewList(initialState, payload),
     changeEnabled: (state, { payload }) => {
       const { username } = payload;
-      const index = state.users.findIndex((u) => u.username === username);
-      state.users[index].enabled = !state.users[index].enabled;
+      const index = state.data.findIndex((u) => u.username === username);
+      state.data[index].enabled = !state.data[index].enabled;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(isPending(getAllUsers), (state) => {
-        state.page += 1;
-      })
-      .addMatcher(isFulfilled(getAllUsers), (state, { payload }) => {
-        const { data } = payload;
-        if (data.length === 0 && !state.reachEnd) {
-          state.reachEnd = true;
-          if (state.page > 1) {
-            toast.warn('You have reached the end!');
-          }
-        } else {
-          state.users.push(...data);
-        }
-      })
-      .addMatcher(isRejectedWithValue(getAllUsers), (_, { payload }) => {
-        const { msg } = payload;
-        toast.error(msg);
-      });
+      .addMatcher(isPending(getAllUsers), reducers.pendingList)
+      .addMatcher(isFulfilled(getAllUsers), reducers.fullfilledList)
+      .addMatcher(isRejectedWithValue(getAllUsers), reducers.rejectNoLoading);
   },
 });
 

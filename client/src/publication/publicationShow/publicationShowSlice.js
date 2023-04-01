@@ -4,8 +4,7 @@ import {
   isRejectedWithValue,
   isFulfilled,
 } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
-import { thunks } from '../../utils';
+import { reducers, thunks } from '../../utils';
 
 const initialState = {
   publication: {},
@@ -21,9 +20,7 @@ const publicationShowSlice = createSlice({
   name: 'publicationShow',
   initialState,
   reducers: {
-    clearPublication: () => {
-      return initialState;
-    },
+    clearPublication: () => reducers.clear(initialState),
   },
   extraReducers: (builder) => {
     builder
@@ -31,10 +28,10 @@ const publicationShowSlice = createSlice({
         const { data } = payload;
         state.publication = data;
       })
-      .addMatcher(isRejectedWithValue(getPublication), (_, { payload }) => {
-        const { msg } = payload;
-        toast.error(msg);
-      });
+      .addMatcher(
+        isRejectedWithValue(getPublication),
+        reducers.rejectNoLoading
+      );
   },
 });
 
