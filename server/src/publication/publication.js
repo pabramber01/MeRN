@@ -66,10 +66,7 @@ PublicationSchema.pre('save', async function () {
 });
 
 PublicationSchema.statics.lookup = async function (params) {
-  const attrPath = params.populate.path;
-  const model = mongoose.model(this.schema.path(attrPath).options.ref);
-  const modelName = model.collection.name;
-  return this.aggregate(lookupPipeline(modelName, params));
+  return this.aggregate(lookupPipeline(this.schema, params));
 };
 
 export default mongoose.model('Publication', PublicationSchema);

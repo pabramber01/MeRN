@@ -8,6 +8,7 @@ import { Slider, sliderVH, SliderPlaceholder } from './slider';
 import { Separator } from './separator';
 import { Tabs } from './tabs';
 import { EmptyData } from './empty';
+import { DUButton } from './dubutton';
 
 export {
   FormInput,
@@ -27,4 +28,5 @@ export {
   Separator,
   Tabs,
   EmptyData,
+  DUButton,
 };

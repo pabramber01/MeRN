@@ -1,6 +1,7 @@
 import UserShow, {
   userShowSlice,
   getUserProfile,
+  changeFollowShow,
   UserShowPlaceholder,
 } from './userShow';
 import UserForm, {
@@ -9,6 +10,8 @@ import UserForm, {
   deleteUser,
   getUserData,
   updateUser,
+  followUser,
+  unfollowUser,
   banUser,
   unbanUser,
 } from './userForm';
@@ -17,6 +20,7 @@ import UserList, {
   getAll,
   changeView,
   changeEnabled,
+  changeFollowList,
 } from './userList';
 
 export {
@@ -30,11 +34,15 @@ export {
   deleteUser,
   getUserData,
   updateUser,
+  followUser,
+  unfollowUser,
   banUser,
   unbanUser,
+  changeFollowShow,
   UserList,
   userListSlice,
   getAll,
   changeView,
   changeEnabled,
+  changeFollowList,
 };

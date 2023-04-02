@@ -4,14 +4,14 @@ import { useLocation } from 'react-router-dom';
 
 function UsersDashboard() {
   const { pathname, search } = useLocation();
-  const params = new URLSearchParams(search);
+  const q = new URLSearchParams(search).get('q');
 
-  let type = 'following';
+  let type;
 
-  if (pathname.startsWith('/admin/users')) {
-    type =
-      params.get('q') !== null ? `admin-search/${params.get('q')}` : 'admin';
-  }
+  if (pathname.startsWith('/admin/users'))
+    type = q !== null ? `admin-search/${q}` : 'admin';
+  else if (pathname.startsWith('/users/myfollows'))
+    type = q !== null ? `follows-search/${q}` : 'follows';
 
   return (
     <>

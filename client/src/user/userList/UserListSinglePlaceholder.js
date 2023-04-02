@@ -9,7 +9,7 @@ function UserListSinglePlaceholder() {
           <span className="placeholder placeholder-wave ms-2">Loading...</span>
         </div>
         <div className="user-actions">
-          <span className="placeholder placeholder-wave ban-placeholder">
+          <span className="placeholder placeholder-wave do-placeholder">
             Loading...
           </span>
         </div>

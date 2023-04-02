@@ -8,6 +8,7 @@ import userListSlice, {
   getAll,
   changeView,
   changeEnabled,
+  changeFollowList,
 } from './userListSlice';
 
 export default UserList;
@@ -16,6 +17,7 @@ export {
   getAll,
   changeView,
   changeEnabled,
+  changeFollowList,
   UserListWrapper,
   UserListSingle,
   UserListSinglePlaceholderAvatar,

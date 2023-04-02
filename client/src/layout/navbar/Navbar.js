@@ -69,6 +69,11 @@ function Navbar() {
                     dropdown={true}
                   />
                   <NavbarLink
+                    path={`/users/myfollows`}
+                    label="My follows"
+                    dropdown={true}
+                  />
+                  <NavbarLink
                     path={`/users/mysettings`}
                     label="My settings"
                     dropdown={true}

@@ -8,7 +8,7 @@ function Profile() {
 
   return (
     <>
-      <div className="row justify-content-center">
+      <div className="row justify-content-center position-relative">
         <div className="col-md-12 col-xl-4">
           <UserShow username={username} />
         </div>

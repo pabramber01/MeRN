@@ -49,17 +49,17 @@ const UserListWrapper = styled.main`
   .username {
     margin: auto 5px auto 5px;
   }
-  .ban-placeholder,
-  .ban-action,
-  .unban-action {
-    width: 72.6333px;
+  .do-placeholder,
+  .do-action,
+  .undo-action {
+    min-width: 72.6333px;
   }
-  .ban-placeholder {
+  .do-placeholder {
     color: var(--bs-secondary);
   }
   .admin-role {
     display: block;
-    width: 72.6333px;
+    min-width: 72.6333px;
     text-align: center;
   }
   @media not all and (any-pointer: coarse) {

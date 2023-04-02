@@ -10,6 +10,8 @@ import userFormSlice, {
   deleteUser,
   getUserData,
   updateUser,
+  followUser,
+  unfollowUser,
   banUser,
   unbanUser,
 } from './userFormSlice';
@@ -27,6 +29,8 @@ export {
   updatePassword,
   deleteUser,
   getUserData,
+  followUser,
+  unfollowUser,
   banUser,
   unbanUser,
 };

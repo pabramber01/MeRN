@@ -18,7 +18,17 @@ const getUserProfile = createAsyncThunk(
 const userShowSlice = createSlice({
   name: 'userShow',
   initialState,
-  reducers: {},
+  reducers: {
+    changeFollowShow: (state, { payload }) => {
+      const notPayload = !payload;
+      const isSame = payload && payload.username === state.userProfile.username;
+      const changeNum = notPayload || isSame;
+
+      const isNewFollow = !state.userProfile.isFollowing;
+      state.userProfile.isFollowing = isNewFollow;
+      if (changeNum) state.userProfile.numFollowers += isNewFollow ? +1 : -1;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isFulfilled(getUserProfile), (state, { payload }) => {
@@ -33,5 +43,5 @@ const userShowSlice = createSlice({
 });
 
 export { getUserProfile };
-// export const {} = userShowSlice.actions;
+export const { changeFollowShow } = userShowSlice.actions;
 export default userShowSlice.reducer;

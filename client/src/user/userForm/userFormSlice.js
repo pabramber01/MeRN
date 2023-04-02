@@ -33,6 +33,16 @@ const deleteUser = createAsyncThunk(
   async (_, thunkAPI) => thunks.delete(`/users/own`, thunkAPI)
 );
 
+const followUser = createAsyncThunk(
+  'userForm/followUser',
+  async (id, thunkAPI) => thunks.patch(`/users/${id}/follow`, null, thunkAPI)
+);
+
+const unfollowUser = createAsyncThunk(
+  'userForm/unfollowUser',
+  async (id, thunkAPI) => thunks.patch(`/users/${id}/unfollow`, null, thunkAPI)
+);
+
 const banUser = createAsyncThunk('userForm/banUser', async (id, thunkAPI) =>
   thunks.patch(`/users/${id}/ban`, null, thunkAPI)
 );
@@ -65,6 +75,12 @@ const userFormSlice = createSlice({
       .addMatcher(isFulfilled(deleteUser), (state) => {
         state = initialState;
       })
+      .addMatcher(isFulfilled(followUser), () => {
+        toast.success('User follow successfully!');
+      })
+      .addMatcher(isFulfilled(unfollowUser), () => {
+        toast.success('User unfollow successfully!');
+      })
       .addMatcher(isFulfilled(banUser), () => {
         toast.success('User banned succesfully!');
       })
@@ -77,6 +93,8 @@ const userFormSlice = createSlice({
           updateUser,
           updatePassword,
           deleteUser,
+          followUser,
+          unfollowUser,
           banUser,
           unbanUser
         ),
@@ -90,6 +108,8 @@ export {
   updateUser,
   updatePassword,
   deleteUser,
+  followUser,
+  unfollowUser,
   banUser,
   unbanUser,
 };

@@ -37,7 +37,7 @@ const NavbarWrapper = styled.main`
     transform: rotate(0);
   }
   .dropdown-menu-fade.show {
-    max-height: 133px;
+    max-height: 166px;
     opacity: 1;
     visibility: visible;
     transition: max-height 0.4s, opacity 0.3s;
@@ -91,7 +91,7 @@ const NavbarWrapper = styled.main`
         transform: rotate(0);
       }
       .dropdown:hover > .dropdown-menu-hover {
-        max-height: 133px;
+        max-height: 166px;
         opacity: 1;
         visibility: visible;
         transition: max-height 0.4s, opacity 0.3s;

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import { concatUserAvat } from '../utils/index.js';
+import { concatUserAvat, lookupPipeline } from '../utils/index.js';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -42,8 +42,20 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    follows: {
+      type: ['ObjectId'],
+      ref: 'User',
+      required: true,
+    },
+    followers: {
+      type: ['ObjectId'],
+      ref: 'User',
+      required: true,
+    },
   },
   {
+    optimisticConcurrency: true,
+    timestamps: true,
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
@@ -51,8 +63,6 @@ const UserSchema = new mongoose.Schema(
       },
     },
     toObject: { virtual: true },
-    optimisticConcurrency: true,
-    timestamps: true,
   }
 );
 
@@ -61,6 +71,22 @@ UserSchema.virtual('publications', {
   localField: '_id',
   foreignField: 'user',
   justOne: false,
+});
+
+UserSchema.post('aggregate', async function (obj) {
+  obj.forEach((u) => {
+    const follows =
+      typeof u.follows === 'object' && u.follows[0] && u.follows[0].avatar;
+    const followers =
+      typeof u.followers === 'object' && u.follows[0] && u.followers[0].avatar;
+    const avatar = u.avatar;
+
+    if (follows)
+      u.follows.forEach((f) => (f.avatar = concatUserAvat(f.avatar, f._id)));
+    if (followers)
+      u.followers.forEach((f) => (f.avatar = concatUserAvat(f.avatar, f._id)));
+    if (avatar) u.avatar = concatUserAvat(u.avatar, u._id);
+  });
 });
 
 UserSchema.post('findOne', async function (obj) {
@@ -76,9 +102,10 @@ UserSchema.post('find', async function (obj) {
 });
 
 UserSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 });
 
 UserSchema.pre('save', async function () {
@@ -102,6 +129,14 @@ UserSchema.methods.checkPassword = async function (pass) {
   }
 
   return isEqual;
+};
+
+UserSchema.methods.isFollowing = async function (user) {
+  return this.follows.includes(user);
+};
+
+UserSchema.statics.lookup = async function (params) {
+  return this.aggregate(lookupPipeline(this.schema, params));
 };
 
 export default mongoose.model('User', UserSchema);

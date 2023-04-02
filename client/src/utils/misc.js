@@ -13,4 +13,10 @@ const objectsEqual = (a, b) => {
   return arraysEqual(Object.values(a), Object.values(b));
 };
 
-export { arraysEqual, objectsEqual };
+const numberFormatter = (n) =>
+  new Intl.NumberFormat('en-GB', {
+    notation: 'compact',
+    compactDisplay: 'short',
+  }).format(n);
+
+export { arraysEqual, objectsEqual, numberFormatter };

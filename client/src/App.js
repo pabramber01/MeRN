@@ -37,6 +37,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="users/:username" element={<Profile />} />
             <Route path="users/mysettings" element={<Settings />} />
+            <Route path="users/myfollows" element={<UsersDashboard />} />
             <Route path="publications/:id" element={<Publication />} />
             <Route path="publications/new" element={<PublicationEdit />} />
             <Route path="publications/edit" element={<PublicationEdit />} />

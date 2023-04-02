@@ -27,7 +27,11 @@ function UserList({ page }) {
     e.preventDefault();
     const { search } = values;
 
-    navigate(`/admin/users?q=${search}`);
+    if (page.startsWith('admin')) {
+      navigate(`/admin/users?q=${search}`);
+    } else if (page.startsWith('follows')) {
+      navigate(`/users/myfollows?q=${search}`);
+    }
   };
 
   const handleChange = (e) => {
@@ -56,7 +60,7 @@ function UserList({ page }) {
         </div>
       </div>
       {view !== page || (data.length === 0 && !reachEnd) ? (
-        page.startsWith('admin-search') ? (
+        page.includes('search') ? (
           <Spinner color="secondary" centered={true} />
         ) : (
           <UserListPlaceholder />
@@ -68,7 +72,7 @@ function UserList({ page }) {
               key={user._id}
               className="col-md-10 offset-md-1 col-lg-6 offset-lg-0 col-xl-4 offset-xl-0"
             >
-              <UserListSingle data={user} />
+              <UserListSingle data={user} page={page} />
             </div>
           ))}
           {!reachEnd && (

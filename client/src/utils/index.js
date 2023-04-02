@@ -1,6 +1,6 @@
 import customAxiosAPI, { setupInterceptors } from './axios';
 import thunks from './thunks';
-import { arraysEqual, objectsEqual } from './misc';
+import { arraysEqual, objectsEqual, numberFormatter } from './misc';
 import { imgIsCached } from './cache';
 import {
   addUserToLocalStorage,
@@ -18,6 +18,7 @@ export {
   thunks,
   arraysEqual,
   objectsEqual,
+  numberFormatter,
   imgIsCached,
   reducers,
 };

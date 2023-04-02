@@ -2,22 +2,43 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { isMongoId } from 'validator';
-import { SuspenseImg } from '../../layout';
+import { SuspenseImg, DUButton } from '../../layout';
+import { followUser, unfollowUser } from '../userForm';
+import { numberFormatter } from '../../utils';
+import { changeFollowList } from '..';
 import {
   UserShowWrapper,
   UserShowPlaceholderAvatar,
   UserShowPlaceholder,
   getUserProfile,
+  changeFollowShow,
 } from '.';
 
 function UserShow({ username }) {
+  const { userProfile } = useSelector((store) => store.userShow);
+  const { currentUser } = useSelector((store) => store.authForm);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userProfile } = useSelector((store) => store.userShow);
 
   const fieldCondition = isMongoId(username)
     ? userProfile._id
     : userProfile.username;
+
+  const myProfile = currentUser.username === username;
+
+  const allPages = {
+    profile: {
+      isDoAction: !userProfile.isFollowing,
+      doAction: () => followUser(username),
+      undoAction: () => unfollowUser(username),
+      doText: 'Follow',
+      undoText: 'Unfollow',
+      thenActions: [
+        () => changeFollowList({ ...userProfile }),
+        () => changeFollowShow(),
+      ],
+    },
+  };
 
   useEffect(() => {
     if (username !== fieldCondition) {
@@ -28,17 +49,33 @@ function UserShow({ username }) {
   }, [username]);
 
   return username !== fieldCondition ? (
-    <UserShowPlaceholder />
+    <UserShowPlaceholder myProfile={myProfile} />
   ) : (
     <UserShowWrapper>
       <div className="profile">
-        <SuspenseImg
-          fallback={<UserShowPlaceholderAvatar />}
-          attr={{ src: userProfile.avatar, className: 'user-img', alt: '' }}
-        />
-        <div className="profile-info">
-          <h4>{userProfile.username}</h4>
+        <div className="profile-data">
+          <SuspenseImg
+            fallback={<UserShowPlaceholderAvatar />}
+            attr={{ src: userProfile.avatar, className: 'user-img', alt: '' }}
+          />
+          <span className="username">{userProfile.username}</span>
         </div>
+        <div className="profile-info">
+          <h6>
+            {numberFormatter(userProfile.numPublications)} <br /> posts
+          </h6>
+          <h6>
+            {numberFormatter(userProfile.numFollows)} <br /> follows
+          </h6>
+          <h6>
+            {numberFormatter(userProfile.numFollowers)} <br /> followers
+          </h6>
+        </div>
+        {!myProfile && (
+          <div className="actions mx-3">
+            <DUButton page="profile" allPages={allPages} />
+          </div>
+        )}
       </div>
     </UserShowWrapper>
   );
