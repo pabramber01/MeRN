@@ -33,6 +33,11 @@ const PublicationSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    likedBy: {
+      type: ['ObjectId'],
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );
@@ -63,6 +68,12 @@ PublicationSchema.pre('save', async function () {
   if (validator.isEmpty(this.description)) {
     this.description = undefined;
   }
+});
+
+PublicationSchema.pre('save', async function () {
+  const imgs = this.images;
+  if (imgs && imgs.length > 0 && imgs[0].startsWith('http'))
+    this.images = this.images.map((img) => img.split('/').splice(-1)[0]);
 });
 
 PublicationSchema.statics.lookup = async function (params) {

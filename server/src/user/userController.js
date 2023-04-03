@@ -57,7 +57,8 @@ async function updateUser(req, res) {
       if (!isImage) throw new BadRequestError('You must only upload image');
 
       const fileName = img.name;
-      const v = data.__v;
+      let v = Number(data.avatar.split('avatar')[1].split('.')[0]);
+      v = isNaN(v) ? 0 : v;
       path = `avatar${v + 1}${fileName.substr(fileName.lastIndexOf('.'))}`;
     }
   }
@@ -158,10 +159,10 @@ async function followUser(req, res) {
     throw new BadRequestError(`You are already following user ${id}`);
 
   user.follows.push(follow._id);
-  await user.save();
+  await user.save({ timestamps: false });
 
   follow.followers.push(user._id);
-  await follow.save();
+  await follow.save({ timestamps: false });
 
   res.status(StatusCodes.OK).json({ success: true, data: { _id: user._id } });
 }
@@ -180,12 +181,12 @@ async function unfollowUser(req, res) {
     throw new BadRequestError(`You are not following user ${id}`);
 
   user.follows.splice(indexUser, 1);
-  await user.save();
+  await user.save({ timestamps: false });
 
   const indexFol = follow.followers.findIndex((u) => u._id === req.user.userId);
 
   follow.followers.splice(indexFol, 1);
-  await follow.save();
+  await follow.save({ timestamps: false });
 
   res.status(StatusCodes.OK).json({ success: true, data: { _id: user._id } });
 }

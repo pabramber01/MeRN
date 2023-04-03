@@ -21,6 +21,11 @@ const publicationShowSlice = createSlice({
   initialState,
   reducers: {
     clearPublication: () => reducers.clear(initialState),
+    changeLiked: (state) => {
+      const isNewLike = !state.publication.isLiked;
+      state.publication.isLiked = isNewLike;
+      state.publication.numLikes += isNewLike ? +1 : -1;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -36,5 +41,5 @@ const publicationShowSlice = createSlice({
 });
 
 export { getPublication };
-export const { clearPublication } = publicationShowSlice.actions;
+export const { clearPublication, changeLiked } = publicationShowSlice.actions;
 export default publicationShowSlice.reducer;

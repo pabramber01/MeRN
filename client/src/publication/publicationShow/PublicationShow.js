@@ -2,9 +2,18 @@ import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RiEditBoxLine, RiDeleteBin2Line } from 'react-icons/ri';
+import UseAnimations from 'react-useanimations';
+import heart from 'react-useanimations/lib/heart';
 import { Slider, sliderVH, Spinner, SuspenseImg } from '../../layout';
-import { loadPublication, deletePublication, clearFeed } from '..';
 import {
+  loadPublication,
+  deletePublication,
+  clearFeed,
+  likePublication,
+  dislikePublication,
+} from '..';
+import {
+  changeLiked,
   clearPublication,
   getPublication,
   PublicationShowPlaceholder,
@@ -44,6 +53,13 @@ function PublicationShow({ publicationId }) {
     }
   };
 
+  const handleLike = () => {
+    const action = publication.isLiked ? dislikePublication : likePublication;
+    dispatch(action())
+      .unwrap()
+      .then(() => dispatch(changeLiked()));
+  };
+
   return publication._id !== publicationId ? (
     <PublicationShowPlaceholder />
   ) : (
@@ -61,23 +77,36 @@ function PublicationShow({ publicationId }) {
             <h1 className="publication-title">{publication.title}</h1>
             <div className="publication-actions">
               {isLoading ? (
-                <Spinner color="secondary" />
+                <Spinner color="secondary" small={true} />
               ) : (
-                publication.user.username === currentUser.username && (
-                  <>
-                    <RiEditBoxLine
-                      size={25}
-                      onClick={handleEdit}
-                      type="button"
-                      className="mx-2"
-                    />
-                    <RiDeleteBin2Line
-                      size={25}
-                      onClick={handleDelete}
-                      type="button"
-                    />
-                  </>
-                )
+                <>
+                  <span className="likes">{publication.numLikes}</span>
+                  <UseAnimations
+                    animation={heart}
+                    size={30}
+                    onClick={handleLike}
+                    type="button"
+                    fillColor="var(--bs-secondary)"
+                    strokeColor="var(--bs-secondary)"
+                    reverse={publication.isLiked}
+                  />
+                  {publication.user.username === currentUser.username && (
+                    <>
+                      <RiEditBoxLine
+                        size={25}
+                        onClick={handleEdit}
+                        type="button"
+                        className="mx-1"
+                      />
+                      <RiDeleteBin2Line
+                        size={25}
+                        onClick={handleDelete}
+                        type="button"
+                        className="mx-1"
+                      />
+                    </>
+                  )}
+                </>
               )}
             </div>
           </div>

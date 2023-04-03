@@ -52,6 +52,11 @@ const UserSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    likes: {
+      type: ['ObjectId'],
+      ref: 'Publication',
+      required: true,
+    },
   },
   {
     optimisticConcurrency: true,

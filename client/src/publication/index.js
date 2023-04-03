@@ -9,6 +9,7 @@ import PublicationShow, {
   publicationShowSlice,
   getPublication,
   clearPublication,
+  changeLiked,
   PublicationShowPlaceholder,
 } from './publicationShow';
 import PublicationForm, {
@@ -17,6 +18,8 @@ import PublicationForm, {
   updatePublication,
   deletePublication,
   loadPublication,
+  likePublication,
+  dislikePublication,
 } from './publicationForm';
 
 export {
@@ -30,6 +33,7 @@ export {
   publicationShowSlice,
   getPublication,
   clearPublication,
+  changeLiked,
   PublicationShowPlaceholder,
   PublicationForm,
   publicationFormSlice,
@@ -37,4 +41,6 @@ export {
   updatePublication,
   deletePublication,
   loadPublication,
+  likePublication,
+  dislikePublication,
 };

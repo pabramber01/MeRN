@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'fs/promises';
 import validator from 'validator';
+import { User } from '../user/index.js';
+import mongoose from 'mongoose';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const staticFolder = '../../public/mern/publications';
@@ -48,7 +50,7 @@ const getAllPublications = async (req, res) => {
 
 const getPublication = async (req, res) => {
   const { id } = req.params;
-  const { username, role } = req.user;
+  const { username, role, userId } = req.user;
   const isAdmin = role === 'admin';
 
   if (!validator.isMongoId(id))
@@ -56,7 +58,16 @@ const getPublication = async (req, res) => {
 
   const data = await Publication.lookup({
     filter: { _id: id },
-    project: { __v: 0 },
+    project: {
+      title: 1,
+      description: 1,
+      images: 1,
+      user: 1,
+      createdAt: 1,
+      updatedAt: 1,
+      numLikes: { $size: '$likedBy' },
+      isLiked: { $in: [mongoose.Types.ObjectId(userId), '$likedBy'] },
+    },
     populate: {
       path: 'user',
       select: { username: 1, avatar: 1 },
@@ -148,7 +159,7 @@ const updatePublication = async (req, res) => {
     images.forEach((img) => paths.push(img.name));
   }
 
-  const v = data.__v;
+  const v = Number(data.images[0].split('image')[1].split('.')[0]);
   const getBaseImg = (img) => img.split('/').splice(-1)[0].slice(2);
   const getExtension = (img) => img.substr(img.lastIndexOf('.'));
   oldImg.forEach((img) => paths.unshift(getBaseImg(img)));
@@ -205,10 +216,58 @@ const deletePublication = async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
 };
 
+const likePublication = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+
+  const data = await Publication.findOne({ _id: id });
+
+  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+
+  if (data.likedBy.includes(userId))
+    throw new BadRequestError(`You already like this publication`);
+
+  const user = await User.findOne({ _id: userId });
+
+  user.likes.push(data._id);
+  await user.save({ timestamps: false });
+
+  data.likedBy.push(userId);
+  await data.save({ timestamps: false });
+
+  res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
+};
+
+const dislikePublication = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+
+  const data = await Publication.findOne({ _id: id });
+  const user = await User.findOne({ _id: userId });
+
+  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+
+  const indexPub = data.likedBy.findIndex((u) => u._id.equals(user._id));
+  if (indexPub === -1)
+    throw new BadRequestError(`You did not like publication ${id}`);
+
+  data.likedBy.splice(indexPub, 1);
+  await data.save({ timestamps: false });
+
+  const indexUser = user.likes.findIndex((p) => p._id.equals(data._id));
+
+  user.likes.splice(indexUser, 1);
+  await user.save({ timestamps: false });
+
+  res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
+};
+
 export default {
   getAllPublications,
   getPublication,
   createPublication,
   updatePublication,
   deletePublication,
+  likePublication,
+  dislikePublication,
 };

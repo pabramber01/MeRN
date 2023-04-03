@@ -10,8 +10,16 @@ const PublicationShowWrapper = styled.main`
     color: var(--bs-secondary);
   }
   .publication-actions {
+    display: flex;
     align-self: center;
+    align-items: center;
     color: var(--bs-secondary);
+  }
+  .likes {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    height: 25px;
+    font-weight: bold;
   }
   .publication-description {
     text-indent: 50px;

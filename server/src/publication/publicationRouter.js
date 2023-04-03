@@ -24,4 +24,15 @@ router
     publicationController.deletePublication
   );
 
+router
+  .route('/:id/like')
+  .patch(authMiddleware.isAuthenticated, publicationController.likePublication);
+
+router
+  .route('/:id/dislike')
+  .patch(
+    authMiddleware.isAuthenticated,
+    publicationController.dislikePublication
+  );
+
 export default router;

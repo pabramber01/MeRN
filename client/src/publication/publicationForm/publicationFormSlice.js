@@ -38,6 +38,22 @@ const deletePublication = createAsyncThunk(
     )
 );
 
+const likePublication = createAsyncThunk(
+  'publicationForm/likePublication',
+  async (_, thunkAPI) => {
+    const { id } = thunkAPI.getState().publicationForm.publication;
+    return thunks.patch(`/publications/${id}/like`, null, thunkAPI);
+  }
+);
+
+const dislikePublication = createAsyncThunk(
+  'publicationForm/dislikePublication',
+  async (_, thunkAPI) => {
+    const { id } = thunkAPI.getState().publicationForm.publication;
+    return thunks.patch(`/publications/${id}/dislike`, null, thunkAPI);
+  }
+);
+
 const publicationFormSlice = createSlice({
   name: 'publicationForm',
   initialState,
@@ -71,13 +87,21 @@ const publicationFormSlice = createSlice({
         isRejectedWithValue(
           createPublication,
           updatePublication,
-          deletePublication
+          deletePublication,
+          likePublication,
+          dislikePublication
         ),
         reducers.reject
       );
   },
 });
 
-export { createPublication, updatePublication, deletePublication };
+export {
+  createPublication,
+  updatePublication,
+  deletePublication,
+  likePublication,
+  dislikePublication,
+};
 export const { loadPublication } = publicationFormSlice.actions;
 export default publicationFormSlice.reducer;
