@@ -7,6 +7,7 @@ import path, { dirname } from 'path';
 import fs from 'fs/promises';
 import validator from 'validator';
 import { User } from '../user/index.js';
+import { Comment } from '../comment/index.js';
 import mongoose from 'mongoose';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -51,7 +52,7 @@ const getAllPublications = async (req, res) => {
 const getPublication = async (req, res) => {
   const { id } = req.params;
   const { username, role, userId } = req.user;
-  const isAdmin = role === 'admin';
+  const isAdmin = role !== 'admin';
 
   if (!validator.isMongoId(id))
     throw new BadRequestError(`No publication found with id: '${id}'`);
@@ -74,7 +75,7 @@ const getPublication = async (req, res) => {
       match: {
         $or: [
           { enabled: true },
-          { enabled: isAdmin && false },
+          { enabled: isAdmin },
           { enabled: false, username: username },
         ],
       },
@@ -133,7 +134,9 @@ const updatePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (!data || userId !== data.user.toString())
+  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+
+  if (userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
 
   if (!oldImg.every((img) => data.images.includes(img)))
@@ -204,7 +207,9 @@ const deletePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (!data || userId !== data.user.toString())
+  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+
+  if (userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
 
   await data.delete();
@@ -262,6 +267,68 @@ const dislikePublication = async (req, res) => {
   res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
 };
 
+const getAllCommentsByPublication = async (req, res) => {
+  const { id } = req.params;
+  const { after, before, sort, page } = req.query;
+  const { username, role } = req.user;
+  const isAdmin = role !== 'admin';
+  const pageSize = 9;
+
+  const orderQuery = sortQuery({
+    sort,
+    fields: ['createdAt'],
+    defaultSort: { createdAt: -1 },
+  });
+
+  const skipQuery = pageQuery({ page, pageSize });
+
+  const filterQuery = rangeDatesQuery({
+    filter: { publication: mongoose.Types.ObjectId(id) },
+    field: 'createdAt',
+    start: after,
+    end: before,
+  });
+
+  if (!validator.isMongoId(id))
+    throw new BadRequestError(`No publication found with id: '${id}'`);
+
+  const pub = await Publication.lookup({
+    filter: { _id: id },
+    populate: {
+      path: 'user',
+      match: {
+        $or: [
+          { enabled: true },
+          { enabled: isAdmin },
+          { enabled: false, username: username },
+        ],
+      },
+    },
+  });
+
+  if (pub.length === 0)
+    throw new BadRequestError(`No publication found with id: '${id}'`);
+
+  const data = await Comment.lookup({
+    filter: filterQuery,
+    project: { comment: 1, user: 1, updatedAt: 1, createdAt: 1 },
+    options: { sort: orderQuery, limit: pageSize, skip: skipQuery },
+    populate: {
+      path: 'user',
+      select: { username: 1, avatar: 1 },
+      match: {
+        $or: [
+          { enabled: true },
+          { enabled: false, username: username },
+          { enabled: !isAdmin },
+        ],
+      },
+    },
+  });
+
+  res.status(StatusCodes.OK).json({ success: true, data });
+};
+
 export default {
   getAllPublications,
   getPublication,
@@ -270,4 +337,5 @@ export default {
   deletePublication,
   likePublication,
   dislikePublication,
+  getAllCommentsByPublication,
 };

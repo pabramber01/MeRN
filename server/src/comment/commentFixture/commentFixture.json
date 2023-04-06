@@ -1,0 +1,29 @@
+{
+  "model": "Comment",
+  "data": [
+    {
+      "_id": "642c314dd7ed9ed0719537b2",
+      "comment": "Gatekeep hexagon cronut",
+      "user": "63e65ee4e59bf65fa96314ca",
+      "publication": "63e65f008c924cea3068c31f",
+      "createdAt": "2023-02-10T18:17:30.368Z",
+      "updatedAt": "2023-02-10T18:17:30.368Z"
+    },
+    {
+      "_id": "642c315b2c53166bc7c4cfc4",
+      "comment": "Cold-pressed mixtape neutra stumptown twee locavore, scenester fingerstache brunch kogi. Direct trade lomo franzen XOXO, same blog asymmetrical sus food truck poke. Retro prism flexitarian raw denim, offal butcher listicle asymmetrical hell of keytar synth air plant. Woke next level offal neutra subway tile +1 pok pok iPhone heirloom",
+      "user": "63e65f94cccb463f267e38b1",
+      "publication": "63e65f008c924cea3068c31f",
+      "createdAt": "2023-02-10T18:17:31.368Z",
+      "updatedAt": "2023-02-10T18:17:31.368Z"
+    },
+    {
+      "_id": "642c315fd49c032dbe74acd6",
+      "comment": "Fit intelligentsia bruh etsy gatekeep put a bird on it VHS microdosing sustainable everyday carry ramps. DSA drinking vinegar cred cardigan authentic chia 3 wolf moon subway tile occupy master cleanse four dollar toast. Hoodie raclette pabst Brooklyn man braid 8-bit",
+      "user": "63e65f7a5370fe2673c74f07",
+      "publication": "63e65f008c924cea3068c31f",
+      "createdAt": "2023-02-10T19:17:30.368Z",
+      "updatedAt": "2023-02-10T19:17:30.368Z"
+    }
+  ]
+}

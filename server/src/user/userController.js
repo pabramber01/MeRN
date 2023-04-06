@@ -256,8 +256,8 @@ async function getUserProfile(req, res) {
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
 
   const isEnabled = { enabled: true };
-  const isSelf = { enabled: role === 'admin' && false };
-  const isAdmin = { enabled: false, username: username };
+  const isAdmin = { enabled: role !== 'admin' };
+  const isSelf = { enabled: false, username: username };
 
   const data = (
     await User.aggregate([
@@ -299,7 +299,7 @@ async function getAllPublicationsByUser(req, res) {
   const { id } = req.params;
   const { after, before, sort, page } = req.query;
   const { username, role } = req.user;
-  const isAdmin = role === 'admin';
+  const isAdmin = role !== 'admin';
   const pageSize = 9;
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
 
@@ -323,7 +323,7 @@ async function getAllPublicationsByUser(req, res) {
       [searchField]: id,
       $or: [
         { enabled: true },
-        { enabled: isAdmin && false },
+        { enabled: isAdmin },
         { enabled: false, username: username },
       ],
     },

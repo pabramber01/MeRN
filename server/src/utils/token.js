@@ -1,7 +1,12 @@
 import jwt from 'jsonwebtoken';
 
 const createToken = (user) => {
-  return { userId: user._id, username: user.username, role: user.role };
+  return {
+    userId: user._id,
+    username: user.username,
+    role: user.role,
+    avatar: user.avatar,
+  };
 };
 
 const isTokenValid = ({ token }) => {

@@ -9,6 +9,7 @@ import { connectDB } from './utils/index.js';
 import { authMiddleware, authRouter } from './auth/index.js';
 import { userRouter } from './user/index.js';
 import { publicationRouter } from './publication/index.js';
+import { commentRouter } from './comment/index.js';
 import {
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
@@ -38,6 +39,7 @@ app.use(morgan('common'));
 app.use('/mern/v1/auth', authRouter);
 app.use('/mern/v1/users', userRouter);
 app.use('/mern/v1/publications', publicationRouter);
+app.use('/mern/v1/comments', commentRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(routeNotFoundMiddleware);

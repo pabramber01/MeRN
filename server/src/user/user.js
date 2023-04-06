@@ -121,6 +121,7 @@ UserSchema.pre('save', async function () {
 });
 
 UserSchema.pre('remove', async function () {
+  await this.model('Comment').deleteMany({ user: this._id });
   await this.model('Publication').deleteMany({ user: this._id });
 });
 

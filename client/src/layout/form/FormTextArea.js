@@ -12,7 +12,7 @@ function FormTextArea({
 }) {
   let errorClass;
   if (hasError == null) {
-    errorClass = undefined;
+    errorClass = '';
   } else {
     if (hasError) {
       errorClass = 'is-invalid';

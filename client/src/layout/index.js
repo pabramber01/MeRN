@@ -9,6 +9,8 @@ import { Separator } from './separator';
 import { Tabs } from './tabs';
 import { EmptyData } from './empty';
 import { DUButton } from './dubutton';
+import { ReadMore } from './readMore';
+import { Modal } from './modal';
 
 export {
   FormInput,
@@ -29,4 +31,6 @@ export {
   Tabs,
   EmptyData,
   DUButton,
+  ReadMore,
+  Modal,
 };

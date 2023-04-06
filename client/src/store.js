@@ -6,6 +6,7 @@ import {
   publicationShowSlice,
   publicationFormSlice,
 } from './publication';
+import { commentFormSlice, commentListSlice } from './comment';
 
 const combinedReducer = combineReducers({
   authForm: authFormSlice,
@@ -15,6 +16,8 @@ const combinedReducer = combineReducers({
   publicationList: publicationListSlice,
   publicationShow: publicationShowSlice,
   publicationForm: publicationFormSlice,
+  commentList: commentListSlice,
+  commentForm: commentFormSlice,
 });
 
 const rootReducer = (state, action) => {

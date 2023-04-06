@@ -25,6 +25,13 @@ router
   );
 
 router
+  .route('/:id/comments')
+  .get(
+    authMiddleware.isAuthenticated,
+    publicationController.getAllCommentsByPublication
+  );
+
+router
   .route('/:id/like')
   .patch(authMiddleware.isAuthenticated, publicationController.likePublication);
 

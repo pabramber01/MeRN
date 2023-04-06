@@ -76,6 +76,10 @@ PublicationSchema.pre('save', async function () {
     this.images = this.images.map((img) => img.split('/').splice(-1)[0]);
 });
 
+PublicationSchema.pre('remove', async function () {
+  await this.model('Comment').deleteMany({ publication: this._id });
+});
+
 PublicationSchema.statics.lookup = async function (params) {
   return this.aggregate(lookupPipeline(this.schema, params));
 };
