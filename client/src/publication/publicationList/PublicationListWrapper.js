@@ -14,13 +14,6 @@ const PublicationListWrapper = styled.main`
     height: 100%;
     object-fit: cover;
   }
-  .user-img,
-  .placeholder-avatar {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
-  }
   .photo-info {
     width: 100%;
     padding: 15px;

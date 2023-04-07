@@ -1,6 +1,5 @@
 import { Publication } from './index.js';
 import { StatusCodes } from 'http-status-codes';
-import { pageQuery, sortQuery, rangeDatesQuery } from '../utils/index.js';
 import { BadRequestError, UnauthorizedError } from '../error/error.js';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
@@ -9,12 +8,18 @@ import validator from 'validator';
 import { User } from '../user/index.js';
 import { Comment } from '../comment/index.js';
 import mongoose from 'mongoose';
+import {
+  pageQuery,
+  sortQuery,
+  rangeDatesQuery,
+  searchQuery,
+} from '../utils/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const staticFolder = '../../public/mern/publications';
 
 const getAllPublications = async (req, res) => {
-  const { after, before, sort, page } = req.query;
+  const { after, before, sort, page, q } = req.query;
   const { username } = req.user;
   const pageSize = 9;
 
@@ -26,8 +31,14 @@ const getAllPublications = async (req, res) => {
 
   const skipQuery = pageQuery({ page, pageSize });
 
-  const filterQuery = rangeDatesQuery({
+  let filterQuery = searchQuery({
     filter: {},
+    fields: ['title', 'description', 'user.username'],
+    q,
+  });
+
+  filterQuery = rangeDatesQuery({
+    filter: filterQuery,
     field: 'updatedAt',
     start: after,
     end: before,

@@ -11,6 +11,7 @@ import { EmptyData } from './empty';
 import { DUButton } from './dubutton';
 import { ReadMore } from './readMore';
 import { Modal } from './modal';
+import { Avatar, AvatarPlaceholder } from './avatar';
 
 export {
   FormInput,
@@ -33,4 +34,6 @@ export {
   DUButton,
   ReadMore,
   Modal,
+  Avatar,
+  AvatarPlaceholder,
 };

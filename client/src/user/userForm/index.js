@@ -3,7 +3,6 @@ import UserFormWrapper from './UserFormWrapper';
 import UserFormGeneral from './UserFormGeneral';
 import UserFormSecurity from './UserFormSecurity';
 import userFormService from './userFormService';
-import UserFormPlaceholderAvatar from './UserFormPlaceholderAvatar';
 import UserFormGeneralPlaceholder from './UserFormGeneralPlaceholder';
 import userFormSlice, {
   updatePassword,
@@ -19,7 +18,6 @@ import userFormSlice, {
 export default UserForm;
 export {
   UserFormWrapper,
-  UserFormPlaceholderAvatar,
   UserFormGeneralPlaceholder,
   UserFormGeneral,
   UserFormSecurity,

@@ -6,15 +6,6 @@ const UserShowWrapper = styled.main`
     display: flex;
     margin: 1rem auto 0.5rem auto;
   }
-  .user-img,
-  .placeholder-img {
-    width: 150px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border: thick solid rgba(var(--bs-primary-rgb));
-    border-radius: 50%;
-    box-shadow: 10px 5px 5px rgba(var(--bs-secondary-rgb));
-  }
   .profile-data {
     display: grid;
   }
@@ -25,15 +16,15 @@ const UserShowWrapper = styled.main`
   }
   .username-placeholder {
     width: 50%;
-    margin: 0.5rem auto 0.4rem auto;
+    margin: 7px auto 7px auto;
   }
   .profile-info {
     display: flex;
     text-align: center;
-    margin: auto 1rem auto 1rem;
+    margin: auto 0.2rem auto 0.2rem;
   }
   h6 {
-    width: 70px;
+    width: 60px;
   }
   .actions {
     position: absolute;

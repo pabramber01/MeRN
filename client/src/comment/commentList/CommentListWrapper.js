@@ -12,23 +12,9 @@ const CommentListWrapper = styled.main`
     padding: 1rem 1rem 1rem 0.5rem;
     transition: all 0.3s ease-in-out;
   }
-  .user-img,
-  .placeholder-avatar {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border: 2px solid rgba(var(--bs-primary-rgb));
-    border-radius: 50%;
-    box-shadow: 5px 2px 5px rgba(var(--bs-secondary-rgb));
-    margin-right: 10px;
-  }
-  a {
-    color: var(--bs-body-color);
-    text-decoration: none;
-    display: flex;
-  }
   .info {
     width: 100%;
+    margin-left: 10px;
   }
   .header {
     color: grey;

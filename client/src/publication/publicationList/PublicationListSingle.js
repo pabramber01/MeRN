@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ConditionalLink, SuspenseImg } from '../../layout';
+import { Avatar, ConditionalLink, SuspenseImg } from '../../layout';
 import {
-  PublicationListSinglePlaceholderAvatar,
   PublicationListSinglePlaceholderImage,
   PublicationListWrapper,
 } from '.';
@@ -24,14 +23,7 @@ function PublicationListSingle({ data: { _id, title, images, user }, page }) {
             to={`/users/${user.username}`}
             condition={!page.startsWith('profile')}
           >
-            <SuspenseImg
-              fallback={<PublicationListSinglePlaceholderAvatar />}
-              attr={{
-                src: user.avatar,
-                className: 'user-img',
-                alt: user.username,
-              }}
-            />
+            <Avatar url={user.avatar} size="sm" shadow={false} color="light" />
           </ConditionalLink>
         </div>
       </div>

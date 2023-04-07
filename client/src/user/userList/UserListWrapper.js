@@ -25,20 +25,6 @@ const UserListWrapper = styled.main`
     align-items: center;
     max-width: 75%;
   }
-  a {
-    color: var(--bs-body-color);
-    text-decoration: none;
-    display: flex;
-  }
-  .user-img,
-  .placeholder-avatar {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border: 2px solid rgba(var(--bs-primary-rgb));
-    border-radius: 50%;
-    box-shadow: 5px 2px 5px rgba(var(--bs-secondary-rgb));
-  }
   .user-info {
     display: block;
     overflow-x: scroll;

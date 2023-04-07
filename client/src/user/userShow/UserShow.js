@@ -2,13 +2,12 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { isMongoId } from 'validator';
-import { SuspenseImg, DUButton } from '../../layout';
+import { DUButton, Avatar } from '../../layout';
 import { followUser, unfollowUser } from '../userForm';
 import { numberFormatter } from '../../utils';
 import { changeFollowList } from '..';
 import {
   UserShowWrapper,
-  UserShowPlaceholderAvatar,
   UserShowPlaceholder,
   getUserProfile,
   changeFollowShow,
@@ -54,10 +53,7 @@ function UserShow({ username }) {
     <UserShowWrapper>
       <div className="profile">
         <div className="profile-data">
-          <SuspenseImg
-            fallback={<UserShowPlaceholderAvatar />}
-            attr={{ src: userProfile.avatar, className: 'user-img', alt: '' }}
-          />
+          <Avatar url={userProfile.avatar} size="lg" shadow={true} />
           <span className="username">{userProfile.username}</span>
         </div>
         <div className="profile-info">

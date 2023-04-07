@@ -42,10 +42,12 @@ const authFormSlice = createSlice({
       state.currentUser = getUserFromLocalStorage();
     },
     logoutUserLocal: (state, { payload }) => {
-      state.currentUser = null;
-      removeUserFromLocalStorage();
-      if (payload) toast.success(payload);
-      else toast.warn('Session expired, logging out...');
+      if (!toast.isActive(401)) {
+        state.currentUser = null;
+        removeUserFromLocalStorage();
+        if (payload) toast.success(payload);
+        else toast.warn('Session expired, logging out...', { toastId: 401 });
+      }
     },
   },
   extraReducers: (builder) => {

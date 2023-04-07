@@ -1,7 +1,7 @@
-import { CommentListWrapper, CommentListSinglePlaceholderAvatar } from '.';
+import { CommentListWrapper } from '.';
 import { RiEditBoxLine, RiDeleteBin2Line } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { ReadMore, Spinner, SuspenseImg } from '../../layout';
+import { Avatar, ReadMore, Spinner } from '../../layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCommentList, deleteComment, loadComment } from '..';
 import { useState } from 'react';
@@ -36,10 +36,7 @@ function CommentListSingle({
       <div className="comment-card">
         <div className="avatar">
           <Link to={`/users/${user.username}`}>
-            <SuspenseImg
-              fallback={<CommentListSinglePlaceholderAvatar />}
-              attr={{ src: user.avatar, className: 'user-img', alt: 'avatar' }}
-            />
+            <Avatar url={user.avatar} size="sm" shadow={true} />
           </Link>
         </div>
         <div className="info">

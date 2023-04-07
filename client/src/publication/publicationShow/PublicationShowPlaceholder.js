@@ -1,5 +1,5 @@
-import { SliderPlaceholder, sliderVH } from '../../layout';
-import { PublicationShowWrapper, PublicationShowPlaceholderAvatar } from '.';
+import { AvatarPlaceholder, SliderPlaceholder, sliderVH } from '../../layout';
+import { PublicationShowWrapper } from '.';
 
 function PublicationShowPlaceholder() {
   return (
@@ -32,7 +32,7 @@ function PublicationShowPlaceholder() {
             </p>
             <div className="publication-user">
               <span className="user-name h-50 placeholder placeholder-wave col-2" />
-              <PublicationShowPlaceholderAvatar />
+              <AvatarPlaceholder size="sm" shadow={true} />
             </div>
           </div>
         </div>

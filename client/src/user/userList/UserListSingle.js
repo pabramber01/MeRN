@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { DUButton, SuspenseImg } from '../../layout';
+import { Avatar, DUButton } from '../../layout';
+import { UserListWrapper, changeEnabled } from '.';
 import {
   banUser,
   changeFollowShow,
@@ -7,11 +8,6 @@ import {
   unbanUser,
   unfollowUser,
 } from '..';
-import {
-  UserListWrapper,
-  UserListSinglePlaceholderAvatar,
-  changeEnabled,
-} from '.';
 
 function UserListSingle({
   data: { username, avatar, email, role, enabled },
@@ -43,10 +39,7 @@ function UserListSingle({
       <div className="user-card">
         <div className="user">
           <Link to={`/users/${username}`}>
-            <SuspenseImg
-              fallback={<UserListSinglePlaceholderAvatar />}
-              attr={{ src: avatar, className: 'user-img', alt: 'avatar' }}
-            />
+            <Avatar url={avatar} size="sm" shadow={true} />
           </Link>
           <div className="user-info">
             <p className="username">{username}</p>

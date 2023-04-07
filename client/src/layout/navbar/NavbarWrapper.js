@@ -1,9 +1,18 @@
 import styled from 'styled-components';
 
 const NavbarWrapper = styled.main`
+  label {
+    display: none;
+  }
   .navbar-brand {
     width: 50%;
     margin-right: 0;
+  }
+  .nav-item {
+    line-height: 2.5rem;
+  }
+  .nav-link {
+    height: 100%;
   }
   .active {
     color: #ffffff !important;
@@ -37,7 +46,7 @@ const NavbarWrapper = styled.main`
     transform: rotate(0);
   }
   .dropdown-menu-fade.show {
-    max-height: 166px;
+    max-height: 193px;
     opacity: 1;
     visibility: visible;
     transition: max-height 0.4s, opacity 0.3s;
@@ -45,10 +54,6 @@ const NavbarWrapper = styled.main`
   .dropdown-menu {
     margin: 0;
     border-radius: 0;
-  }
-  .dropdown-item {
-    padding-left: 2rem;
-    padding-right: 2rem;
   }
   .dropdown-toggle-mobile {
     display: flex;
@@ -69,6 +74,7 @@ const NavbarWrapper = styled.main`
   @media (min-width: 1200px) {
     .search-input {
       transform: translateX(-50%);
+      position: absolute;
     }
     .dropdown-menu-center {
       left: 50%;
@@ -77,11 +83,7 @@ const NavbarWrapper = styled.main`
     .dropdown-menu {
       margin-top: 0.5rem;
       border-radius: 5px;
-      min-width: 8rem;
-    }
-    .dropdown-item {
-      padding-left: 1rem;
-      padding-right: 1rem;
+      min-width: 9rem;
     }
     .nav-pills {
       --bs-nav-pills-border-radius: 0.375rem;
@@ -91,7 +93,7 @@ const NavbarWrapper = styled.main`
         transform: rotate(0);
       }
       .dropdown:hover > .dropdown-menu-hover {
-        max-height: 166px;
+        max-height: 193px;
         opacity: 1;
         visibility: visible;
         transition: max-height 0.4s, opacity 0.3s;

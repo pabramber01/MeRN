@@ -19,6 +19,8 @@ const getAll = createAsyncThunk(
   'publicationList/getAll',
   async (view, thunkAPI) => {
     switch (true) {
+      case view.startsWith('home-search'):
+        return thunkAPI.dispatch(getAllPublications(view.split('/')[1]));
       case view.startsWith('home'):
         return thunkAPI.dispatch(getAllPublications());
       case view.startsWith('profile'):
@@ -31,10 +33,11 @@ const getAll = createAsyncThunk(
 
 const getAllPublications = createAsyncThunk(
   'publicationList/getAllPublications',
-  async (_, thunkAPI) => {
+  async (query, thunkAPI) => {
     const { page, datetime } = thunkAPI.getState().publicationList;
+    query = !query ? '' : `q=${query}&`;
     return thunks.get(
-      `/publications?before=${datetime}&page=${page}`,
+      `/publications?${query}before=${datetime}&page=${page}`,
       thunkAPI
     );
   }

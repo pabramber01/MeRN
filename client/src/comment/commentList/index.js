@@ -8,7 +8,6 @@ import CommentList from './CommentList';
 import CommentListPlaceholder from './CommentListPlaceholder';
 import CommentListSingle from './CommentListSingle';
 import CommentListSinglePlaceholder from './CommentListSinglePlaceholder';
-import CommentListSinglePlaceholderAvatar from './CommentListSinglePlaceholderAvatar';
 
 export default CommentList;
 export {
@@ -20,5 +19,4 @@ export {
   CommentListPlaceholder,
   CommentListSingle,
   CommentListSinglePlaceholder,
-  CommentListSinglePlaceholderAvatar,
 };

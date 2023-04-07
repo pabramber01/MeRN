@@ -106,6 +106,11 @@ UserSchema.post('find', async function (obj) {
   });
 });
 
+UserSchema.post('save', async function (obj) {
+  const avatar = obj && obj.avatar;
+  if (avatar) obj.avatar = concatUserAvat(obj.avatar, obj._id);
+});
+
 UserSchema.pre('save', async function () {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);

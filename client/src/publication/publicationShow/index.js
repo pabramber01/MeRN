@@ -1,7 +1,6 @@
 import PublicationShowWrapper from './PublicationShowWrapper';
 import PublicationShow from './PublicationShow';
 import PublicationShowPlaceholder from './PublicationShowPlaceholder';
-import PublicationShowPlaceholderAvatar from './PublicationShowPlaceholderAvatar';
 import publicationShowSlice, {
   getPublication,
   clearPublication,
@@ -16,5 +15,4 @@ export {
   changeLiked,
   PublicationShowWrapper,
   PublicationShowPlaceholder,
-  PublicationShowPlaceholderAvatar,
 };

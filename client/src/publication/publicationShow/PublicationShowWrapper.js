@@ -46,22 +46,13 @@ const PublicationShowWrapper = styled.main`
     justify-content: end;
   }
   a {
-    color: var(--bs-body-color);
+    color: var(--bs-secondary);
     text-decoration: none;
     display: flex;
   }
   .placeholder-user-name,
   .user-name {
     margin: auto 5px auto 5px;
-  }
-  .placeholder-avatar,
-  .user-img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border: 2px solid rgba(var(--bs-primary-rgb));
-    border-radius: 50%;
-    box-shadow: 5px 2px 5px rgba(var(--bs-secondary-rgb));
   }
 `;
 

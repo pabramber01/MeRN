@@ -1,8 +1,8 @@
 import {
   PublicationListWrapper,
-  PublicationListSinglePlaceholderAvatar,
   PublicationListSinglePlaceholderImage,
 } from '.';
+import { AvatarPlaceholder } from '../../layout';
 
 function PublicationListSinglePlaceholder() {
   return (
@@ -11,7 +11,7 @@ function PublicationListSinglePlaceholder() {
         <PublicationListSinglePlaceholderImage />
         <div className="photo-info d-flex justify-content-between align-items-center placeholder placeholder-wave">
           <span className="placeholder placeholder-wave col-6"></span>
-          <PublicationListSinglePlaceholderAvatar />
+          <AvatarPlaceholder size="sm" shadow={false} color="light" />
         </div>
       </div>
     </PublicationListWrapper>

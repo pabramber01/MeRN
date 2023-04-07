@@ -26,14 +26,15 @@ const pageQuery = ({ page, pageSize }) => {
 };
 
 const searchQuery = ({ filter, fields, q }) => {
-  let searchQuery = {};
+  let searchQuery = [];
 
   if (q)
-    fields.forEach(
-      (field) => (searchQuery[field] = { $regex: q, $options: 'i' })
+    fields.forEach((field) =>
+      searchQuery.push({ [field]: { $regex: q, $options: 'i' } })
     );
 
-  return { ...filter, ...searchQuery };
+  let res = searchQuery.length === 0 ? {} : { $or: searchQuery };
+  return { ...filter, ...res };
 };
 
 const rangeDatesQuery = ({ filter, field, start, end }) => {

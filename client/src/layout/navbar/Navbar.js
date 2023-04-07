@@ -1,10 +1,17 @@
 import { useSelector } from 'react-redux';
-import { NavbarDropdown, NavbarLink, NavbarLogout, NavbarWrapper } from '.';
+import {
+  NavbarAvt,
+  NavbarDropdown,
+  NavbarLink,
+  NavbarLogout,
+  NavbarSearch,
+  NavbarWrapper,
+} from '.';
 import { Logo, Separator } from '..';
 
 function Navbar() {
   const {
-    currentUser: { username, role },
+    currentUser: { username, role, avatar },
   } = useSelector((state) => state.authForm);
 
   return (
@@ -32,21 +39,20 @@ function Navbar() {
               <span className="offcanvas-title">
                 <Logo />
               </span>
-              <button className="btn-close" data-bs-dismiss="offcanvas" />
+              <button
+                id="close-offcanvas"
+                className="btn-close"
+                data-bs-dismiss="offcanvas"
+              />
             </div>
             {/* Offcanvas body && Navbar body */}
-            <div className="offcanvas-body justify-content-between">
-              <form className="search-input">
-                <input
-                  className="form-control"
-                  type="search"
-                  placeholder="Search"
-                />
-              </form>
+            <div className="offcanvas-body justify-content-between align-items-center">
+              <NavbarSearch />
               <br />
               <ul className="navbar-nav nav-pills">
                 <hr className="initial-separator" />
                 <NavbarLink path="/" label="Home" />
+                <NavbarLink path="/publications/new" label="New" />
                 {role === 'admin' && (
                   <NavbarDropdown label="Admin">
                     <NavbarLink
@@ -56,13 +62,7 @@ function Navbar() {
                     />
                   </NavbarDropdown>
                 )}
-                <NavbarDropdown label={`${username}`}>
-                  <NavbarLink
-                    path={`/publications/new`}
-                    label="New Post"
-                    dropdown={true}
-                  />
-                  <hr className="dropdown-divider" />
+                <NavbarDropdown label={<NavbarAvt a={avatar} u={username} />}>
                   <NavbarLink
                     path={`/users/${username}`}
                     label="My Profile"

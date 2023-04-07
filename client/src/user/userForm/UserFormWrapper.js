@@ -6,15 +6,6 @@ const UserFormWrapper = styled.main`
     font-size: 1.1rem;
     font-weight: bold;
   }
-  .user-img,
-  .placeholder-img {
-    width: 150px;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border: thick solid rgba(var(--bs-primary-rgb));
-    border-radius: 50%;
-    box-shadow: 10px 5px 5px rgba(var(--bs-secondary-rgb));
-  }
   .avatar-container {
     display: grid;
     justify-content: center;

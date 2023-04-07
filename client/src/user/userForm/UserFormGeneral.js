@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getUserData,
   UserFormGeneralPlaceholder,
-  UserFormPlaceholderAvatar,
   userFormService,
   updateUser,
 } from '.';
-import { FormInput, FormSubmit, SuspenseImg } from '../../layout';
+import { Avatar, FormInput, FormSubmit } from '../../layout';
 import { FiUploadCloud } from 'react-icons/fi';
 import { TiDelete } from 'react-icons/ti';
 import { loadCurrentUser } from '../../auth';
@@ -120,14 +119,7 @@ function UserFormGeneral() {
           <div className="col-md-6 order-md-2">
             <div className="avatar-container">
               <div className="avatar">
-                <SuspenseImg
-                  fallback={<UserFormPlaceholderAvatar />}
-                  attr={{
-                    src: values.preview,
-                    className: 'user-img',
-                    alt: '',
-                  }}
-                />
+                <Avatar url={values.preview} size="lg" shadow={true} />
                 <div className="delete-container">
                   <TiDelete className="delete-icon" />
                   <button

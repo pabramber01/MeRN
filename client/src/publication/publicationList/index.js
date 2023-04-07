@@ -9,7 +9,6 @@ import PublicationListPlaceholder from './PublicationListPlaceholder';
 import PublicationListSingle from './PublicationListSingle';
 import PublicationListSinglePlaceholder from './PublicationListSinglePlaceholder';
 import PublicationListSinglePlaceholderImage from './PublicationListSinglePlaceholderImage';
-import PublicationListSinglePlaceholderAvatar from './PublicationListSinglePlaceholderAvatar';
 
 export default PublicationList;
 export {
@@ -22,5 +21,4 @@ export {
   PublicationListSingle,
   PublicationListSinglePlaceholder,
   PublicationListSinglePlaceholderImage,
-  PublicationListSinglePlaceholderAvatar,
 };

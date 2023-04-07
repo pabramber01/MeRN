@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RiEditBoxLine, RiDeleteBin2Line } from 'react-icons/ri';
 import UseAnimations from 'react-useanimations';
 import heart from 'react-useanimations/lib/heart';
-import { Slider, sliderVH, Spinner, SuspenseImg } from '../../layout';
+import { Avatar, Slider, sliderVH, Spinner } from '../../layout';
 import {
   loadPublication,
   deletePublication,
@@ -17,7 +17,6 @@ import {
   clearPublication,
   getPublication,
   PublicationShowPlaceholder,
-  PublicationShowPlaceholderAvatar,
   PublicationShowWrapper,
 } from '.';
 
@@ -130,14 +129,7 @@ function PublicationShow({ publicationId }) {
                 <span className="user-name">{publication.user.username}</span>
               </Link>
               <Link to={`/users/${publication.user.username}`}>
-                <SuspenseImg
-                  fallback={<PublicationShowPlaceholderAvatar />}
-                  attr={{
-                    src: publication.user.avatar,
-                    className: 'user-img',
-                    alt: publication.user.username,
-                  }}
-                />
+                <Avatar url={publication.user.avatar} size="sm" shadow={true} />
               </Link>
             </div>
           </div>

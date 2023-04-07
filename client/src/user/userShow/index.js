@@ -5,7 +5,6 @@ import userShowSlice, {
 import UserShow from './UserShow';
 import UserShowWrapper from './UserShowWrapper';
 import UserShowPlaceholder from './UserShowPlaceholder';
-import UserShowPlaceholderAvatar from './UserShowPlaceholderAvatar';
 
 export default UserShow;
 export {
@@ -14,5 +13,4 @@ export {
   changeFollowShow,
   UserShowWrapper,
   UserShowPlaceholder,
-  UserShowPlaceholderAvatar,
 };

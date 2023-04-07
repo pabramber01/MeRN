@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const SliderWrapper = styled.main`
   .full-slider {
     background-color: var(--bs-light);
-    overflow: hidden;
+    overflow-x: clip;
     position: absolute;
     left: 0;
     right: 0;

@@ -50,7 +50,6 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
   if (select) populatePipeline.push({ $project: select });
 
   const pipeline = [
-    { $match: filter },
     {
       $lookup: {
         from: modelName,
@@ -59,6 +58,7 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
         pipeline: populatePipeline,
       },
     },
+    { $match: filter },
   ];
   if (!pathIsArray) pipeline.push({ $unwind: `$${path}` });
   if (sort) pipeline.push({ $sort: sort });

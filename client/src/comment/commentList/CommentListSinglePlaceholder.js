@@ -1,11 +1,12 @@
-import { CommentListSinglePlaceholderAvatar, CommentListWrapper } from '.';
+import { CommentListWrapper } from '.';
+import { AvatarPlaceholder } from '../../layout';
 
 function CommentListSinglePlaceholder() {
   return (
     <CommentListWrapper>
       <div className="comment-card">
         <div className="avatar">
-          <CommentListSinglePlaceholderAvatar />
+          <AvatarPlaceholder size="sm" shadow={true} />
         </div>
         <div className="info w-100">
           <div className="header">

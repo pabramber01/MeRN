@@ -2,7 +2,6 @@ import UserList from './UserList';
 import UserListSingle from './UserListSingle';
 import UserListWrapper from './UserListWrapper';
 import UserListPlaceholder from './UserListPlaceholder';
-import UserListSinglePlaceholderAvatar from './UserListSinglePlaceholderAvatar';
 import UserListSinglePlaceholder from './UserListSinglePlaceholder';
 import userListSlice, {
   getAll,
@@ -20,7 +19,6 @@ export {
   changeFollowList,
   UserListWrapper,
   UserListSingle,
-  UserListSinglePlaceholderAvatar,
   UserListPlaceholder,
   UserListSinglePlaceholder,
 };
