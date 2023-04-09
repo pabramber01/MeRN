@@ -10,21 +10,20 @@ import {
 const initialState = {
   data: [],
   datetime: '',
-  page: 0,
+  page: 1,
   view: '',
   reachEnd: false,
 };
 
 const getAll = createAsyncThunk('userList/getAll', async (view, thunkAPI) => {
-  switch (true) {
-    case view.startsWith('admin-search'):
-      return thunkAPI.dispatch(getAllUsers(view.split('/')[1]));
-    case view.startsWith('admin'):
-      return thunkAPI.dispatch(getAllUsers());
-    case view.startsWith('follows-search'):
-      return thunkAPI.dispatch(getAllFollows(view.split('/')[1]));
-    case view.startsWith('follows'):
-      return thunkAPI.dispatch(getAllFollows());
+  const [name, param] = view.split(/=(.*)/s);
+  const { page, datetime } = thunkAPI.getState().userList;
+  const payload = { param, datetime, page };
+  switch (name) {
+    case 'getAllUsers':
+      return thunkAPI.dispatch(getAllUsers(payload));
+    case 'getAllFollows':
+      return thunkAPI.dispatch(getAllFollows(payload));
     default:
       console.log('Wrong view');
   }
@@ -32,9 +31,8 @@ const getAll = createAsyncThunk('userList/getAll', async (view, thunkAPI) => {
 
 const getAllUsers = createAsyncThunk(
   'userList/getAllUsers',
-  async (query, thunkAPI) => {
-    const { page, datetime } = thunkAPI.getState().userList;
-    query = !query ? '' : `q=${query}&`;
+  async ({ param, datetime, page }, thunkAPI) => {
+    const query = !param ? '' : `q=${param}&`;
     return thunks.get(
       `/users?${query}before=${datetime}&page=${page}`,
       thunkAPI
@@ -44,9 +42,8 @@ const getAllUsers = createAsyncThunk(
 
 const getAllFollows = createAsyncThunk(
   'userList/getAllFollows',
-  async (query, thunkAPI) => {
-    const { page } = thunkAPI.getState().userList;
-    query = !query ? '' : `q=${query}&`;
+  async ({ param, page }, thunkAPI) => {
+    const query = !param ? '' : `q=${param}&`;
     return thunks.get(`/users/own/follows?${query}page=${page}`, thunkAPI);
   }
 );
@@ -67,7 +64,8 @@ const userListSlice = createSlice({
       const isNewFollow = isFollowing != null && !isFollowing;
       if (isNewFollow) {
         const { _id, username, avatar } = payload;
-        const index = state.data.findIndex((u) => u.username > username);
+        let index = state.data.findIndex((u) => u.username > username);
+        index = index === -1 ? state.data.length : index;
         state.data.splice(index, 0, { _id, username, avatar });
       } else {
         const { username } = payload;

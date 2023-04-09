@@ -3,11 +3,13 @@ import {
   createAsyncThunk,
   isRejectedWithValue,
   isFulfilled,
+  isPending,
 } from '@reduxjs/toolkit';
 import { reducers, thunks } from '../../utils';
 
 const initialState = {
   userProfile: {},
+  isLoading: false,
 };
 
 const getUserProfile = createAsyncThunk(
@@ -22,23 +24,25 @@ const userShowSlice = createSlice({
     changeFollowShow: (state, { payload }) => {
       const notPayload = !payload;
       const isSame = payload && payload.username === state.userProfile.username;
-      const changeNum = notPayload || isSame;
+      const change = notPayload || isSame;
 
       const isNewFollow = !state.userProfile.isFollowing;
-      state.userProfile.isFollowing = isNewFollow;
-      if (changeNum) state.userProfile.numFollowers += isNewFollow ? +1 : -1;
+
+      if (change) {
+        state.userProfile.isFollowing = isNewFollow;
+        state.userProfile.numFollowers += isNewFollow ? +1 : -1;
+      }
     },
   },
   extraReducers: (builder) => {
     builder
+      .addMatcher(isPending(getUserProfile), reducers.pending)
       .addMatcher(isFulfilled(getUserProfile), (state, { payload }) => {
         const { data } = payload;
         state.userProfile = data;
+        state.isLoading = false;
       })
-      .addMatcher(
-        isRejectedWithValue(getUserProfile),
-        reducers.rejectNoLoading
-      );
+      .addMatcher(isRejectedWithValue(getUserProfile), reducers.reject);
   },
 });
 

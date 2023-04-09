@@ -2,6 +2,12 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { Spinner } from '../spinner';
 
+const revertColor = (txt) => {
+  return txt.includes('primary')
+    ? txt.replace('primary', 'secondary')
+    : txt.replace('secondary', 'primary');
+};
+
 const initialValues = {
   isLoading: false,
 };
@@ -21,6 +27,7 @@ function DUButton({ page, allPages }) {
     undoAction,
     undoText,
     thenActions,
+    changeColor,
   } = Object.values(allPages)[index];
 
   condition = condition || (() => true);
@@ -28,6 +35,11 @@ function DUButton({ page, allPages }) {
   text = isDoAction ? doText : undoText;
   btnClass = isDoAction ? 'secondary do-action' : 'primary undo-action';
   color = isDoAction ? 'primary' : 'secondary';
+
+  if (changeColor) {
+    btnClass = revertColor(btnClass);
+    color = revertColor(color);
+  }
 
   const handleAction = (f, gs) => {
     setValues({ isLoading: true });

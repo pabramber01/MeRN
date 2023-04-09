@@ -8,6 +8,7 @@ import publicationFormSlice, {
   loadPublication,
   likePublication,
   dislikePublication,
+  clearPublicationForm,
 } from './publicationFormSlice';
 
 export default PublicationForm;
@@ -21,4 +22,5 @@ export {
   loadPublication,
   likePublication,
   dislikePublication,
+  clearPublicationForm,
 };

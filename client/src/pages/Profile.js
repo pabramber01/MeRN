@@ -16,7 +16,7 @@ function Profile() {
       <div className="row">
         <Separator color={'secondary'} cls={'mb-2'} />
       </div>
-      <PublicationList page={`profile/${username}`} />
+      <PublicationList page={`getAllPublicationsByUser=${username}`} />
     </>
   );
 }

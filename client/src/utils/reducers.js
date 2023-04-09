@@ -1,5 +1,9 @@
 import { toast } from 'react-toastify';
 
+const compareSameListAction = (state, meta) => {
+  return state.datetime === meta.arg.datetime;
+};
+
 const reducers = {
   clear: (initialState) => {
     return initialState;
@@ -15,7 +19,9 @@ const reducers = {
   pendingList: (state) => {
     state.page += 1;
   },
-  fullfilledList: (state, { payload }) => {
+  fullfilledList: (state, { payload, meta }) => {
+    if (!compareSameListAction(state, meta)) return;
+
     const { data } = payload;
     if (data.length === 0 && !state.reachEnd) {
       state.reachEnd = true;

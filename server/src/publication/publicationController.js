@@ -26,7 +26,7 @@ const getAllPublications = async (req, res) => {
   const orderQuery = sortQuery({
     sort,
     fields: ['createdAt', 'updatedAt'],
-    defaultSort: { updatedAt: -1 },
+    defaultSort: { updatedAt: -1, title: 1 },
   });
 
   const skipQuery = pageQuery({ page, pageSize });
@@ -52,7 +52,7 @@ const getAllPublications = async (req, res) => {
       path: 'user',
       select: { username: 1, avatar: 1 },
       match: {
-        $or: [{ enabled: true }, { enabled: false, username: username }],
+        $or: [{ enabled: true }, { username: username }],
       },
     },
   });
@@ -84,11 +84,7 @@ const getPublication = async (req, res) => {
       path: 'user',
       select: { username: 1, avatar: 1 },
       match: {
-        $or: [
-          { enabled: true },
-          { enabled: isAdmin },
-          { enabled: false, username: username },
-        ],
+        $or: [{ enabled: true }, { enabled: isAdmin }, { username: username }],
       },
     },
   });
@@ -285,6 +281,9 @@ const getAllCommentsByPublication = async (req, res) => {
   const isAdmin = role !== 'admin';
   const pageSize = 9;
 
+  if (!validator.isMongoId(id))
+    throw new BadRequestError(`No publication found with id: '${id}'`);
+
   const orderQuery = sortQuery({
     sort,
     fields: ['createdAt'],
@@ -300,19 +299,12 @@ const getAllCommentsByPublication = async (req, res) => {
     end: before,
   });
 
-  if (!validator.isMongoId(id))
-    throw new BadRequestError(`No publication found with id: '${id}'`);
-
   const pub = await Publication.lookup({
     filter: { _id: id },
     populate: {
       path: 'user',
       match: {
-        $or: [
-          { enabled: true },
-          { enabled: isAdmin },
-          { enabled: false, username: username },
-        ],
+        $or: [{ enabled: true }, { enabled: isAdmin }, { username: username }],
       },
     },
   });
@@ -328,11 +320,7 @@ const getAllCommentsByPublication = async (req, res) => {
       path: 'user',
       select: { username: 1, avatar: 1 },
       match: {
-        $or: [
-          { enabled: true },
-          { enabled: false, username: username },
-          { enabled: !isAdmin },
-        ],
+        $or: [{ enabled: true }, { username: username }],
       },
     },
   });

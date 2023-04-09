@@ -9,9 +9,9 @@ function UsersDashboard() {
   let type;
 
   if (pathname.startsWith('/admin/users'))
-    type = q !== null ? `admin-search/${q}` : 'admin';
+    type = q === null ? 'getAllUsers' : `getAllUsers=${q}`;
   else if (pathname.startsWith('/users/myfollows'))
-    type = q !== null ? `follows-search/${q}` : 'follows';
+    type = q === null ? 'getAllFollows' : `getAllFollows=${q}`;
 
   return (
     <>

@@ -20,6 +20,7 @@ import PublicationForm, {
   loadPublication,
   likePublication,
   dislikePublication,
+  clearPublicationForm,
 } from './publicationForm';
 
 export {
@@ -43,4 +44,5 @@ export {
   loadPublication,
   likePublication,
   dislikePublication,
+  clearPublicationForm,
 };

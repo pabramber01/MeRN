@@ -27,9 +27,9 @@ function UserList({ page }) {
     e.preventDefault();
     const { search } = values;
 
-    if (page.startsWith('admin')) {
+    if (page.startsWith('getAllUsers')) {
       navigate(`/admin/users?q=${search}`);
-    } else if (page.startsWith('follows')) {
+    } else if (page.startsWith('getAllFollows')) {
       navigate(`/users/myfollows?q=${search}`);
     }
   };

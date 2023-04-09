@@ -14,7 +14,7 @@ function UserListSingle({
   page,
 }) {
   const allPages = {
-    admin: {
+    getAllUsers: {
       isDoAction: enabled,
       doAction: () => banUser(username),
       undoAction: () => unbanUser(username),
@@ -22,7 +22,7 @@ function UserListSingle({
       undoText: 'Unban',
       thenActions: [() => changeEnabled({ username })],
     },
-    follows: {
+    getAllFollows: {
       condition: () => window.confirm('Do you want to unfollow this user?'),
       isDoAction: false,
       undoAction: () => unfollowUser(username),
@@ -31,6 +31,7 @@ function UserListSingle({
         () => changeFollowList({ username }),
         () => changeFollowShow({ username }),
       ],
+      changeColor: true,
     },
   };
 
@@ -47,7 +48,7 @@ function UserListSingle({
           </div>
         </div>
         <div className="user-actions">
-          {page.startsWith('admin') && role === 'admin' ? (
+          {page.startsWith('getAllUsers') && role === 'admin' ? (
             <span className="admin-role">Admin</span>
           ) : (
             <DUButton page={page} allPages={allPages} />

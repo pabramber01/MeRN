@@ -15,7 +15,7 @@ function Publication() {
             <Separator color="secondary" />
           </div>
           <CommentForm type="new" id={id} />
-          <CommentList page={`publication/${id}`} />
+          <CommentList page={`getAllCommByPublication=${id}`} />
         </div>
       </div>
     </>

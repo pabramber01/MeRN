@@ -14,6 +14,13 @@ $nav-tabs-link-hover-border-color: rgba(var(--bs-primary-rgb), 0.25)
 @import 'react-toastify/dist/ReactToastify.css';
 @import '@fontsource/yatra-one';
 
+:root {
+  --toastify-color-success: var(--bs-primary);
+  --toastify-color-error: var(--bs-secondary);
+  --toastify-color-warning: #f7d3b1;
+  --toastify-toast-background: var(--bs-light);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

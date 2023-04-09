@@ -6,7 +6,7 @@ function Home() {
   const { search } = useLocation();
   const q = new URLSearchParams(search).get('q');
 
-  const type = q !== null ? `home-search/${q}` : 'home';
+  const type = q === null ? 'getAllPublications' : `getAllPublications=${q}`;
 
   return (
     <>

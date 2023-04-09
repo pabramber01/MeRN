@@ -4,13 +4,12 @@ import {
   createSlice,
   isPending,
   isFulfilled,
-  isRejectedWithValue,
 } from '@reduxjs/toolkit';
 
 const initialState = {
   data: [],
   datetime: '',
-  page: 0,
+  page: 1,
   view: '',
   reachEnd: false,
 };
@@ -18,9 +17,12 @@ const initialState = {
 const getAll = createAsyncThunk(
   'commentList/getAll',
   async (view, thunkAPI) => {
-    switch (true) {
-      case view.startsWith('publication'):
-        return thunkAPI.dispatch(getAllCommByPublication(view.split('/')[1]));
+    const [name, param] = view.split(/=(.*)/s);
+    const { page, datetime } = thunkAPI.getState().commentList;
+    const payload = { param, datetime, page };
+    switch (name) {
+      case 'getAllCommByPublication':
+        return thunkAPI.dispatch(getAllCommByPublication(payload));
       default:
         console.log('Wrong view');
     }
@@ -29,13 +31,11 @@ const getAll = createAsyncThunk(
 
 const getAllCommByPublication = createAsyncThunk(
   'commentList/getAllCommByPublication',
-  async (id, thunkAPI) => {
-    const { page, datetime } = thunkAPI.getState().commentList;
-    return thunks.get(
-      `/publications/${id}/comments?before=${datetime}&page=${page}`,
+  async ({ param, datetime, page }, thunkAPI) =>
+    thunks.get(
+      `/publications/${param}/comments?before=${datetime}&page=${page}`,
       thunkAPI
-    );
-  }
+    )
 );
 
 const commentListSlice = createSlice({
@@ -64,10 +64,9 @@ const commentListSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(isPending(getAllCommByPublication), reducers.pendingList)
-      .addMatcher(isFulfilled(getAllCommByPublication), reducers.fullfilledList)
       .addMatcher(
-        isRejectedWithValue(getAllCommByPublication),
-        reducers.rejectNoLoading
+        isFulfilled(getAllCommByPublication),
+        reducers.fullfilledList
       );
   },
 });

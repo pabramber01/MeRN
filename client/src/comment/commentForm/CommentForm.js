@@ -21,7 +21,9 @@ function CommentForm({ type, id }) {
   const [values, setValues] = useState(initialValues(comment));
 
   useEffect(() => {
-    if (type === 'edit') {
+    if (type === 'new') {
+      setValues(initialValues({}));
+    } else if (type === 'edit') {
       setValues(initialValues(comment));
     } // eslint-disable-next-line
   }, [comment]);

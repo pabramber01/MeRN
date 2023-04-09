@@ -14,7 +14,7 @@ import {
 } from '.';
 
 function UserShow({ username }) {
-  const { userProfile } = useSelector((store) => store.userShow);
+  const { isLoading, userProfile } = useSelector((store) => store.userShow);
   const { currentUser } = useSelector((store) => store.authForm);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ function UserShow({ username }) {
   const myProfile = currentUser.username === username;
 
   const allPages = {
-    profile: {
+    getUserProfile: {
       isDoAction: !userProfile.isFollowing,
       doAction: () => followUser(username),
       undoAction: () => unfollowUser(username),
@@ -36,6 +36,7 @@ function UserShow({ username }) {
         () => changeFollowList({ ...userProfile }),
         () => changeFollowShow(),
       ],
+      changeColor: true,
     },
   };
 
@@ -45,9 +46,9 @@ function UserShow({ username }) {
         .unwrap()
         .catch(() => navigate('/'));
     } // eslint-disable-next-line
-  }, [username]);
+  }, [username, fieldCondition]);
 
-  return username !== fieldCondition ? (
+  return username !== fieldCondition || isLoading ? (
     <UserShowPlaceholder myProfile={myProfile} />
   ) : (
     <UserShowWrapper>
@@ -69,7 +70,7 @@ function UserShow({ username }) {
         </div>
         {!myProfile && (
           <div className="actions mx-3">
-            <DUButton page="profile" allPages={allPages} />
+            <DUButton page="getUserProfile" allPages={allPages} />
           </div>
         )}
       </div>

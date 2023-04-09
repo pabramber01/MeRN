@@ -3,11 +3,13 @@ import {
   createAsyncThunk,
   isRejectedWithValue,
   isFulfilled,
+  isPending,
 } from '@reduxjs/toolkit';
 import { reducers, thunks } from '../../utils';
 
 const initialState = {
   publication: {},
+  isLoading: false,
 };
 
 const getPublication = createAsyncThunk(
@@ -29,14 +31,13 @@ const publicationShowSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addMatcher(isPending(getPublication), reducers.pending)
       .addMatcher(isFulfilled(getPublication), (state, { payload }) => {
         const { data } = payload;
         state.publication = data;
+        state.isLoading = false;
       })
-      .addMatcher(
-        isRejectedWithValue(getPublication),
-        reducers.rejectNoLoading
-      );
+      .addMatcher(isRejectedWithValue(getPublication), reducers.reject);
   },
 });
 

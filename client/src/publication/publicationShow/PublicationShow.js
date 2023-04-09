@@ -11,6 +11,7 @@ import {
   clearFeed,
   likePublication,
   dislikePublication,
+  clearPublicationForm,
 } from '..';
 import {
   changeLiked,
@@ -22,19 +23,27 @@ import {
 
 function PublicationShow({ publicationId }) {
   const { currentUser } = useSelector((store) => store.authForm);
-  const { publication } = useSelector((store) => store.publicationShow);
-  const { isLoading } = useSelector((store) => store.publicationForm);
+  const { isLoading: loadingForm } = useSelector(
+    (store) => store.publicationForm
+  );
+  const { isLoading: loadingShow, publication } = useSelector(
+    (store) => store.publicationShow
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (publication._id !== publicationId) {
+    if (loadingForm) {
+      dispatch(clearFeed());
+      navigate('/');
+      dispatch(clearPublicationForm());
+    } else if (publication._id !== publicationId) {
       dispatch(getPublication(publicationId))
         .unwrap()
-        .then((pub) => dispatch(loadPublication(pub.data)))
+        .then((p) => dispatch(loadPublication(p.data)))
         .catch(() => navigate('/'));
     } // eslint-disable-next-line
-  }, [publicationId]);
+  }, [publication._id, publicationId]);
 
   const handleEdit = () => {
     navigate('/publications/edit');
@@ -44,11 +53,7 @@ function PublicationShow({ publicationId }) {
     if (window.confirm('Do you really want to delete this publication?')) {
       dispatch(deletePublication())
         .unwrap()
-        .then(() => {
-          dispatch(clearFeed());
-          navigate('/');
-          dispatch(clearPublication());
-        });
+        .then(() => dispatch(clearPublication()));
     }
   };
 
@@ -59,7 +64,7 @@ function PublicationShow({ publicationId }) {
       .then(() => dispatch(changeLiked()));
   };
 
-  return publication._id !== publicationId ? (
+  return publication._id !== publicationId || loadingShow ? (
     <PublicationShowPlaceholder />
   ) : (
     <PublicationShowWrapper>
@@ -75,7 +80,7 @@ function PublicationShow({ publicationId }) {
           <div className="header">
             <h1 className="publication-title">{publication.title}</h1>
             <div className="publication-actions">
-              {isLoading ? (
+              {loadingForm ? (
                 <Spinner color="secondary" small={true} />
               ) : (
                 <>

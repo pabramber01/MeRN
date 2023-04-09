@@ -257,7 +257,7 @@ async function getUserProfile(req, res) {
 
   const isEnabled = { enabled: true };
   const isAdmin = { enabled: role !== 'admin' };
-  const isSelf = { enabled: false, username: username };
+  const isSelf = { username: username };
 
   const data = (
     await User.aggregate([
@@ -321,11 +321,7 @@ async function getAllPublicationsByUser(req, res) {
   const data = await User.findOne(
     {
       [searchField]: id,
-      $or: [
-        { enabled: true },
-        { enabled: isAdmin },
-        { enabled: false, username: username },
-      ],
+      $or: [{ enabled: true }, { enabled: isAdmin }, { username: username }],
     },
     { _id: 1 }
   ).populate({

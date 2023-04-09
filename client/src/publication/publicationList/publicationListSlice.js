@@ -10,7 +10,7 @@ import {
 const initialState = {
   data: [],
   datetime: '',
-  page: 0,
+  page: 1,
   view: '',
   reachEnd: false,
 };
@@ -18,13 +18,14 @@ const initialState = {
 const getAll = createAsyncThunk(
   'publicationList/getAll',
   async (view, thunkAPI) => {
-    switch (true) {
-      case view.startsWith('home-search'):
-        return thunkAPI.dispatch(getAllPublications(view.split('/')[1]));
-      case view.startsWith('home'):
-        return thunkAPI.dispatch(getAllPublications());
-      case view.startsWith('profile'):
-        return thunkAPI.dispatch(getAllPublicationsByUser(view.split('/')[1]));
+    const [name, param] = view.split(/=(.*)/s);
+    const { page, datetime } = thunkAPI.getState().publicationList;
+    const payload = { param, datetime, page };
+    switch (name) {
+      case 'getAllPublications':
+        return thunkAPI.dispatch(getAllPublications(payload));
+      case 'getAllPublicationsByUser':
+        return thunkAPI.dispatch(getAllPublicationsByUser(payload));
       default:
         console.log('Wrong view');
     }
@@ -33,9 +34,8 @@ const getAll = createAsyncThunk(
 
 const getAllPublications = createAsyncThunk(
   'publicationList/getAllPublications',
-  async (query, thunkAPI) => {
-    const { page, datetime } = thunkAPI.getState().publicationList;
-    query = !query ? '' : `q=${query}&`;
+  async ({ param, datetime, page }, thunkAPI) => {
+    const query = !param ? '' : `q=${param}&`;
     return thunks.get(
       `/publications?${query}before=${datetime}&page=${page}`,
       thunkAPI
@@ -45,10 +45,9 @@ const getAllPublications = createAsyncThunk(
 
 const getAllPublicationsByUser = createAsyncThunk(
   'publicationList/getAllPublicationsByUser',
-  async (username, thunkAPI) => {
-    const { page, datetime } = thunkAPI.getState().publicationList;
+  async ({ param, datetime, page }, thunkAPI) => {
     return thunks.get(
-      `/users/${username}/publications?before=${datetime}&page=${page}`,
+      `/users/${param}/publications?before=${datetime}&page=${page}`,
       thunkAPI
     );
   }

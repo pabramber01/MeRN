@@ -58,6 +58,7 @@ const publicationFormSlice = createSlice({
   name: 'publicationForm',
   initialState,
   reducers: {
+    clearPublicationForm: () => reducers.clear(initialState),
     loadPublication: (state, { payload }) => {
       const { _id, title, description, images } = payload;
       state.publication = { id: _id, title, description, images };
@@ -79,17 +80,14 @@ const publicationFormSlice = createSlice({
           toast.success(`Your publication was uploaded!`);
         }
       )
-      .addMatcher(isFulfilled(deletePublication), (state) => {
-        state = initialState;
+      .addMatcher(isFulfilled(deletePublication), () => {
         toast.success('Publication was successfully deleted!');
       })
       .addMatcher(
         isRejectedWithValue(
           createPublication,
           updatePublication,
-          deletePublication,
-          likePublication,
-          dislikePublication
+          deletePublication
         ),
         reducers.reject
       );
@@ -103,5 +101,6 @@ export {
   likePublication,
   dislikePublication,
 };
-export const { loadPublication } = publicationFormSlice.actions;
+export const { loadPublication, clearPublicationForm } =
+  publicationFormSlice.actions;
 export default publicationFormSlice.reducer;
