@@ -1,10 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
-import validator from 'validator';
 import { fileURLToPath } from 'url';
 import p, { dirname } from 'path';
 import fs from 'fs/promises';
+import validator from 'validator';
+import { Types } from 'mongoose';
 import { User } from './index.js';
-import { BadRequestError } from '../error/error.js';
+import { BadRequestError, NotFoundError } from '../error/error.js';
 import {
   createToken,
   attachLoginCookie,
@@ -116,7 +117,7 @@ async function banUser(req, res) {
 
   const data = await User.findOne({ [searchField]: id });
 
-  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+  if (!data) throw new NotFoundError(`Username '${id}' does not exist`);
 
   if (data.role === 'admin')
     throw new BadRequestError('You can not ban an admin user');
@@ -133,7 +134,7 @@ async function unbanUser(req, res) {
 
   const data = await User.findOne({ [searchField]: id });
 
-  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+  if (!data) throw new NotFoundError(`Username '${id}' does not exist`);
 
   data.set({ enabled: true });
   await data.save();
@@ -144,13 +145,18 @@ async function unbanUser(req, res) {
 async function followUser(req, res) {
   const { id } = req.params;
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
+  const isEnabled = { enabled: true };
+  const isAdmin = { enabled: req.user.role !== 'admin' };
 
   if (id === req.user.username || id === req.user.userId)
     throw new BadRequestError('You can not follow yourself');
 
-  const follow = await User.findOne({ [searchField]: id });
+  const follow = await User.findOne({
+    [searchField]: id,
+    $or: [isEnabled, isAdmin],
+  });
 
-  if (!follow) throw new BadRequestError(`User ${id} does not exists`);
+  if (!follow) throw new NotFoundError(`User ${id} does not exists`);
 
   const user = await User.findOne({ username: req.user.username });
 
@@ -170,11 +176,16 @@ async function followUser(req, res) {
 async function unfollowUser(req, res) {
   const { id } = req.params;
   const searchField = validator.isMongoId(id) ? '_id' : 'username';
+  const isEnabled = { enabled: true };
+  const isAdmin = { enabled: req.user.role !== 'admin' };
 
   const user = await User.findOne({ username: req.user.username });
-  const follow = await User.findOne({ [searchField]: id });
+  const follow = await User.findOne({
+    [searchField]: id,
+    $or: [isEnabled, isAdmin],
+  });
 
-  if (!follow) throw new BadRequestError(`User ${id} does not exists`);
+  if (!follow) throw new NotFoundError(`User ${id} does not exists`);
 
   const indexUser = user.follows.findIndex((f) => f._id.equals(follow._id));
   if (indexUser === -1)
@@ -183,7 +194,7 @@ async function unfollowUser(req, res) {
   user.follows.splice(indexUser, 1);
   await user.save({ timestamps: false });
 
-  const indexFol = follow.followers.findIndex((u) => u._id === req.user.userId);
+  const indexFol = follow.followers.findIndex((u) => u._id == req.user.userId);
 
   follow.followers.splice(indexFol, 1);
   await follow.save({ timestamps: false });
@@ -253,7 +264,10 @@ async function getAllFollows(req, res) {
 async function getUserProfile(req, res) {
   const { id } = req.params;
   const { username, role } = req.user;
-  const searchField = validator.isMongoId(id) ? '_id' : 'username';
+
+  const isId = validator.isMongoId(id);
+  const searchField = isId ? '_id' : 'username';
+  const idField = isId ? Types.ObjectId(id) : id;
 
   const isEnabled = { enabled: true };
   const isAdmin = { enabled: role !== 'admin' };
@@ -263,7 +277,7 @@ async function getUserProfile(req, res) {
     await User.aggregate([
       {
         $match: {
-          [searchField]: id,
+          [searchField]: idField,
           $or: [isEnabled, isSelf, isAdmin],
         },
       },
@@ -273,6 +287,36 @@ async function getUserProfile(req, res) {
           localField: '_id',
           foreignField: 'user',
           as: 'publications',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          as: 'follows',
+          let: { follows: '$follows' },
+          pipeline: [
+            {
+              $match: {
+                $or: [isEnabled, isSelf],
+                $expr: { $in: ['$_id', '$$follows'] },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          as: 'followers',
+          let: { followers: '$followers' },
+          pipeline: [
+            {
+              $match: {
+                $or: [isEnabled, isSelf],
+                $expr: { $in: ['$_id', '$$followers'] },
+              },
+            },
+          ],
         },
       },
       {
@@ -287,7 +331,7 @@ async function getUserProfile(req, res) {
     ])
   )[0];
 
-  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+  if (!data) throw new NotFoundError(`Username '${id}' does not exist`);
 
   const currentUser = await User.findOne({ username: username });
   data.isFollowing = await currentUser.isFollowing(data._id);
@@ -332,7 +376,7 @@ async function getAllPublicationsByUser(req, res) {
     populate: { path: 'user', select: { username: 1, avatar: 1 } },
   });
 
-  if (!data) throw new BadRequestError(`Username '${id}' does not exist`);
+  if (!data) throw new NotFoundError(`Username '${id}' does not exist`);
 
   res.status(StatusCodes.OK).json({ success: true, data: data.publications });
 }

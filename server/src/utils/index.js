@@ -1,4 +1,5 @@
 import connectDB, {
+  updateArray,
   concatPubImg,
   concatUserAvat,
   lookupPipeline,
@@ -19,6 +20,7 @@ import {
 
 export {
   connectDB,
+  updateArray,
   concatPubImg,
   concatUserAvat,
   lookupPipeline,

@@ -25,7 +25,7 @@ const reducers = {
     const { data } = payload;
     if (data.length === 0 && !state.reachEnd) {
       state.reachEnd = true;
-      if (state.page > 1) {
+      if (state.page > 2) {
         toast.warn('You have reached the end!');
       }
     } else {
@@ -37,12 +37,21 @@ const reducers = {
     state.isLoading = false;
     toast.error(msg);
   },
-  rejectOnlyLoading: (state) => {
-    state.isLoading = false;
-  },
   rejectNoLoading: (_, { payload }) => {
     const { msg } = payload;
     toast.error(msg);
+  },
+  rejectOnlyLoading: (state) => {
+    state.isLoading = false;
+  },
+  rejectOneMsg: (state, { payload }, id) => {
+    const { msg } = payload;
+    state.isLoading = false;
+    toast.error(msg, { toastId: id });
+  },
+  rejectOneMsgNoLoading: ({ payload }, id) => {
+    const { msg } = payload;
+    toast.error(msg, { toastId: id });
   },
 };
 

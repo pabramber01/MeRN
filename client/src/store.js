@@ -21,7 +21,9 @@ const combinedReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  const resetActions = [
+  const resetActions = ['RESET'];
+
+  const logoutActions = [
     'authForm/logoutUser/fulfilled',
     'authForm/logoutUserLocal',
   ];
@@ -35,10 +37,13 @@ const rootReducer = (state, action) => {
 
   switch (true) {
     case resetActions.includes(action.type):
+      state = { authForm: state.authForm };
+      break;
+    case logoutActions.includes(action.type):
       state = undefined;
       break;
     case updateUserActions.includes(action.type):
-      state = { authForm: state.authForm, userShow: state.userForm };
+      state = { authForm: state.authForm };
       break;
     case banActions.includes(action.type):
       state = { authForm: state.authForm, userList: state.userList };

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
 import { publicationService } from './index.js';
 import {
   concatPubImg,
   concatUserAvat,
   lookupPipeline,
+  updateArray,
 } from '../utils/index.js';
 
 const PublicationSchema = new mongoose.Schema(
@@ -18,6 +18,7 @@ const PublicationSchema = new mongoose.Schema(
     description: {
       type: String,
       default: 'Description not provided',
+      set: (d) => (d === '' ? 'Description not provided' : d),
       maxLength: [512, 'Description is too long'],
     },
     images: {
@@ -65,18 +66,19 @@ PublicationSchema.post('find', async function (obj) {
 });
 
 PublicationSchema.pre('save', async function () {
-  if (validator.isEmpty(this.description)) {
-    this.description = undefined;
-  }
-});
-
-PublicationSchema.pre('save', async function () {
   const imgs = this.images;
   if (imgs && imgs.length > 0 && imgs[0].startsWith('http'))
     this.images = this.images.map((img) => img.split('/').splice(-1)[0]);
 });
 
+PublicationSchema.pre('updateOne', async function () {
+  const imgs = this.getUpdate().images;
+  if (imgs && imgs.length > 0 && imgs[0].startsWith('http'))
+    this.getUpdate().images = imgs.map((img) => img.split('/').splice(-1)[0]);
+});
+
 PublicationSchema.pre('remove', async function () {
+  await this.model('User').updateMany(...updateArray(this, 'likes'));
   await this.model('Comment').deleteMany({ publication: this._id });
 });
 

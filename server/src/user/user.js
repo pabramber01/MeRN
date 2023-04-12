@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import { concatUserAvat, lookupPipeline } from '../utils/index.js';
+import { concatUserAvat, lookupPipeline, updateArray } from '../utils/index.js';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -126,8 +126,11 @@ UserSchema.pre('save', async function () {
 });
 
 UserSchema.pre('remove', async function () {
+  await this.model('User').updateMany(...updateArray(this, 'follows'));
+  await this.model('User').updateMany(...updateArray(this, 'followers'));
   await this.model('Comment').deleteMany({ user: this._id });
   await this.model('Publication').deleteMany({ user: this._id });
+  await this.model('Publication').updateMany(...updateArray(this, 'likedBy'));
 });
 
 UserSchema.methods.checkPassword = async function (pass) {

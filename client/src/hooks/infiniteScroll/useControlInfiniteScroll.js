@@ -23,7 +23,7 @@ const useControlInfiniteScroll = (getFunc, page, reachEnd) => {
       window.addEventListener('scroll', event);
       return () => window.removeEventListener('scroll', event);
     } // eslint-disable-next-line
-  }, [reachEnd]);
+  }, [reachEnd, page]);
 };
 
 export default useControlInfiniteScroll;

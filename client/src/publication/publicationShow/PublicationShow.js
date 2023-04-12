@@ -40,8 +40,7 @@ function PublicationShow({ publicationId }) {
     } else if (publication._id !== publicationId) {
       dispatch(getPublication(publicationId))
         .unwrap()
-        .then((p) => dispatch(loadPublication(p.data)))
-        .catch(() => navigate('/'));
+        .then((p) => dispatch(loadPublication(p.data)));
     } // eslint-disable-next-line
   }, [publication._id, publicationId]);
 

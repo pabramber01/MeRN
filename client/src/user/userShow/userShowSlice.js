@@ -42,7 +42,10 @@ const userShowSlice = createSlice({
         state.userProfile = data;
         state.isLoading = false;
       })
-      .addMatcher(isRejectedWithValue(getUserProfile), reducers.reject);
+      .addMatcher(isRejectedWithValue(getUserProfile), (state, { payload }) => {
+        const id = 'user' + payload.msg.split(' ')[1].replaceAll("'", '');
+        reducers.rejectOneMsg(state, { payload }, id);
+      });
   },
 });
 

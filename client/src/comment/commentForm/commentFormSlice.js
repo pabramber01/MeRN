@@ -61,7 +61,10 @@ const commentFormSlice = createSlice({
       })
       .addMatcher(
         isRejectedWithValue(createComment, updateComment, deleteComment),
-        reducers.reject
+        (_, { payload }) => {
+          const id = 'pub' + payload.msg.split(' ').pop().replaceAll("'", '');
+          reducers.rejectOneMsgNoLoading({ payload }, id);
+        }
       );
   },
 });

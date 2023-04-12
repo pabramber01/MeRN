@@ -37,7 +37,10 @@ const publicationShowSlice = createSlice({
         state.publication = data;
         state.isLoading = false;
       })
-      .addMatcher(isRejectedWithValue(getPublication), reducers.reject);
+      .addMatcher(isRejectedWithValue(getPublication), (state, { payload }) => {
+        const id = 'pub' + payload.msg.split(' ').pop().replaceAll("'", '');
+        reducers.rejectOneMsg(state, { payload }, id);
+      });
   },
 });
 

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { isMongoId } from 'validator';
 import { DUButton, Avatar } from '../../layout';
 import { followUser, unfollowUser } from '../userForm';
@@ -17,7 +16,6 @@ function UserShow({ username }) {
   const { isLoading, userProfile } = useSelector((store) => store.userShow);
   const { currentUser } = useSelector((store) => store.authForm);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const fieldCondition = isMongoId(username)
     ? userProfile._id
@@ -42,9 +40,7 @@ function UserShow({ username }) {
 
   useEffect(() => {
     if (username !== fieldCondition) {
-      dispatch(getUserProfile(username))
-        .unwrap()
-        .catch(() => navigate('/'));
+      dispatch(getUserProfile(username));
     } // eslint-disable-next-line
   }, [username, fieldCondition]);
 

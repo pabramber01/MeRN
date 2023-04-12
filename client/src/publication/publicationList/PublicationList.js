@@ -17,7 +17,7 @@ function PublicationList({ page }) {
   useControlInfiniteScroll(getAll, page, reachEnd);
 
   return view !== page || (data.length === 0 && !reachEnd) ? (
-    page.includes('search') ? (
+    page.includes('=') && !page.split('=')[0].includes('By') ? (
       <Spinner color="secondary" centered={true} />
     ) : (
       <PublicationListPlaceholder />

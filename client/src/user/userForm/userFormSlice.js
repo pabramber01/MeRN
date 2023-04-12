@@ -93,12 +93,17 @@ const userFormSlice = createSlice({
           updateUser,
           updatePassword,
           deleteUser,
-          followUser,
-          unfollowUser,
           banUser,
           unbanUser
         ),
         reducers.rejectNoLoading
+      )
+      .addMatcher(
+        isRejectedWithValue(followUser, unfollowUser),
+        (_, { payload }) => {
+          const id = 'user' + payload.msg.split(' ')[1];
+          reducers.rejectOneMsgNoLoading({ payload }, id);
+        }
       );
   },
 });

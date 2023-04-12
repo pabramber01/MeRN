@@ -23,7 +23,7 @@
       "role": "user",
       "avatar": "avatar0.jpg",
       "enabled": "true",
-      "follows": [],
+      "follows": ["63e65f94cccb463f267e38b1"],
       "followers": [],
       "likes": [],
       "createdAt": "2019-02-10T18:17:21.368Z",
@@ -37,8 +37,8 @@
       "role": "user",
       "avatar": "avatar0.jpg",
       "enabled": "true",
-      "follows": [],
-      "followers": ["63e65f94cccb463f267e38b1"],
+      "follows": ["63e65f7a5370fe2673c74f07", "63e65f94cccb463f267e38b1"],
+      "followers": ["63e65f7a5370fe2673c74f07", "63e65f94cccb463f267e38b1"],
       "likes": ["63e65f008c924cea3068c31f"],
       "createdAt": "2019-02-10T18:17:21.368Z",
       "updatedAt": "2019-02-10T18:17:21.368Z"
@@ -52,7 +52,7 @@
       "avatar": "avatar0.jpg",
       "enabled": "true",
       "follows": ["63e65ee4e59bf65fa96314ca"],
-      "followers": ["63e65ee4e59bf65fa96314ca"],
+      "followers": ["63e65ee4e59bf65fa96314ca", "63e65f94cccb463f267e38b1"],
       "likes": ["63e65f008c924cea3068c31f"],
       "createdAt": "2019-02-10T18:17:21.368Z",
       "updatedAt": "2019-02-10T18:17:21.368Z"
@@ -65,12 +65,8 @@
       "role": "user",
       "avatar": "avatar0.png",
       "enabled": "true",
-      "follows": [
-        "63e65ee4e59bf65fa96314ca",
-        "63e65f7a5370fe2673c74f07",
-        "63e65ed132dde4d4ebe2cd15"
-      ],
-      "followers": ["63e65ee4e59bf65fa96314ca", "63e65f7a5370fe2673c74f07"],
+      "follows": ["63e65ee4e59bf65fa96314ca", "63e65f7a5370fe2673c74f07"],
+      "followers": ["63e65ee4e59bf65fa96314ca", "63e65ed132dde4d4ebe2cd15"],
       "likes": ["63e65f008c924cea3068c31f"],
       "createdAt": "2019-02-10T18:17:21.368Z",
       "updatedAt": "2019-02-10T18:17:21.368Z"

@@ -12,13 +12,18 @@ const setupInterceptors = (dispatch, navigate) => {
       return res;
     },
     (err) => {
-      if (err.response.status === 401) {
+      const isUnauthorized = err.response.status === 401;
+      const isForbidden = err.response.status === 403;
+      const isNotFound = err.response.status === 404;
+      const isNotBanned = !err.response.data.msg.includes('ban');
+
+      if (isUnauthorized) {
         dispatch(logoutUserLocal());
         return;
-      } else if (
-        err.response.status === 403 &&
-        !err.response.data.msg.includes('ban')
-      ) {
+      } else if (isForbidden && isNotBanned) {
+        navigate('/');
+      } else if (isNotFound) {
+        dispatch({ type: 'RESET' });
         navigate('/');
       }
       return Promise.reject(err);

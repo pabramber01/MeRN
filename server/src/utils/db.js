@@ -6,6 +6,12 @@ const connectDB = (url) => {
   return mongoose.connect(url);
 };
 
+const updateArray = (obj, field) => [
+  { [field]: obj._id },
+  { $pull: { [field]: obj._id } },
+  { timestamps: false },
+];
+
 const concatPubImg = (img, id) =>
   `${process.env.BASE_URL}/mern/static/publications/${id}/${img}`;
 
@@ -70,4 +76,4 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
 };
 
 export default connectDB;
-export { concatPubImg, concatUserAvat, lookupPipeline };
+export { updateArray, concatPubImg, concatUserAvat, lookupPipeline };

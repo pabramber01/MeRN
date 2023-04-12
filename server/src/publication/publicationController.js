@@ -1,13 +1,17 @@
 import { Publication } from './index.js';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError, UnauthorizedError } from '../error/error.js';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import fs from 'fs/promises';
 import validator from 'validator';
 import { User } from '../user/index.js';
 import { Comment } from '../comment/index.js';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../error/error.js';
 import {
   pageQuery,
   sortQuery,
@@ -66,31 +70,67 @@ const getPublication = async (req, res) => {
   const isAdmin = role !== 'admin';
 
   if (!validator.isMongoId(id))
-    throw new BadRequestError(`No publication found with id: '${id}'`);
+    throw new NotFoundError(`No publication found with id: '${id}'`);
 
-  const data = await Publication.lookup({
-    filter: { _id: id },
-    project: {
-      title: 1,
-      description: 1,
-      images: 1,
-      user: 1,
-      createdAt: 1,
-      updatedAt: 1,
-      numLikes: { $size: '$likedBy' },
-      isLiked: { $in: [mongoose.Types.ObjectId(userId), '$likedBy'] },
-    },
-    populate: {
-      path: 'user',
-      select: { username: 1, avatar: 1 },
-      match: {
-        $or: [{ enabled: true }, { enabled: isAdmin }, { username: username }],
+  const data = await Publication.aggregate([
+    { $match: { _id: Types.ObjectId(id) } },
+    {
+      $lookup: {
+        from: 'users',
+        as: 'user',
+        let: { user: '$user' },
+        pipeline: [
+          {
+            $match: {
+              $or: [
+                { enabled: true },
+                { enabled: isAdmin },
+                { username: username },
+              ],
+              $expr: { $eq: ['$_id', '$$user'] },
+            },
+          },
+          {
+            $project: { username: 1, avatar: 1 },
+          },
+        ],
       },
     },
-  });
+    {
+      $unwind: '$user',
+    },
+    {
+      $lookup: {
+        from: 'users',
+        as: 'likedBy',
+        let: { likedBy: '$likedBy' },
+        pipeline: [
+          {
+            $match: {
+              $or: [{ enabled: true }, { username: username }],
+              $expr: { $in: ['$_id', '$$likedBy'] },
+            },
+          },
+          { $project: { _id: 1 } },
+        ],
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        description: 1,
+        images: 1,
+        user: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        numLikes: { $size: '$likedBy' },
+        isLiked: { $in: [{ _id: Types.ObjectId(userId) }, '$likedBy'] },
+      },
+    },
+  ]);
 
   if (data.length === 0)
-    throw new BadRequestError(`No publication found with id: '${id}'`);
+    throw new NotFoundError(`No publication found with id: '${id}'`);
 
   res.status(StatusCodes.OK).json({ success: true, data: data[0] });
 };
@@ -141,7 +181,7 @@ const updatePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+  if (!data) throw new NotFoundError(`No publication found with id: ${id}`);
 
   if (userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
@@ -214,7 +254,7 @@ const deletePublication = async (req, res) => {
 
   const data = await Publication.findOne({ _id: id });
 
-  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+  if (!data) throw new NotFoundError(`No publication found with id: ${id}`);
 
   if (userId !== data.user.toString())
     throw new UnauthorizedError('Invalid credentials');
@@ -230,11 +270,22 @@ const deletePublication = async (req, res) => {
 
 const likePublication = async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.user;
+  const { userId, username, role } = req.user;
+  const isEnabled = { enabled: true };
+  const isSelf = { username: username };
+  const isAdmin = { enabled: role !== 'admin' };
 
-  const data = await Publication.findOne({ _id: id });
+  if (!validator.isMongoId(id))
+    throw new NotFoundError(`No publication found with id: ${id}`);
 
-  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+  const data = (
+    await Publication.lookup({
+      filter: { _id: id },
+      populate: { path: 'user', match: { $or: [isEnabled, isSelf, isAdmin] } },
+    })
+  )[0];
+
+  if (!data) throw new NotFoundError(`No publication found with id: ${id}`);
 
   if (data.likedBy.includes(userId))
     throw new BadRequestError(`You already like this publication`);
@@ -245,26 +296,37 @@ const likePublication = async (req, res) => {
   await user.save({ timestamps: false });
 
   data.likedBy.push(userId);
-  await data.save({ timestamps: false });
+  await Publication.updateOne({ _id: id }, { ...data }, { timestamps: false });
 
   res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
 };
 
 const dislikePublication = async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.user;
+  const { userId, username, role } = req.user;
+  const isEnabled = { enabled: true };
+  const isSelf = { username: username };
+  const isAdmin = { enabled: role !== 'admin' };
 
-  const data = await Publication.findOne({ _id: id });
+  if (!validator.isMongoId(id))
+    throw new NotFoundError(`No publication found with id: ${id}`);
+
   const user = await User.findOne({ _id: userId });
+  const data = (
+    await Publication.lookup({
+      filter: { _id: id },
+      populate: { path: 'user', match: { $or: [isEnabled, isSelf, isAdmin] } },
+    })
+  )[0];
 
-  if (!data) throw new BadRequestError(`No publication found with id: ${id}`);
+  if (!data) throw new NotFoundError(`No publication found with id: ${id}`);
 
   const indexPub = data.likedBy.findIndex((u) => u._id.equals(user._id));
   if (indexPub === -1)
     throw new BadRequestError(`You did not like publication ${id}`);
 
   data.likedBy.splice(indexPub, 1);
-  await data.save({ timestamps: false });
+  await Publication.updateOne({ _id: id }, { ...data }, { timestamps: false });
 
   const indexUser = user.likes.findIndex((p) => p._id.equals(data._id));
 
@@ -282,7 +344,7 @@ const getAllCommentsByPublication = async (req, res) => {
   const pageSize = 9;
 
   if (!validator.isMongoId(id))
-    throw new BadRequestError(`No publication found with id: '${id}'`);
+    throw new NotFoundError(`No publication found with id: '${id}'`);
 
   const orderQuery = sortQuery({
     sort,
@@ -293,7 +355,7 @@ const getAllCommentsByPublication = async (req, res) => {
   const skipQuery = pageQuery({ page, pageSize });
 
   const filterQuery = rangeDatesQuery({
-    filter: { publication: mongoose.Types.ObjectId(id) },
+    filter: { publication: Types.ObjectId(id) },
     field: 'createdAt',
     start: after,
     end: before,
@@ -310,7 +372,7 @@ const getAllCommentsByPublication = async (req, res) => {
   });
 
   if (pub.length === 0)
-    throw new BadRequestError(`No publication found with id: '${id}'`);
+    throw new NotFoundError(`No publication found with id: '${id}'`);
 
   const data = await Comment.lookup({
     filter: filterQuery,
