@@ -5,7 +5,6 @@
   "main": "./src/app.js",
   "type": "module",
   "scripts": {
-    "install": "npm ci",
     "start": "nodemon ./src/app.js",
     "test": "jest",
     "populate": "node ./src/utils/populate.js"

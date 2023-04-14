@@ -27,7 +27,6 @@
     "react-scripts": "^5.0.1"
   },
   "scripts": {
-    "install": "npm ci",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "build": "react-scripts build",

@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "MeRightNow social network app",
   "scripts": {
-    "install": "concurrently \"cd server && npm run install\" \"cd client && npm run install\" ",
     "start": "concurrently \"cd server && npm run start\" \"cd client && npm start\" ",
     "test": "concurrently \"cd server && npm run test -- --coverage --passWithNoTests\" \"cd client && npm test -- --watchAll=false --coverage --passWithNoTests\" ",
-    "populate": "cd server && npm run populate"
+    "populate": "cd server && npm run populate",
+    "install": "concurrently \"cd server && npm ci\" \"cd client && npm ci\" "
   },
   "repository": {
     "type": "git",
