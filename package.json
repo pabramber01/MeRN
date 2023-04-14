@@ -4,6 +4,8 @@
   "description": "MeRightNow social network app",
   "scripts": {
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\" ",
+    "install": "concurrently \"cd server && npm ci\" \"cd client && ci\" ",
+    "test": "concurrently \"cd server && npm run test -- --coverage\" \"cd client && npm test -- --watchAll=false --coverage\" ",
     "populate": "cd server && npm run populate"
   },
   "repository": {
