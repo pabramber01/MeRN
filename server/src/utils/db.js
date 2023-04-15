@@ -1,9 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 mongoose.set('strictQuery', false);
 
 const connectDB = (url) => {
   return mongoose.connect(url);
+};
+
+const connectTestDB = async (mongod) => {
+  const url = await mongod.getUri();
+  await mongoose.connect(url);
+};
+
+const closeTestDB = async (mongod) => {
+  await mongoose.connection.dropDatabase();
+  await mongoose.connection.close();
+  await mongod.stop();
+};
+
+const clearTestDB = async () => {
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    await collections[key].deleteMany();
+  }
 };
 
 const updateArray = (obj, field) => [
@@ -76,4 +94,12 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
 };
 
 export default connectDB;
-export { updateArray, concatPubImg, concatUserAvat, lookupPipeline };
+export {
+  connectTestDB,
+  closeTestDB,
+  clearTestDB,
+  updateArray,
+  concatPubImg,
+  concatUserAvat,
+  lookupPipeline,
+};

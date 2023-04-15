@@ -15,7 +15,7 @@ import {
   routeNotFoundMiddleware,
 } from './error/index.js';
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
@@ -34,7 +34,7 @@ app.use('/mern/static', express.static('./public/mern'));
 
 app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
 
-app.use(morgan('common'));
+if (process.env.NODE_ENV !== 'test') app.use(morgan('common'));
 
 app.use('/mern/v1/auth', authRouter);
 app.use('/mern/v1/users', userRouter);
@@ -56,4 +56,4 @@ const start = async () => {
   }
 };
 
-start();
+if (process.env.NODE_ENV !== 'test') start();

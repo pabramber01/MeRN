@@ -23,6 +23,8 @@ jobs:
         run: |
           npm i
           npm run install
+          cp ./server/local-settings.example.js ./server/.env
+          cp ./client/local-settings.example.js ./client/.env
       - name: Test and coverage
         run: npm run test
       - name: SonarCloud Scan
