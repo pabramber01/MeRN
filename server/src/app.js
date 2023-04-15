@@ -69,6 +69,6 @@ const start = async () => {
   }
 };
 
-if (process.env.NODE_ENV === 'development') start();
+if (process.env.NODE_ENV !== 'test') start();
 
 export default app;
