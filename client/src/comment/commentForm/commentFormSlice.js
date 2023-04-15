@@ -55,9 +55,9 @@ const commentFormSlice = createSlice({
           toast.success(`Your comment was uploaded!`);
         }
       )
-      .addMatcher(isFulfilled(deleteComment), (state) => {
-        state = initialState;
+      .addMatcher(isFulfilled(deleteComment), () => {
         toast.success('Comment was successfully deleted!');
+        return initialState;
       })
       .addMatcher(
         isRejectedWithValue(createComment, updateComment, deleteComment),

@@ -17,7 +17,11 @@ function Slider({ id, images, alt, edit }) {
   }, [images]);
 
   useEffect(() => {
-    new Carousel(`#${id}`); // eslint-disable-next-line
+    try {
+      new Carousel(`#${id}`);
+    } catch (e) {
+      console.log(e);
+    } // eslint-disable-next-line
   }, [imgs]);
 
   return !areImgsEqual ? (

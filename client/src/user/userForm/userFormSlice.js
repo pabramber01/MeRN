@@ -69,11 +69,8 @@ const userFormSlice = createSlice({
         addUserToLocalStorage(data.user);
         toast.success('Your account has been updated successfully!');
       })
-      .addMatcher(isFulfilled(updatePassword), (state) => {
+      .addMatcher(isFulfilled(updatePassword), () => {
         toast.success('Your password has been updated successfully!');
-      })
-      .addMatcher(isFulfilled(deleteUser), (state) => {
-        state = initialState;
       })
       .addMatcher(isFulfilled(followUser), () => {
         toast.success('User follow successfully!');

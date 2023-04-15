@@ -6,7 +6,7 @@ import store from './store';
 import {
   Protected,
   Landing,
-  Error,
+  ErrorNotFound,
   SharedLayout,
   Home,
   Profile,
@@ -46,7 +46,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/landing" element={<Landing />} />
-          <Route path="*" element={<Error />} />
+          <Route path="*" element={<ErrorNotFound />} />
         </Routes>
         <ToastContainer position="bottom-right" />
       </BrowserRouter>

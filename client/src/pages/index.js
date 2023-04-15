@@ -1,6 +1,6 @@
 import Landing from './Landing';
 import Protected from './Protected';
-import Error from './Error';
+import ErrorNotFound from './ErrorNotFound';
 import SharedLayout from './SharedLayout';
 import Home from './Home';
 import Profile from './Profile';
@@ -14,7 +14,7 @@ import UsersDashboard from './UsersDashboard';
 export {
   Landing,
   Protected,
-  Error,
+  ErrorNotFound,
   SharedLayout,
   Home,
   Profile,

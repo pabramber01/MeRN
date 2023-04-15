@@ -4,6 +4,10 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import rateLimiter from 'express-rate-limit';
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
 import morgan from 'morgan';
 import { connectDB } from './utils/index.js';
 import { authMiddleware, authRouter } from './auth/index.js';
@@ -33,6 +37,15 @@ app.use('/mern/static', authMiddleware.isAuthenticated);
 app.use('/mern/static', express.static('./public/mern'));
 
 app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 60,
+  })
+);
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
 
 if (process.env.NODE_ENV !== 'test') app.use(morgan('common'));
 

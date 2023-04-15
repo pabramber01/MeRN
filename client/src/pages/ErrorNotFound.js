@@ -1,6 +1,6 @@
 import not_found from '../assets/images/not_found.svg';
 
-function Error() {
+function ErrorNotFound() {
   return (
     <div className="container vh-100">
       <div className="row h-100 justify-content-center align-items-center text-center">
@@ -16,4 +16,4 @@ function Error() {
   );
 }
 
-export default Error;
+export default ErrorNotFound;

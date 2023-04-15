@@ -14,9 +14,6 @@
       "json",
       "lcov",
       "clover"
-    ],
-    "coveragePathIgnorePatterns": [
-      ".test.js"
     ]
   },
   "repository": {
