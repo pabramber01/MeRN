@@ -9,6 +9,9 @@
     "test": "cross-env NODE_ENV=test node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js",
     "populate": "node ./src/utils/populate.js"
   },
+  "jest": {
+    "coverageReporters": ["json", "lcov", "clover"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pabramber01/MeRN.git"
