@@ -33,6 +33,7 @@ jobs:
           args: >
             -Dsonar.organization=${{ secrets.SONARCLOUD_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONARCLOUD_PROJECTKEY }}
+            -Dsonar.coverage.exclusions=**/*.test.js
             -Dsonar.javascript.lcov.reportPaths=./server/coverage/lcov.info,./client/coverage/lcov.info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
