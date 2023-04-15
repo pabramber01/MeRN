@@ -1,6 +1,6 @@
 {
   "name": "mern-social-backend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MeRightNow social network backend",
   "main": "./src/app.js",
   "type": "module",

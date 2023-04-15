@@ -1,6 +1,6 @@
 {
   "name": "mern-social-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MeRightNow social network app",
   "scripts": {
     "start": "concurrently \"cd server && npm run start\" \"cd client && npm start\" ",
