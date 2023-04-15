@@ -11,7 +11,6 @@ jobs:
     secrets:
       SONARCLOUD_ORGANIZATION: ${{ secrets.SONARCLOUD_ORGANIZATION }}
       SONARCLOUD_PROJECTKEY: ${{ secrets.SONARCLOUD_PROJECTKEY }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
   release:

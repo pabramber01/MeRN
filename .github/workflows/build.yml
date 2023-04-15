@@ -11,8 +11,6 @@ on:
         required: true
       SONARCLOUD_PROJECTKEY:
         required: true
-      GITHUB_TOKEN:
-        required: true
       SONARCLOUD_TOKEN:
         required: true
 
