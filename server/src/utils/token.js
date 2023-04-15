@@ -19,6 +19,7 @@ const attachLoginCookie = ({ res, userToken }) => {
   });
 
   const oneDay = 1000 * 60 * 60 * 24;
+  console.log(process.env.FT_BASE_URL);
   const domain = process.env.FT_BASE_URL.split(/\.(.*)/s)[1];
 
   res.cookie('token', token, {
