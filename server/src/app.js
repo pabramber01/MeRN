@@ -19,7 +19,7 @@ import {
   routeNotFoundMiddleware,
 } from './error/index.js';
 
-export const app = express();
+const app = express();
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
@@ -69,4 +69,6 @@ const start = async () => {
   }
 };
 
-if (process.env.NODE_ENV !== 'test') start();
+if (process.env.NODE_ENV === 'development') start();
+
+export default app;
