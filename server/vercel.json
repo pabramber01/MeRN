@@ -16,10 +16,6 @@
     {
       "source": "/(.*)",
       "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    },
-    {
-      "source": "https://mern-frontend-pabramber01.vercel.app/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
     }
   ]
 }
