@@ -19,6 +19,7 @@ const attachLoginCookie = ({ res, userToken }) => {
   });
 
   const oneDay = 1000 * 60 * 60 * 24;
+  const domain = process.env.FT_BASE_URL.split(/\.(.*)/s)[1];
 
   res.cookie('token', token, {
     httpOnly: true,
@@ -26,18 +27,20 @@ const attachLoginCookie = ({ res, userToken }) => {
     secure: process.env.NODE_ENV === 'production',
     signed: true,
     sameSite: 'Lax',
-    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
+    domain: process.env.NODE_ENV === 'production' ? domain : 'localhost',
   });
 };
 
 const attachLogoutCookie = ({ res }) => {
   const oneSec = 1000;
 
+  const domain = process.env.FT_BASE_URL.split(/\.(.*)/s)[1];
+
   res.cookie('token', 'logout', {
     httpOnly: true,
     expires: new Date(Date.now() + oneSec),
     sameSite: 'Lax',
-    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
+    domain: process.env.NODE_ENV === 'production' ? domain : 'localhost',
   });
 };
 
