@@ -15,7 +15,12 @@
   "headers": [
     {
       "source": "/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://mern-frontend-pabramber01.vercel.app"
+        }
+      ]
     }
   ]
 }
