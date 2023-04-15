@@ -4,7 +4,7 @@ const authFormService = {
   validate: (username, email, password, password2, isMember) => {
     const usernameErrors = authFormService.validateUsername(username);
     const emailErrors = authFormService.validateEmail(email);
-    const passwordErrors = authFormService.validatePassword(password, isMember);
+    const passwordErrors = authFormService.validatePassword(password);
     const password2Errors = authFormService.validatePassword2(
       password,
       password2
@@ -41,11 +41,11 @@ const authFormService = {
 
     return { hasError, errorMsg };
   },
-  validatePassword: (password, isMember) => {
+  validatePassword: (password) => {
     let hasError = false;
     let errorMsg = '';
 
-    if (!isMember && password.length < 3) {
+    if (password.length < 3) {
       hasError = true;
       errorMsg = 'Must be atleast 3 long';
     }
