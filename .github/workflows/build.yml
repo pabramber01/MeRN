@@ -5,6 +5,16 @@ on:
     branches: ['main']
   pull_request:
     branches: ['main']
+  workflow_call:
+    secrets:
+      SONARCLOUD_ORGANIZATION:
+        required: true
+      SONARCLOUD_PROJECTKEY:
+        required: true
+      GITHUB_TOKEN:
+        required: true
+      SONARCLOUD_TOKEN:
+        required: true
 
 jobs:
   build:

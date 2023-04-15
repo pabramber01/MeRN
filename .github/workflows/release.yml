@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  buildTest:
+    uses: pabramber01/MeRN/.github/workflows/build.yml@main
+    secrets:
+      SONARCLOUD_ORGANIZATION: ${{ secrets.SONARCLOUD_ORGANIZATION }}
+      SONARCLOUD_PROJECTKEY: ${{ secrets.SONARCLOUD_PROJECTKEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+
+  release:
+    needs: buildTest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
