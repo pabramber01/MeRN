@@ -41,6 +41,9 @@
       "json",
       "lcov",
       "clover"
+    ],
+    "coveragePathIgnorePatterns": [
+      ".test.js"
     ]
   },
   "eslintConfig": {
