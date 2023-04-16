@@ -18,6 +18,10 @@
       "dest": "public/common/$1"
     },
     {
+      "src": "/mern/static/(.*)",
+      "dest": "public/mern/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/app.js"
     }

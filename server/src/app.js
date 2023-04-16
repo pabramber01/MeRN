@@ -33,7 +33,7 @@ app.use(
     defParamCharset: 'utf8',
   })
 );
-// app.use('/common/static', authMiddleware.isAuthenticated);
+app.use('/common/static', authMiddleware.isAuthenticated);
 app.use('/common/static', express.static('./public/common'));
 app.use('/mern/static', authMiddleware.isAuthenticated);
 app.use('/mern/static', express.static('./public/mern'));
