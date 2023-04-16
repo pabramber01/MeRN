@@ -14,6 +14,10 @@
   ],
   "routes": [
     {
+      "src": "/common/static/(.*)",
+      "dest": "public/common/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/app.js"
     }
