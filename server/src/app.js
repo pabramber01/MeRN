@@ -9,6 +9,8 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
 import morgan from 'morgan';
+import { fileURLToPath } from 'url';
+import p, { dirname } from 'path';
 import { connectDB } from './utils/index.js';
 import { authMiddleware, authRouter } from './auth/index.js';
 import { userRouter } from './user/index.js';
@@ -18,6 +20,8 @@ import {
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
 } from './error/index.js';
+
+const __dir = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -34,7 +38,7 @@ app.use(
   })
 );
 // app.use('/common/static', authMiddleware.isAuthenticated);
-app.use('/common/static', express.static('./public/common'));
+app.use('/common/static', express.static(p.join(__dir, '../public/common')));
 app.use('/mern/static', authMiddleware.isAuthenticated);
 app.use('/mern/static', express.static('./public/mern'));
 
