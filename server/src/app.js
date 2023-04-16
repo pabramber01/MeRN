@@ -21,6 +21,8 @@ import {
 
 const app = express();
 
+app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
+
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
@@ -36,7 +38,6 @@ app.use('/common/static', express.static('./public/common'));
 app.use('/mern/static', authMiddleware.isAuthenticated);
 app.use('/mern/static', express.static('./public/mern'));
 
-app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000,
