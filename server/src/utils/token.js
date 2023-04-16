@@ -35,6 +35,7 @@ const attachLogoutCookie = ({ res }) => {
   res.cookie('token', 'logout', {
     httpOnly: true,
     expires: new Date(Date.now() + oneSec),
+    secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'Lax',
   });
 };

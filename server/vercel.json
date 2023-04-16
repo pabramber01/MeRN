@@ -12,8 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/mern/(.*)",
       "dest": "src/app.js"
+    },
+    {
+      "src": "/(.+)",
+      "dest": "public/$1"
     }
   ]
 }
