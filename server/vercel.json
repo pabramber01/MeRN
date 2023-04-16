@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "buildCommand": "npm run start && npm run populate",
+  "installCommand": "npm ci",
   "builds": [
     {
       "src": "src/app.js",
@@ -14,10 +16,6 @@
     {
       "src": "/(.*)",
       "dest": "src/app.js"
-    },
-    {
-      "src": "/(.+)",
-      "dest": "public/$1"
     }
   ]
 }
