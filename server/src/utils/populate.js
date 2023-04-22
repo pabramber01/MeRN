@@ -124,6 +124,7 @@ const copyDirsCloud = async (params) => {
     });
 
     for (const file of files) {
+      console.log(file);
       const extraPath = file.split(p.basename(path))[1].replaceAll('\\', '/');
       const i = extraPath.lastIndexOf('/');
 
