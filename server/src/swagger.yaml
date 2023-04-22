@@ -1,0 +1,436 @@
+openapi: 3.0.3
+info:
+  title: MeRN
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: 'https://api-merightnow.onrender.com/mern/v1'
+  - url: 'http://localhost:8000/mern/v1'
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all users (admin solo)
+      description: Get all users (admin solo)
+      operationId: getAllUsersAdminSolo
+      parameters:
+        - name: before
+          in: query
+          schema:
+            type: string
+            example: '2023-04-22T12:58:03.378Z'
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: '1'
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Create user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: paco@chocolatero.com
+                password:
+                  type: string
+                  example: paco
+                username:
+                  type: string
+                  example: paco
+            example:
+              email: paco@chocolatero.com
+              password: paco
+              username: paco
+      responses:
+        '200':
+          description: ''
+  /users/own:
+    get:
+      tags:
+        - Users
+      summary: Get user personal data
+      description: Get user personal data
+      operationId: getUserPersonalData
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Delete user
+      operationId: deleteUser
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Users
+      summary: Update user data
+      description: Update user data
+      operationId: updateUserData
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  example: ''
+                email:
+                  type: string
+                  example: example@updated.com
+                username:
+                  type: string
+                  example: updated
+      responses:
+        '200':
+          description: ''
+  /users/own/change-password:
+    patch:
+      tags:
+        - Users
+      summary: Update password
+      description: Update password
+      operationId: updatePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPass:
+                  type: string
+                  example: user1updated
+                oldPass:
+                  type: string
+                  example: user1
+            example:
+              newPass: user1updated
+              oldPass: user1
+      responses:
+        '200':
+          description: ''
+  /users/own/follows:
+    get:
+      tags:
+        - Users
+      summary: Get all follows by user
+      description: Get all follows by user
+      operationId: getAllFollowsByUser
+      responses:
+        '200':
+          description: ''
+  /users/user1:
+    get:
+      tags:
+        - Users
+      summary: Get user public data
+      description: Get user public data
+      operationId: getUserPublicData
+      responses:
+        '200':
+          description: ''
+  /users/user1/publications:
+    get:
+      tags:
+        - Users
+      summary: Get all publications by user
+      description: Get all publications by user
+      operationId: getAllPublicationsByUser
+      parameters:
+        - name: before
+          in: query
+          schema:
+            type: string
+            example: '2023-04-22T13:09:49.402Z'
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: '1'
+      responses:
+        '200':
+          description: ''
+  /users/user4/follow:
+    patch:
+      tags:
+        - Users
+      summary: Follow user
+      description: Follow user
+      operationId: followUser
+      responses:
+        '200':
+          description: ''
+  /users/user4/unfollow:
+    patch:
+      tags:
+        - Users
+      summary: Unfollow user
+      description: Unfollow user
+      operationId: unfollowUser
+      responses:
+        '200':
+          description: ''
+  /users/user3/ban:
+    patch:
+      tags:
+        - Users
+      summary: Ban user (admin solo)
+      description: Ban user (admin solo)
+      operationId: banUserAdminSolo
+      responses:
+        '200':
+          description: ''
+  /users/user3/unban:
+    patch:
+      tags:
+        - Users
+      summary: Unban user (admin solo)
+      description: Unban user (admin solo)
+      operationId: unbanUserAdminSolo
+      responses:
+        '200':
+          description: ''
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      description: Login user
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: user2
+                username:
+                  type: string
+                  example: user2
+            example:
+              password: user2
+              username: user2
+      responses:
+        '200':
+          description: ''
+  /auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: Logout user
+      description: Logout user
+      operationId: logoutUser
+      responses:
+        '200':
+          description: ''
+  /publications:
+    get:
+      tags:
+        - Publications
+      summary: Get all publications
+      description: Get all publications
+      operationId: getAllPublications
+      parameters:
+        - name: publications?before
+          in: query
+          schema:
+            type: string
+            example: '2023-04-22T11:26:07.588Z'
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: '1'
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - Publications
+      summary: Create publication
+      description: Create publication
+      operationId: createPublication
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: ''
+                images:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                  example: testpub
+      responses:
+        '200':
+          description: ''
+  /publications/63e6608d2397e6b0a1e0f9a4:
+    get:
+      tags:
+        - Publications
+      summary: Get publication by id
+      description: Get publication by id
+      operationId: getPublicationById
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+        - Publications
+      summary: Delete publication
+      description: Delete publication
+      operationId: deletePublication
+      responses:
+        '200':
+          description: ''
+  /publications/63e65f008c924cea3068c31f:
+    patch:
+      tags:
+        - Publications
+      summary: Update publication
+      description: Update publication
+      operationId: updatePublication
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: descriptionupdated
+                newImg:
+                  type: string
+                  format: binary
+                oldImg:
+                  type: string
+                  example: >-
+                    https://res.cloudinary.com/pabramber01/image/authenticated/s--H8CBHkjt--/v1/mern/publications/63e65f008c924cea3068c31f/4-image0.jpg
+                title:
+                  type: string
+                  example: titleupdated
+      responses:
+        '200':
+          description: ''
+  /publications/63e65f008c924cea3068c31f/comments:
+    get:
+      tags:
+        - Publications
+      summary: Get all comments by publication id
+      description: Get all comments by publication id
+      operationId: getAllCommentsByPublicationId
+      parameters:
+        - name: before
+          in: query
+          schema:
+            type: string
+            example: '2023-04-22T12:48:53.494Z'
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: '1'
+      responses:
+        '200':
+          description: ''
+  /publications/63e6608d2397e6b0a1e0f9a4/like:
+    patch:
+      tags:
+        - Publications
+      summary: Like publication
+      description: Like publication
+      operationId: likePublication
+      responses:
+        '200':
+          description: ''
+  /publications/63e6608d2397e6b0a1e0f9a4/dislike:
+    patch:
+      tags:
+        - Publications
+      summary: Dislike publication
+      description: Dislike publication
+      operationId: dislikePublication
+      responses:
+        '200':
+          description: ''
+  /comments:
+    post:
+      tags:
+        - Comments
+      summary: Create comment
+      description: Create comment
+      operationId: createComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: this is a comment
+                publication:
+                  type: string
+                  example: 63e6607f87c75a7718033394
+            example:
+              comment: this is a comment
+              publication: 63e6607f87c75a7718033394
+      responses:
+        '200':
+          description: ''
+  /comments/6443e47557ad8a4d525405a2:
+    delete:
+      tags:
+        - Comments
+      summary: Delete comment
+      description: Delete comment
+      operationId: deleteComment
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+        - Comments
+      summary: Update comment
+      description: Update comment
+      operationId: updateComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  example: updated comment
+            example:
+              comment: updated comment
+      responses:
+        '200':
+          description: ''
+tags:
+  - name: Users
+  - name: Auth
+  - name: Publications
+  - name: Comments

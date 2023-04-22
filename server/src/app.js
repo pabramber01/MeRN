@@ -2,6 +2,8 @@ import 'dotenv/config';
 import 'express-async-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import swaggerUI from 'swagger-ui-express';
+import YAML from 'yamljs';
 import { v2 as cloudinary } from 'cloudinary';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
@@ -21,6 +23,9 @@ import {
 } from './error/index.js';
 
 const app = express();
+
+const swaggerDocument = YAML.load('./src/swagger.yaml');
+app.use('/mern/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
 
