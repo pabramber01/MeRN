@@ -124,7 +124,7 @@ const copyDirsCloud = async (params) => {
     });
 
     for (const file of files) {
-      const extraPath = file.split(p.basename(path))[1].replaceAll(/\\/g, '/');
+      const extraPath = file.split(p.basename(path))[1].replace(/\\/g, '/');
       const i = extraPath.lastIndexOf('/');
 
       await cloudinary.uploader.upload(file, {
