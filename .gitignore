@@ -127,6 +127,7 @@ dist
 
 # Temp public files
 server/public/mern/*
+server/tmp/
 
 # misc
 .DS_Store
