@@ -25,7 +25,7 @@ const reducers = {
     const { data } = payload;
     if (data.length === 0 && !state.reachEnd) {
       state.reachEnd = true;
-      if (state.page > 2) {
+      if (state.data.length > 0 && state.page > 2) {
         toast.warn('You have reached the end!');
       }
     } else {
