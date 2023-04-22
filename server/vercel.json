@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm run start && npm run populate",
   "installCommand": "npm ci",
   "builds": [
     {
@@ -12,14 +11,34 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/common/static/(.*)",
-      "dest": "public/common/$1"
+      "source": "/common/static/(.*)",
+      "destination": "public/common/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "src/app.js"
+      "source": "/(.*)",
+      "destination": "src/app.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://mern-frontend-pabramber01.vercel.app"
+        }
+      ]
     }
   ]
 }
