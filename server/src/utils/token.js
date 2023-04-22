@@ -25,8 +25,7 @@ const attachLoginCookie = ({ res, userToken }) => {
     expires: new Date(Date.now() + oneDay),
     secure: process.env.NODE_ENV === 'production',
     signed: true,
-    sameSite: 'lax',
-    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'Lax',
   });
 };
 
@@ -37,8 +36,7 @@ const attachLogoutCookie = ({ res }) => {
     httpOnly: true,
     expires: new Date(Date.now() + oneSec),
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'Lax',
   });
 };
 
