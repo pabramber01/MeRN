@@ -10,7 +10,6 @@ import {
   searchQuery,
   rangeDatesQuery,
 } from './queries.js';
-import { readFixtures, moveAssets } from './reader.js';
 import {
   createToken,
   isTokenValid,
@@ -28,8 +27,6 @@ export {
   isTokenValid,
   attachLoginCookie,
   attachLogoutCookie,
-  readFixtures,
-  moveAssets,
   sortQuery,
   pageQuery,
   searchQuery,

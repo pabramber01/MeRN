@@ -2,6 +2,7 @@ import 'dotenv/config';
 import 'express-async-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import { v2 as cloudinary } from 'cloudinary';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import rateLimiter from 'express-rate-limit';
@@ -26,17 +27,27 @@ app.use(cors({ credentials: true, origin: process.env.FT_BASE_URL }));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
 
-app.use(
-  fileUpload({
-    createParentPath: true,
-    defCharset: 'utf8',
-    defParamCharset: 'utf8',
-  })
-);
+const fileOptions = {
+  createParentPath: true,
+  defCharset: 'utf8',
+  defParamCharset: 'utf8',
+};
+if (process.env.NODE_ENV === 'production') fileOptions['useTempFiles'] = true;
+app.use(fileUpload(fileOptions));
+
 app.use('/common/static', authMiddleware.isAuthenticated);
 app.use('/common/static', express.static('./public/common'));
-app.use('/mern/static', authMiddleware.isAuthenticated);
-app.use('/mern/static', express.static('./public/mern'));
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/mern/static', authMiddleware.isAuthenticated);
+  app.use('/mern/static', express.static('./public/mern'));
+} else {
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+  });
+}
 
 app.use(
   rateLimiter({

@@ -1,10 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
-import { fileURLToPath } from 'url';
-import p, { dirname } from 'path';
-import fs from 'fs/promises';
 import validator from 'validator';
 import { Types } from 'mongoose';
-import { User } from './index.js';
+import { User, userService } from './index.js';
 import { BadRequestError, NotFoundError } from '../error/error.js';
 import {
   createToken,
@@ -15,9 +12,6 @@ import {
   searchQuery,
   rangeDatesQuery,
 } from '../utils/index.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const staticFolder = '../../public/mern/users';
 
 async function createUser(req, res) {
   const { username, email, password } = req.body;
@@ -57,9 +51,13 @@ async function updateUser(req, res) {
       const isImage = img && img.mimetype.startsWith('image');
       if (!isImage) throw new BadRequestError('You must only upload image');
 
+      const mb10 = 10 * 1024 * 1024;
+      const isSmall = img && img.size < mb10;
+      if (!isSmall) throw new BadRequestError('Avatar must be lower than 10MB');
+
       const fileName = img.name;
       let v = Number(data.avatar.split('avatar')[1].split('.')[0]);
-      v = isNaN(v) ? 0 : v;
+      v = isNaN(v) ? data.__v : v;
       path = `avatar${v + 1}${fileName.substr(fileName.lastIndexOf('.'))}`;
     }
   }
@@ -69,10 +67,12 @@ async function updateUser(req, res) {
 
   const newAvatar = avatar ? false : true;
   if (newAvatar) {
-    if (!oldPh.includes('default'))
-      await fs.rm(p.join(__dirname, `${staticFolder}/${data._id}/${oldPh}`));
-    if (path)
-      await img.mv(p.join(__dirname, `${staticFolder}/${data._id}/${path}`));
+    if (!oldPh.includes('default')) {
+      await userService.deleteAvatar({ data, oldPh });
+    }
+    if (path) {
+      await userService.addAvatar({ img, data, path });
+    }
   }
 
   const userToken = createToken(data);
@@ -102,10 +102,7 @@ async function deleteUser(req, res) {
 
   await data.delete();
 
-  await fs.rm(p.join(__dirname, `${staticFolder}/${data._id}`), {
-    recursive: true,
-    force: true,
-  });
+  await userService.deleteAvatar({ data });
 
   attachLogoutCookie({ res });
   res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });

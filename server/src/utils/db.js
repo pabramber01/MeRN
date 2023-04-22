@@ -1,4 +1,5 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary';
 
 mongoose.set('strictQuery', false);
 
@@ -30,14 +31,40 @@ const updateArray = (obj, field) => [
   { timestamps: false },
 ];
 
-const concatPubImg = (img, id) =>
-  `${process.env.BASE_URL}/mern/static/publications/${id}/${img}`;
+const concatPubImg = (img, id) => {
+  let url;
+
+  if (process.env.NODE_ENV !== 'production') {
+    url = `${process.env.BASE_URL}/mern/static/publications/${id}/${img}`;
+  } else {
+    const publicId = `mern/publications/${id}/${img}`;
+    url = cloudinary.url(publicId, {
+      secure: true,
+      type: 'authenticated',
+      sign_url: true,
+    });
+  }
+
+  return url;
+};
 
 const concatUserAvat = (img, id) => {
-  const route = img.includes('default')
-    ? 'common/static/avatars'
-    : `mern/static/users/${id}`;
-  return `${process.env.BASE_URL}/${route}/${img}`;
+  let url;
+
+  if (img.includes('default')) {
+    url = `${process.env.BASE_URL}/common/static/avatars/${img}`;
+  } else if (process.env.NODE_ENV !== 'production') {
+    url = `${process.env.BASE_URL}/mern/static/users/${id}/${img}`;
+  } else {
+    const publicId = `mern/users/${id}/${img}`;
+    url = cloudinary.url(publicId, {
+      secure: true,
+      type: 'authenticated',
+      sign_url: true,
+    });
+  }
+
+  return url;
 };
 
 const lookupPipeline = (schema, { filter, project, options, populate }) => {

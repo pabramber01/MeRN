@@ -1,8 +1,5 @@
-import { Publication } from './index.js';
+import { Publication, publicationService } from './index.js';
 import { StatusCodes } from 'http-status-codes';
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
-import fs from 'fs/promises';
 import validator from 'validator';
 import { User } from '../user/index.js';
 import { Comment } from '../comment/index.js';
@@ -18,9 +15,6 @@ import {
   rangeDatesQuery,
   searchQuery,
 } from '../utils/index.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const staticFolder = '../../public/mern/publications';
 
 const getAllPublications = async (req, res) => {
   const { after, before, sort, page, q } = req.query;
@@ -148,6 +142,12 @@ const createPublication = async (req, res) => {
     throw new BadRequestError('You must only upload images');
   }
 
+  const mb10 = 10 * 1024 * 1024;
+  const areAllSmall = images.every((img) => img.size < mb10);
+  if (!areAllSmall) {
+    throw new BadRequestError('You must only upload images lower than 10MB');
+  }
+
   const paths = images.map(
     (img, i) => `${i + 1}-image0${img.name.substr(img.name.lastIndexOf('.'))}`
   );
@@ -160,9 +160,7 @@ const createPublication = async (req, res) => {
   });
 
   for (const [i, img] of images.entries())
-    await img.mv(
-      path.join(__dirname, `${staticFolder}/${data._id}/${paths[i]}`)
-    );
+    await publicationService.addPublication({ img, data, path: paths[i] });
 
   res
     .status(StatusCodes.CREATED)
@@ -198,18 +196,21 @@ const updatePublication = async (req, res) => {
     const files = req.files.newImg;
     Array.isArray(files) ? images.push(...files) : images.push(files);
 
-    const areAllImages = images.every((img) =>
-      img.mimetype.startsWith('image')
-    );
-
+    const areAllImages = images.every((i) => i.mimetype.startsWith('image'));
     if (!areAllImages) {
       throw new BadRequestError('You must only upload images');
+    }
+
+    const mb10 = 10 * 1024 * 1024;
+    const areAllSmall = images.every((img) => img.size < mb10);
+    if (!areAllSmall) {
+      throw new BadRequestError('You must only upload images lower than 10MB');
     }
 
     images.forEach((img) => paths.push(img.name));
   }
 
-  const v = Number(data.images[0].split('image')[1].split('.')[0]);
+  const v = Number(data.images[0].split('image').pop().split('.')[0]);
   const getBaseImg = (img) => img.split('/').splice(-1)[0].slice(2);
   const getExtension = (img) => img.substr(img.lastIndexOf('.'));
   oldImg.forEach((img) => paths.unshift(getBaseImg(img)));
@@ -227,22 +228,22 @@ const updatePublication = async (req, res) => {
   await data.save();
 
   for (const img of imagesToDelete)
-    await fs.rm(path.join(__dirname, `${staticFolder}/${data._id}/${img}`));
+    await publicationService.deletePublication({ data, oldPh: img });
 
   for (const [i, img] of imagesToRename.entries())
-    await fs.rename(
-      path.join(__dirname, `${staticFolder}/${data._id}/${img}`),
-      path.join(__dirname, `${staticFolder}/${data._id}/${paths[i]}`)
-    );
+    await publicationService.renamePublication({
+      data,
+      oldPh: img,
+      newPh: paths[i],
+    });
 
   if (images) {
     for (const [i, img] of images.entries())
-      await img.mv(
-        path.join(
-          __dirname,
-          `${staticFolder}/${data._id}/${paths[i + imagesToRename.length]}`
-        )
-      );
+      await publicationService.addPublication({
+        img,
+        data,
+        path: paths[i + imagesToRename.length],
+      });
   }
 
   res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
@@ -261,9 +262,7 @@ const deletePublication = async (req, res) => {
 
   await data.delete();
 
-  await fs.rm(path.join(__dirname, `${staticFolder}/${data._id}`), {
-    recursive: true,
-  });
+  await publicationService.deletePublication({ data });
 
   res.status(StatusCodes.OK).json({ success: true, data: { _id: data._id } });
 };

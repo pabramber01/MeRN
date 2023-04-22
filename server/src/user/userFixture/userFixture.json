@@ -63,7 +63,7 @@
       "email": "user2@mern.com",
       "password": "$2a$10$c7eIOvprb3Z3rLVbYkLnO.a5BoYMetFL3z8zMYnTSw54ZCL0TQuIW",
       "role": "user",
-      "avatar": "avatar0.png",
+      "avatar": "avatar0.jpg",
       "enabled": "true",
       "follows": ["63e65ee4e59bf65fa96314ca", "63e65f7a5370fe2673c74f07"],
       "followers": ["63e65ee4e59bf65fa96314ca", "63e65ed132dde4d4ebe2cd15"],
