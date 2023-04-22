@@ -26,6 +26,7 @@ const attachLoginCookie = ({ res, userToken }) => {
     secure: process.env.NODE_ENV === 'production',
     signed: true,
     sameSite: 'lax',
+    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
   });
 };
 
@@ -37,6 +38,7 @@ const attachLogoutCookie = ({ res }) => {
     expires: new Date(Date.now() + oneSec),
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
+    domain: process.env.FT_BASE_URL.split('//')[1].split(':')[0],
   });
 };
 
