@@ -125,7 +125,7 @@ dist
 .history/
 *.vsix
 
-# Temp public files
+# Tmp files
 server/public/mern/*
 server/tmp/
 
