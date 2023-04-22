@@ -60,11 +60,15 @@ const userListSlice = createSlice({
       state.data[index].enabled = !state.data[index].enabled;
     },
     changeFollowList: (state, { payload }) => {
+      if (state.view.split('=')[0] !== 'getAllFollows') return;
+
       const { isFollowing } = payload;
       const isNewFollow = isFollowing != null && !isFollowing;
+
       if (isNewFollow) {
         const { _id, username, avatar } = payload;
-        let index = state.data.findIndex((u) => u.username > username);
+        const ul = username.toLowerCase();
+        let index = state.data.findIndex((u) => u.username.toLowerCase() > ul);
         index = index === -1 ? state.data.length : index;
         state.data.splice(index, 0, { _id, username, avatar });
       } else {

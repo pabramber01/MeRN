@@ -150,7 +150,7 @@ UserSchema.methods.isFollowing = async function (user) {
 };
 
 UserSchema.statics.lookup = async function (params) {
-  return this.aggregate(lookupPipeline(this.schema, params));
+  return this.aggregate(...lookupPipeline(this.schema, params));
 };
 
 export default mongoose.model('User', UserSchema);

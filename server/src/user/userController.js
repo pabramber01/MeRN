@@ -211,6 +211,8 @@ async function getAllUsers(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
+  const collation = { locale: 'en' };
+
   let filterQuery = searchQuery({ filter: {}, fields: ['username'], q });
   filterQuery = rangeDatesQuery({
     filter: filterQuery,
@@ -222,7 +224,7 @@ async function getAllUsers(req, res) {
   const data = await User.find(
     filterQuery,
     { username: 1, email: 1, role: 1, avatar: 1, enabled: 1 },
-    { sort: orderQuery, limit: pageSize, skip: skipQuery }
+    { sort: orderQuery, limit: pageSize, skip: skipQuery, collation }
   );
 
   res.status(StatusCodes.OK).json({ success: true, data });
@@ -240,12 +242,15 @@ async function getAllFollows(req, res) {
 
   const skipQuery = pageQuery({ page, pageSize });
 
+  const collation = { locale: 'en' };
+
   let matchQuery = { enabled: true };
   matchQuery = searchQuery({ filter: matchQuery, fields: ['username'], q });
 
   let data = await User.lookup({
     filter: { username: req.user.username },
     project: { follows: 1 },
+    options: { collation },
     populate: {
       path: 'follows',
       select: { username: 1, avatar: 1 },

@@ -75,7 +75,7 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
   if (isEmpty(project)) project = null;
   if (isEmpty(options)) options = nullOpt;
 
-  const { sort, limit, skip } = options;
+  const { sort, limit, skip, collation } = options;
   const { path, match } = populate;
   const select = isEmpty(populate.select) ? null : populate.select;
   const optionsPop = isEmpty(populate.options) ? nullOpt : populate.options;
@@ -117,7 +117,7 @@ const lookupPipeline = (schema, { filter, project, options, populate }) => {
   if (limit) pipeline.push({ $limit: limit });
   if (project) pipeline.push({ $project: project });
 
-  return pipeline;
+  return [pipeline, { collation }];
 };
 
 export default connectDB;

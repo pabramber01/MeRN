@@ -34,9 +34,17 @@ class UnauthorizedError extends CustomError {
   }
 }
 
+class TooManyRequestError extends CustomError {
+  constructor(message) {
+    super(message);
+    this.statusCode = StatusCodes.TOO_MANY_REQUESTS;
+  }
+}
+
 export {
   NotFoundError,
   BadRequestError,
   UnauthenticatedError,
   UnauthorizedError,
+  TooManyRequestError,
 };

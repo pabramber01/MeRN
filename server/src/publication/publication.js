@@ -83,7 +83,7 @@ PublicationSchema.pre('remove', async function () {
 });
 
 PublicationSchema.statics.lookup = async function (params) {
-  return this.aggregate(lookupPipeline(this.schema, params));
+  return this.aggregate(...lookupPipeline(this.schema, params));
 };
 
 export default mongoose.model('Publication', PublicationSchema);

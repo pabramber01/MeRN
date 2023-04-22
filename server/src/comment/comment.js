@@ -31,7 +31,7 @@ CommentSchema.post('aggregate', async function (obj) {
 });
 
 CommentSchema.statics.lookup = async function (params) {
-  return this.aggregate(lookupPipeline(this.schema, params));
+  return this.aggregate(...lookupPipeline(this.schema, params));
 };
 
 export default mongoose.model('Comment', CommentSchema);

@@ -49,7 +49,8 @@ function DUButton({ page, allPages }) {
         .then(() => {
           setValues({ isLoading: false });
           gs.forEach((g) => dispatch(g()));
-        });
+        })
+        .catch(() => setValues({ isLoading: false }));
     else setValues({ isLoading: false });
   };
 

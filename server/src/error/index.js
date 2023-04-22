@@ -8,6 +8,7 @@ import {
   NotFoundError,
   UnauthenticatedError,
   UnauthorizedError,
+  TooManyRequestError,
 } from './error.js';
 
 export {
@@ -15,6 +16,7 @@ export {
   NotFoundError,
   UnauthenticatedError,
   UnauthorizedError,
+  TooManyRequestError,
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
 };

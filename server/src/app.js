@@ -18,6 +18,7 @@ import { userRouter } from './user/index.js';
 import { publicationRouter } from './publication/index.js';
 import { commentRouter } from './comment/index.js';
 import {
+  TooManyRequestError,
   errorHandlerMiddleware,
   routeNotFoundMiddleware,
 } from './error/index.js';
@@ -56,8 +57,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(
   rateLimiter({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 60 * 1000,
     max: 60,
+    handler: () => {
+      throw new TooManyRequestError('Too many requests, try again later');
+    },
   })
 );
 app.use(helmet());
