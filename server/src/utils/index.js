@@ -16,6 +16,7 @@ import {
   attachLoginCookie,
   attachLogoutCookie,
 } from './token.js';
+import files from './files.js';
 
 export {
   connectDB,
@@ -31,4 +32,5 @@ export {
   pageQuery,
   searchQuery,
   rangeDatesQuery,
+  files,
 };

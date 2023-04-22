@@ -126,7 +126,7 @@ dist
 *.vsix
 
 # Tmp files
-server/public/mern/*
+server/public/mern/
 server/tmp/
 
 # misc
