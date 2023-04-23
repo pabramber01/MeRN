@@ -286,7 +286,8 @@ const likePublication = async (req, res) => {
 
   if (!data) throw new NotFoundError(`No publication found with id: ${id}`);
 
-  if (data.likedBy.includes(userId))
+  const indexPub = data.likedBy.findIndex((id) => id.equals(userId));
+  if (indexPub !== -1)
     throw new BadRequestError(`You already like this publication`);
 
   const user = await User.findOne({ _id: userId });

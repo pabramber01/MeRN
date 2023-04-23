@@ -1,6 +1,10 @@
 openapi: 3.0.3
 info:
   title: MeRN
+  description: |
+    API description for MeRightNow social network. 
+
+    All endpoints need authentication, so first, create an user or login with one.
   version: 1.0.0
   contact: {}
 servers:
@@ -10,23 +14,50 @@ paths:
   /users:
     get:
       tags:
-        - Users
-      summary: Get all users (admin solo)
-      description: Get all users (admin solo)
+        - Admin
+      summary: Get all users
+      description: Get all users
       operationId: getAllUsersAdminSolo
       parameters:
+        - name: after
+          in: query
+          description: Minimum date to be searched. If omitted, there is no lower limit in the search.
+          schema:
+            type: string
+            example: '1999-04-22T12:58:03.378Z'
         - name: before
           in: query
+          description: Maximum date to be searched. If omitted, there is no upper limit in the search.
           schema:
             type: string
             example: '2023-04-22T12:58:03.378Z'
+        - name: sort
+          description: |
+            Valid attributes are: username.
+
+            The sorting can be performed on several attributes by concatenating them with the character ",".
+
+            The default sorting order is ascending, indicate the "-" char in front of the attribute to be sorted descending.
+
+            Default sort: username.
+          in: query
+          schema:
+            type: string
+            example: 'username'
+        - name: q
+          in: query
+          description: Username to search.
+          schema:
+            type: string
+            example: ''
         - name: page
           in: query
+          description: Number of page.
           schema:
             type: string
             example: '1'
       responses:
-        '200':
+        '':
           description: ''
     post:
       tags:
@@ -42,19 +73,22 @@ paths:
               properties:
                 email:
                   type: string
+                  description: User's email.
                   example: paco@chocolatero.com
                 password:
                   type: string
+                  description: User's password.
                   example: paco
                 username:
                   type: string
+                  description: User's username.
                   example: paco
             example:
               email: paco@chocolatero.com
               password: paco
               username: paco
       responses:
-        '200':
+        '':
           description: ''
   /users/own:
     get:
@@ -64,7 +98,7 @@ paths:
       description: Get user personal data
       operationId: getUserPersonalData
       responses:
-        '200':
+        '':
           description: ''
     delete:
       tags:
@@ -73,7 +107,7 @@ paths:
       description: Delete user
       operationId: deleteUser
       responses:
-        '200':
+        '':
           description: ''
     patch:
       tags:
@@ -89,15 +123,25 @@ paths:
               properties:
                 avatar:
                   type: string
-                  example: ''
+                  format: binary
+                  description: |
+                    User's avatar (file). 
+
+                    If not provided, random avatar is asigned. 
+
+                    Also can explicit old avatar url, so it is not modified. 
+                    As swagger does not allow multiple types including file type
+                    (binary format string), this can be tried with postman.
                 email:
                   type: string
+                  description: User's email.
                   example: example@updated.com
                 username:
                   type: string
+                  description: User's username.
                   example: updated
       responses:
-        '200':
+        '':
           description: ''
   /users/own/change-password:
     patch:
@@ -114,15 +158,17 @@ paths:
               properties:
                 newPass:
                   type: string
-                  example: user1updated
+                  description: User's new password.
+                  example: passupdated
                 oldPass:
                   type: string
-                  example: user1
+                  description: User's old password.
+                  example: user2
             example:
-              newPass: user1updated
-              oldPass: user1
+              newPass: passupdated
+              oldPass: user2
       responses:
-        '200':
+        '':
           description: ''
   /users/own/follows:
     get:
@@ -131,20 +177,54 @@ paths:
       summary: Get all follows by user
       description: Get all follows by user
       operationId: getAllFollowsByUser
+      parameters:
+        - name: sort
+          description: |
+            Valid attributes are: username.
+
+            The sorting can be performed on several attributes by concatenating them with the character ",".
+
+            The default sorting order is ascending, indicate the "-" char in front of the attribute to be sorted descending.
+
+            Default sort: username.
+          in: query
+          schema:
+            type: string
+            example: 'username'
+        - name: q
+          in: query
+          description: Username to search.
+          schema:
+            type: string
+            example: ''
+        - name: page
+          in: query
+          description: Number of page.
+          schema:
+            type: string
+            example: '1'
       responses:
-        '200':
+        '':
           description: ''
-  /users/user1:
+  /users/{id}:
     get:
       tags:
         - Users
       summary: Get user public data
       description: Get user public data
       operationId: getUserPublicData
+      parameters:
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
+          schema:
+            type: string
+            example: user2
       responses:
-        '200':
+        '':
           description: ''
-  /users/user1/publications:
+  /users/{id}/publications:
     get:
       tags:
         - Users
@@ -152,58 +232,118 @@ paths:
       description: Get all publications by user
       operationId: getAllPublicationsByUser
       parameters:
-        - name: before
-          in: query
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
           schema:
             type: string
-            example: '2023-04-22T13:09:49.402Z'
+            example: user2
+        - name: after
+          in: query
+          description: Minimum date to be searched. If omitted, there is no lower limit in the search.
+          schema:
+            type: string
+            example: '1999-04-22T12:58:03.378Z'
+        - name: before
+          in: query
+          description: Maximum date to be searched. If omitted, there is no upper limit in the search.
+          schema:
+            type: string
+            example: '2023-04-22T12:58:03.378Z'
+        - name: sort
+          in: query
+          description: |
+            Valid attributes are: createdAt,updatedAt.
+
+            The sorting can be performed on several attributes by concatenating them with the character ",".
+
+            The default sorting order is ascending, indicate the "-" char in front of the attribute to be sorted descending.
+
+            Default sort: -updatedAt.
+          schema:
+            type: string
+            example: '-updatedAt'
         - name: page
           in: query
+          description: Number of page.
           schema:
             type: string
             example: '1'
       responses:
-        '200':
+        '':
           description: ''
-  /users/user4/follow:
+  /users/{id}/follow:
     patch:
       tags:
         - Users
       summary: Follow user
       description: Follow user
       operationId: followUser
+      parameters:
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
+          schema:
+            type: string
+            example: user3
       responses:
-        '200':
+        '':
           description: ''
-  /users/user4/unfollow:
+  /users/{id}/unfollow:
     patch:
       tags:
         - Users
       summary: Unfollow user
       description: Unfollow user
       operationId: unfollowUser
+      parameters:
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
+          schema:
+            type: string
+            example: user3
       responses:
-        '200':
+        '':
           description: ''
-  /users/user3/ban:
+  /users/{id}/ban:
     patch:
       tags:
-        - Users
-      summary: Ban user (admin solo)
-      description: Ban user (admin solo)
+        - Admin
+      summary: Ban user
+      description: Ban user
       operationId: banUserAdminSolo
+      parameters:
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
+          schema:
+            type: string
+            example: user3
       responses:
-        '200':
+        '':
           description: ''
-  /users/user3/unban:
+  /users/{id}/unban:
     patch:
       tags:
-        - Users
-      summary: Unban user (admin solo)
-      description: Unban user (admin solo)
+        - Admin
+      summary: Unban user
+      description: Unban user
       operationId: unbanUserAdminSolo
+      parameters:
+        - name: id
+          in: path
+          description: User's id. Can be mongoId or username.
+          required: true
+          schema:
+            type: string
+            example: user3
       responses:
-        '200':
+        '':
           description: ''
   /auth/login:
     post:
@@ -220,15 +360,17 @@ paths:
               properties:
                 password:
                   type: string
+                  description: User's password.
                   example: user2
                 username:
                   type: string
+                  description: User's username.
                   example: user2
             example:
               password: user2
               username: user2
       responses:
-        '200':
+        '':
           description: ''
   /auth/logout:
     get:
@@ -238,7 +380,7 @@ paths:
       description: Logout user
       operationId: logoutUser
       responses:
-        '200':
+        '':
           description: ''
   /publications:
     get:
@@ -248,18 +390,45 @@ paths:
       description: Get all publications
       operationId: getAllPublications
       parameters:
-        - name: publications?before
+        - name: after
           in: query
+          description: Minimum date to be searched. If omitted, there is no lower limit in the search.
           schema:
             type: string
-            example: '2023-04-22T11:26:07.588Z'
+            example: '1999-04-22T12:58:03.378Z'
+        - name: before
+          in: query
+          description: Maximum date to be searched. If omitted, there is no upper limit in the search.
+          schema:
+            type: string
+            example: '2023-04-22T12:58:03.378Z'
+        - name: sort
+          in: query
+          description: |
+            Valid attributes are: createdAt,updatedAt.
+
+            The sorting can be performed on several attributes by concatenating them with the character ",".
+
+            The default sorting order is ascending, indicate the "-" char in front of the attribute to be sorted descending.
+
+            Default sort: -updatedAt.
+          schema:
+            type: string
+            example: '-updatedAt'
+        - name: q
+          in: query
+          description: Username, title or description to search.
+          schema:
+            type: string
+            example: ''
         - name: page
           in: query
+          description: Number of page.
           schema:
             type: string
             example: '1'
       responses:
-        '200':
+        '':
           description: ''
     post:
       tags:
@@ -275,25 +444,38 @@ paths:
               properties:
                 description:
                   type: string
+                  description: Publication's description.
                   example: ''
                 images:
-                  type: string
-                  format: binary
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Publication's images (files).
                 title:
                   type: string
+                  description: Publication's title.
                   example: testpub
       responses:
-        '200':
+        '':
           description: ''
-  /publications/63e6608d2397e6b0a1e0f9a4:
+  /publications/{id}:
     get:
       tags:
         - Publications
       summary: Get publication by id
       description: Get publication by id
       operationId: getPublicationById
+      parameters:
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
+          schema:
+            type: string
+            example: 63e6608d2397e6b0a1e0f9a4
       responses:
-        '200':
+        '':
           description: ''
     delete:
       tags:
@@ -301,16 +483,31 @@ paths:
       summary: Delete publication
       description: Delete publication
       operationId: deletePublication
+      parameters:
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
+          schema:
+            type: string
+            example: 63e660983b381b1a6ba422f5
       responses:
-        '200':
+        '':
           description: ''
-  /publications/63e65f008c924cea3068c31f:
     patch:
       tags:
         - Publications
       summary: Update publication
       description: Update publication
       operationId: updatePublication
+      parameters:
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
+          schema:
+            type: string
+            example: 63e66070e7b05efa94ac218d
       requestBody:
         content:
           multipart/form-data:
@@ -319,21 +516,27 @@ paths:
               properties:
                 description:
                   type: string
+                  description: Publication's description.
                   example: descriptionupdated
                 newImg:
-                  type: string
-                  format: binary
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Publication's new images (files).
                 oldImg:
-                  type: string
-                  example: >-
-                    https://res.cloudinary.com/pabramber01/image/authenticated/s--H8CBHkjt--/v1/mern/publications/63e65f008c924cea3068c31f/4-image0.jpg
+                  type: array
+                  items:
+                    type: string
+                  description: Publication's old images (old urls).
                 title:
                   type: string
+                  description: Publication's title.
                   example: titleupdated
       responses:
-        '200':
+        '':
           description: ''
-  /publications/63e65f008c924cea3068c31f/comments:
+  /publications/{id}/comments:
     get:
       tags:
         - Publications
@@ -341,38 +544,82 @@ paths:
       description: Get all comments by publication id
       operationId: getAllCommentsByPublicationId
       parameters:
-        - name: before
-          in: query
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
           schema:
             type: string
-            example: '2023-04-22T12:48:53.494Z'
+            example: 63e65f008c924cea3068c31f
+        - name: after
+          in: query
+          description: Minimum date to be searched. If omitted, there is no lower limit in the search.
+          schema:
+            type: string
+            example: '1999-04-22T12:58:03.378Z'
+        - name: before
+          in: query
+          description: Maximum date to be searched. If omitted, there is no upper limit in the search.
+          schema:
+            type: string
+            example: '2023-04-22T12:58:03.378Z'
+        - name: sort
+          in: query
+          description: |
+            Valid attributes are: createdAt.
+
+            The sorting can be performed on several attributes by concatenating them with the character ",".
+
+            The default sorting order is ascending, indicate the "-" char in front of the attribute to be sorted descending.
+
+            Default sort: -createdAt.
+          schema:
+            type: string
+            example: '-createdAt'
         - name: page
           in: query
+          description: Number of page.
           schema:
             type: string
             example: '1'
       responses:
-        '200':
+        '':
           description: ''
-  /publications/63e6608d2397e6b0a1e0f9a4/like:
+  /publications/{id}/like:
     patch:
       tags:
         - Publications
       summary: Like publication
       description: Like publication
       operationId: likePublication
+      parameters:
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
+          schema:
+            type: string
+            example: 63e66070e7b05efa94ac218d
       responses:
-        '200':
+        '':
           description: ''
-  /publications/63e6608d2397e6b0a1e0f9a4/dislike:
+  /publications/{id}/dislike:
     patch:
       tags:
         - Publications
       summary: Dislike publication
       description: Dislike publication
       operationId: dislikePublication
+      parameters:
+        - name: id
+          in: path
+          description: Publication's id.
+          required: true
+          schema:
+            type: string
+            example: 63e66070e7b05efa94ac218d
       responses:
-        '200':
+        '':
           description: ''
   /comments:
     post:
@@ -389,25 +636,35 @@ paths:
               properties:
                 comment:
                   type: string
+                  description: Comment's text.
                   example: this is a comment
                 publication:
                   type: string
-                  example: 63e6607f87c75a7718033394
+                  description: Publication's id.
+                  example: 63e66070e7b05efa94ac218d
             example:
               comment: this is a comment
-              publication: 63e6607f87c75a7718033394
+              publication: 63e66070e7b05efa94ac218d
       responses:
-        '200':
+        '':
           description: ''
-  /comments/6443e47557ad8a4d525405a2:
+  /comments/{id}:
     delete:
       tags:
         - Comments
       summary: Delete comment
       description: Delete comment
       operationId: deleteComment
+      parameters:
+        - name: id
+          in: path
+          description: Comment's id.
+          required: true
+          schema:
+            type: string
+            example: 642c315b2c53166bc7c4cfc4
       responses:
-        '200':
+        '':
           description: ''
     patch:
       tags:
@@ -415,6 +672,14 @@ paths:
       summary: Update comment
       description: Update comment
       operationId: updateComment
+      parameters:
+        - name: id
+          in: path
+          description: Comment's id.
+          required: true
+          schema:
+            type: string
+            example: 642c315b2c53166bc7c4cfc4
       requestBody:
         content:
           application/json:
@@ -423,14 +688,16 @@ paths:
               properties:
                 comment:
                   type: string
+                  description: Comment's text.
                   example: updated comment
             example:
               comment: updated comment
       responses:
-        '200':
+        '':
           description: ''
 tags:
-  - name: Users
   - name: Auth
+  - name: Users
   - name: Publications
   - name: Comments
+  - name: Admin
