@@ -30,7 +30,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npm run install
           cp ./server/local-settings.example.js ./server/.env
           cp ./client/local-settings.example.js ./client/.env
       - name: Test and coverage
