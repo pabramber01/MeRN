@@ -5,7 +5,7 @@ info:
     API description for MeRightNow social network. 
 
     All endpoints need authentication, so first, create an user or login with one.
-  version: 1.1.2
+  version: 1.1.3
   contact: {}
 servers:
   - url: 'https://api-merightnow.onrender.com/mern/v1'
