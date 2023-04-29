@@ -290,13 +290,17 @@ const likePublication = async (req, res) => {
   if (indexPub !== -1)
     throw new BadRequestError(`You already like this publication`);
 
-  const user = await User.findOne({ _id: userId });
+  await User.updateOne(
+    { _id: userId },
+    { $push: { likes: data._id } },
+    { timestamps: false }
+  );
 
-  user.likes.push(data._id);
-  await user.save({ timestamps: false });
-
-  data.likedBy.push(userId);
-  await Publication.updateOne({ _id: id }, { ...data }, { timestamps: false });
+  await Publication.updateOne(
+    { _id: id },
+    { $push: { likedBy: userId } },
+    { timestamps: false }
+  );
 
   res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
 };
@@ -325,13 +329,17 @@ const dislikePublication = async (req, res) => {
   if (indexPub === -1)
     throw new BadRequestError(`You did not like publication ${id}`);
 
-  data.likedBy.splice(indexPub, 1);
-  await Publication.updateOne({ _id: id }, { ...data }, { timestamps: false });
+  await Publication.updateOne(
+    { _id: id },
+    { $pull: { likedBy: user._id } },
+    { timestamps: false }
+  );
 
-  const indexUser = user.likes.findIndex((p) => p._id.equals(data._id));
-
-  user.likes.splice(indexUser, 1);
-  await user.save({ timestamps: false });
+  await User.updateOne(
+    { _id: userId },
+    { $pull: { likes: data._id } },
+    { timestamps: false }
+  );
 
   res.status(StatusCodes.OK).json({ sucess: true, data: { _id: data._id } });
 };

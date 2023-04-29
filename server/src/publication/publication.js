@@ -40,7 +40,7 @@ const PublicationSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, skipVersioning: { images: true, likedBy: true } }
 );
 
 PublicationSchema.post('aggregate', async function (obj) {

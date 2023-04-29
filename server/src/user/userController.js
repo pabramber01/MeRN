@@ -56,9 +56,8 @@ async function updateUser(req, res) {
       if (!isSmall) throw new BadRequestError('Avatar must be lower than 10MB');
 
       const fileName = img.name;
-      let v = Number(data.avatar.split('avatar')[1].split('.')[0]);
-      v = isNaN(v) ? data.__v : v;
-      path = `avatar${v + 1}${fileName.substr(fileName.lastIndexOf('.'))}`;
+      const ranNum = Math.random().toString().split('.')[1];
+      path = `avatar${ranNum}${fileName.substr(fileName.lastIndexOf('.'))}`;
     }
   }
 
@@ -161,11 +160,17 @@ async function followUser(req, res) {
   if (indexUser !== -1)
     throw new BadRequestError(`You are already following user ${id}`);
 
-  user.follows.push(follow._id);
-  await user.save({ timestamps: false });
+  await User.updateOne(
+    { username: req.user.username },
+    { $push: { follows: follow._id } },
+    { timestamps: false }
+  );
 
-  follow.followers.push(user._id);
-  await follow.save({ timestamps: false });
+  await User.updateOne(
+    { [searchField]: id },
+    { $push: { followers: user._id } },
+    { timestamps: false }
+  );
 
   res.status(StatusCodes.OK).json({ success: true, data: { _id: user._id } });
 }
@@ -188,13 +193,17 @@ async function unfollowUser(req, res) {
   if (indexUser === -1)
     throw new BadRequestError(`You are not following user ${id}`);
 
-  user.follows.splice(indexUser, 1);
-  await user.save({ timestamps: false });
+  await User.updateOne(
+    { username: req.user.username },
+    { $pull: { follows: follow._id } },
+    { timestamps: false }
+  );
 
-  const indexFol = follow.followers.findIndex((u) => u._id == req.user.userId);
-
-  follow.followers.splice(indexFol, 1);
-  await follow.save({ timestamps: false });
+  await User.updateOne(
+    { [searchField]: id },
+    { $pull: { followers: req.user.userId } },
+    { timestamps: false }
+  );
 
   res.status(StatusCodes.OK).json({ success: true, data: { _id: user._id } });
 }

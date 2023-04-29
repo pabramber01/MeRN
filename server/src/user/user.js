@@ -59,15 +59,15 @@ const UserSchema = new mongoose.Schema(
     },
   },
   {
-    optimisticConcurrency: true,
     timestamps: true,
+    skipVersioning: { follows: true, followers: true, likes: true },
+    toObject: { virtual: true },
     toJSON: {
       virtuals: true,
-      transform: (doc, ret) => {
+      transform: (_, ret) => {
         delete ret.id;
       },
     },
-    toObject: { virtual: true },
   }
 );
 
